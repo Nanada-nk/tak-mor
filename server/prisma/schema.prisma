@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      UserRole @default(PATIENT)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  patientProfile Patient?
+  doctorProfile  Doctor?
+}
+
+model Patient {
+  id           Int           @id @default(autoincrement())
+  accountId    Int           @unique
+  hn           String        @unique
+  firstName    String
+  lastName     String
+  address      String
+  birthDate    DateTime?
+  phone        String?
+  lastLogin    DateTime?
+  medicalFiles MedicalFile[]
+  appointments Appointment[]
+
+  account Account   @relation(fields: [accountId], references: [id])
+  Payment Payment[]
+}
+
+model Doctor {
+  id          Int     @id @default(autoincrement())
+  accountId   Int     @unique
+  firstName   String
+  lastName    String
+  bio         String?
+  specialtyId Int
+
+  appointments       Appointment[]
+  specialty          Specialty            @relation(fields: [specialtyId], references: [id])
+  account            Account              @relation(fields: [accountId], references: [id])
+  DoctorAvailability DoctorAvailability[]
+}
+
+model DoctorAvailability {
+  id        Int      @id @default(autoincrement())
+  doctorId  Int
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
+}
+
+model Specialty {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  doctors     Doctor[]
+}
+
+model Appointment {
+  id                 Int               @id @default(autoincrement())
+  vn                 String            @unique
+  patientId          Int
+  doctorId           Int
+  scheduledAt        DateTime
+  duration           String?
+  status             AppointmentStatus @default(PENDING)
+  price              Float
+  paymentId          Int?
+  appointmentSummary String? // หมอสรุปเอง ไม่ผ่าน AI
+  webRTCSession      WebRTCSession?
+
+  patient            Patient              @relation(fields: [patientId], references: [id])
+  doctor             Doctor               @relation(fields: [doctorId], references: [id])
+  payment            Payment?             @relation(fields: [paymentId], references: [id])
+  medicalFile        MedicalFile[]
+  AppointmentSummary AppointmentSummary[]
+}
+
+model AppointmentSummary {
+  id             Int      @id @default(autoincrement())
+  appointmentId  Int      @unique
+  symptoms       String
+  diagnosis      String
+  treatment      String
+  medication     String?
+  recommendation String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model WebRTCSession {
+  id            Int       @id @default(autoincrement())
+  appointmentId Int       @unique
+  roomId        String    @unique
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  endedAt       DateTime?
+
+  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+}
+
+model Payment {
+  id            Int           @id @default(autoincrement())
+  appointment   Appointment[]
+  patientId     Int
+  amount        Float
+  transactionId String?
+  status        PaymentStatus @default(PENDING)
+  method        String
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  webhookLogs   WebhookLog[]
+
+  patient Patient @relation(fields: [patientId], references: [id])
+}
+
+model WebhookLog {
+  id         Int      @id @default(autoincrement())
+  paymentId  Int
+  rawData    Json
+  receivedAt DateTime @default(now())
+
+  payment Payment @relation(fields: [paymentId], references: [id])
+}
+
+model MedicalFile {
+  id            Int      @id @default(autoincrement())
+  patientId     Int
+  appointmentId Int
+  fileUrl       String
+  fileName      String
+  description   String
+  uploadedAt    DateTime @default(now())
+
+  apointment Appointment @relation(fields: [appointmentId], references: [id])
+  patient    Patient     @relation(fields: [patientId], references: [id])
+}
