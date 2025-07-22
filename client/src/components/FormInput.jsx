@@ -1,7 +1,7 @@
 import { Eye, EyeOff } from 'lucide-react'
 import { useState } from 'react';
 
-function FormInput({ label, name, register, error, type = "text", placeholder, autoComplete, headtext }) {
+function FormInput({ label, name, register, error, type = "text", placeholder, autoComplete, }) {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   let inputType;
   if (type === 'password' && isPasswordVisible === true) {

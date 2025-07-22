@@ -39,9 +39,9 @@ function RegisterPage() {
 
 
   return (
-    <AuthLayout>
+    // <AuthLayout>
       <AuthFormCard
-        title={["Welcome to", "Nimble.Glow !"]}
+        title={["Register"]}
         onSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         buttonText="Register"
@@ -50,45 +50,45 @@ function RegisterPage() {
         bottomLinkText="Login"
       >
         <FormInput
-          label="Your FirstName"
+          label="FirstName"
           name="firstName"
           register={register}
           error={errors.firstName}
-          placeholder="Enter Your FirstName"
+          placeholder="Enter FirstName"
         />
 
         <FormInput
-          label="Your LastName"
+          label="LastName"
           name="lastName"
           register={register}
           error={errors.lastName}
-          placeholder="Enter Your LastName"
+          placeholder="Enter LastName"
         />
 
         <FormInput
-          label="Your Mobile"
+          label="Mobile"
           name="mobile"
           register={register}
           error={errors.mobile}
-          placeholder="Enter Your Mobile"
+          placeholder="Enter Mobile"
         />
 
         <FormInput
-          label="Your Email"
+          label="Email"
           name="email"
           type="email"
           register={register}
           error={errors.email}
-          placeholder="Enter Your Email"
+          placeholder="Enter Email"
         />
 
         <FormInput
-          label="Your Password"
+          label="Password"
           name="password"
           type="password"
           register={register}
           error={errors.password}
-          placeholder="Enter Your Password"
+          placeholder="Enter Password"
         />
 
         <FormInput
@@ -97,11 +97,11 @@ function RegisterPage() {
           type="password"
           register={register}
           error={errors.confirmPassword}
-          placeholder="Confirm Your Password"
+          placeholder="Confirm Password"
         />
 
       </AuthFormCard>
-    </AuthLayout>
+    // </AuthLayout>
   )
 }
 

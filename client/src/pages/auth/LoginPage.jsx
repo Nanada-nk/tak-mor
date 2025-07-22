@@ -59,7 +59,7 @@ function LoginPage() {
   useEffect(() => {
     handleLoginRedirect()
   }, [isLoggedIn, user, isLoading, navigate]);
-
+  
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     if (savedEmail) {
