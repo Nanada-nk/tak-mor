@@ -1,4 +1,4 @@
-import Footer from "../layouts/Footer"
+import Footer from "../components/footer/Footer.jsx"
 import CategorySection from "./home/CategorySection.jsx"
 import FeaturedProduct from "./home/FeaturedProduct.jsx"
 import HeroSection from "./home/HeroSection.jsx"
@@ -12,6 +12,7 @@ function HomePage() {
     <div className="bg-pri-wh">
      
       <main>
+        <div>HomePage</div>
         <HeroSection />
         <CategorySection />
         <FeaturedProduct />
