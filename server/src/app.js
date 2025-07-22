@@ -7,6 +7,7 @@ import authenticateUser from './middlewares/authenticate.middleware.js'
 import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
+import authRouter from './routes/auth.route.js'
 
 
 const app = express()
@@ -26,7 +27,7 @@ app.use(express.json())
 app.use(morgan("dev"))
 app.use(compression())
 
-// app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
 app.use('/api/dashboard', dashboardRouter);
 // app.use('/api/doctor', ()=>{});
