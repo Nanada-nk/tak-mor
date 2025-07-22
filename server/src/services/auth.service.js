@@ -6,39 +6,48 @@ import createError from "../utils/create-error.js"
 
 const authService = {}
 
-authService.findUserByEmail = (email) => {
-  return prisma.user.findUnique({
+authService.findAccountByEmail = (email) => {
+  return prisma.account.findUnique({
     where: { email }
   })
 }
 
-authService.findUserById = (id) => {
-  return prisma.user.findUnique({
+authService.findAccountById = (id) => {
+  return prisma.account.findUnique({
     where: { id },
     include: { addresses: true }
   })
 }
 
-authService.createUser = (data) => {
-  return prisma.user.create({ data })
+authService.createAccount = (data) => {
+  return prisma.account.create({ data })
 }
 
+authService.createPatientProfile = (data) => {
+  return prisma.patient.create({ data });
+}
+
+authService.createDoctorProfile = (data) => {
+  return prisma.doctor.create({ data });
+}
+
+
 authService.updateLastLogin = (userId) => {
-  return prisma.user.update({
+  return prisma.account.update({
     where: { id: userId },
     data: { lastLogin: new Date() },
   })
 }
 
 authService.requestPasswordReset = async (email) => {
-  const user = await prisma.user.findUnique({ where: { email } });
-  if (!user) return;
+  const user = await prisma.account.findUnique({ where: { email } });
+  if (!user) throw createError(404, "User not found");
 
   const resetToken = crypto.randomBytes(32).toString('hex');
   const passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
   const passwordResetExpires = new Date(Date.now() + 10 * 60 * 1000);
 
-  await prisma.user.update({
+  await prisma.account.update({
     where: { email },
     data: { passwordResetToken, passwordResetExpires }
   });
@@ -57,7 +66,7 @@ authService.resetPasswordWithToken = async (token, newPassword) => {
 
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-  const user = await prisma.user.findFirst({
+  const user = await prisma.account.findFirst({
     where: {
       passwordResetToken: hashedToken,
       passwordResetExpires: { gte: new Date() } 
