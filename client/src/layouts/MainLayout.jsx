@@ -9,7 +9,9 @@ function MainLayout() {
   return (
     <>
     <HeaderNavBar />
+    <div className="p-6">
     <Outlet />
+    </div>
     <Footer/>
     </>
   );

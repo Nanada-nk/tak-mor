@@ -24,10 +24,10 @@ import AdminRoute from './AdminRoute.jsx';
 
 
 function AppRouter() {
-  const checkAuth = authStore((state) => state.checkAuth)
-  useEffect(() => {
-    checkAuth();
-  }, [])
+  // const checkAuth = authStore((state) => state.checkAuth)
+  // useEffect(() => {
+  //   checkAuth();
+  // }, [])
 
   return (
     <BrowserRouter>
@@ -44,14 +44,14 @@ function AppRouter() {
 
          <Route element={<ProtectedRoute />}>
           <Route path='/' element={<MainLayout />}>
-            <Route path='profile/change-password' element={<ChangePasswordPage />} /> 
-             <Route path='reviews/history' element={<UserReviewHistoryPage />} /> 
+    
+             {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} />  */}
           </Route>
         </Route> 
  
         <Route element={<AdminRoute />}>
           <Route path='/admin' element={<AdminLayout />}>
-            <Route path='reviews' element={<AdminReviewManagementPage />} /> 
+            {/* <Route path='reviews' element={<AdminReviewManagementPage />} />  */}
           </Route>
         </Route> 
 

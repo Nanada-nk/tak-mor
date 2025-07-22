@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import "cally";
+// import "cally";
 import SearchBar from "../../components/SearchBar";
 
 function HeroSection() {
