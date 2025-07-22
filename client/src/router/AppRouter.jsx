@@ -16,7 +16,7 @@ import ResetPasswordPage from '../pages/auth/ResetPasswordPage.jsx';
 
 import NotFoundPage from '../pages/utils/NotFoundPage.jsx';
 import HomePage from '../pages/HomePage.jsx';
-import authStore from '../stores/authStore.js';
+// import authStore from '../stores/authStore.js';
 
 // import AdminReviewManagementPage from '../pages/admin/AdminReviewManagementPage.jsx';
 import ProtectedRoute from './ProtectedRoute.jsx';
@@ -35,7 +35,7 @@ function AppRouter() {
 
         <Route path='/' element={<MainLayout />}>
           <Route index element={<HomePage />} />
-          <Route path='login' element={<LoginPage />} />
+           <Route path='login' element={<LoginPage />} />
           <Route path='register' element={<RegisterPage />} />
           <Route path='forgot-password' element={<ForgotPasswordPage />} />
           <Route path='reset-password' element={<ResetPasswordPage />} /> 
@@ -44,16 +44,16 @@ function AppRouter() {
 
          <Route element={<ProtectedRoute />}>
           <Route path='/' element={<MainLayout />}>
-            {/* <Route path='profile/change-password' element={<ChangePasswordPage />} /> */}
-            {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} /> */}
+            <Route path='profile/change-password' element={<ChangePasswordPage />} /> 
+             <Route path='reviews/history' element={<UserReviewHistoryPage />} /> 
           </Route>
-        </Route>
-
+        </Route> 
+ 
         <Route element={<AdminRoute />}>
           <Route path='/admin' element={<AdminLayout />}>
-            {/* <Route path='reviews' element={<AdminReviewManagementPage />} /> */}
+            <Route path='reviews' element={<AdminReviewManagementPage />} /> 
           </Route>
-        </Route>
+        </Route> 
 
 
         <Route path='*' element={<NotFoundPage />} />
