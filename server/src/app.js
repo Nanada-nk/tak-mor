@@ -26,7 +26,7 @@ app.use(express.json())
 app.use(morgan("dev"))
 app.use(compression())
 
-// app.use('/api/auth', authRouter);
+app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
 app.use('/api/dashboard', dashboardRouter);
 // app.use('/api/doctor', ()=>{});
