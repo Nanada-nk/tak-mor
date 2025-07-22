@@ -7,10 +7,10 @@ export const schemaRegister = Yup.object({
   lastName:
     Yup.string()
       .required("Last name is required"),
-  mobile:
+  phone:
     Yup.string()
-      .matches(/^[0-9]{10}$/, "Mobile number must be 10 digits (e.g. 0811111111)")
-      .required("Mobile is required"),
+      .matches(/^[0-9]{10}$/, "Phone number must be 10 digits (e.g. 0811111111)")
+      .required("Phone is required"),
   email:
     Yup.string()
       .email("Email is invalid")

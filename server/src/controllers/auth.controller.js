@@ -1,101 +1,189 @@
-// import authService from "../services/auth.service.js"
-// import hashService from "../services/hash.service.js"
-// import jwtService from "../services/jwt.service.js"
-// import createError from "../utils/create-error.js"
+
+import authService from '../services/auth.service.js';
+import jwtService from '../services/jwt.service.js';
+import hashService from '../services/hash.service.js';
+import generateHN from '../utils/generateHN.js';
+import { OAuth2Client } from 'google-auth-library';
+import createError from '../utils/create-error.js';
+import crypto from 'crypto';
+
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 
 
-// const authController = {}
+const authController = {}
 
-// authController.register = async (req, res, next) => {
-//   const { firstName, lastName, mobile, email, password, confirmPassword } = req.body;
+authController.register = async (req, res, next) => {
+  const { email, phone, firstName, lastName, password, confirmPassword, role } = req.body;
+  let profile;
 
+  if (!['PATIENT', 'DOCTOR'].includes(role)) {
+    throw createError(400, 'Role must be PATIENT or DOCTOR')
+  }
 
-//   if (password !== confirmPassword) {
-//     throw createError(400, 'Password and Confirm Password do not match')
-//   }
+  if (password !== confirmPassword) {
+    throw createError(400, 'Password and Confirm Password do not match')
+  }
 
-//   const findEmail = await authService.findUserByEmail(email)
-//   if (findEmail) {
-//     throw createError(400, 'Email already exists')
-//   }
+  const findAccount = await authService.findAccountByEmail(email)
+  if (findAccount) {
+    throw createError(400, 'Email already exists')
+  }
 
-//   const hashPassword = await hashService.hash(password)
-//   // console.log('hashPassword', hashPassword)
+  const hashPassword = await hashService.hash(password)
 
-//   const data = {
-//     firstName,
-//     lastName,
-//     mobile,
-//     email,
-//     password: hashPassword,
-//     profileImage: null
-//   };
+  // Create Account
+  const accountData = {
+    email,
+    password: hashPassword,
+    role,
+  };
+  const newAccount = await authService.createAccount(accountData);
 
-//   const newUser = await authService.createUser(data)
-//   res.status(201).json({ message: "Register User Successfully", user: newUser })
-// }
+  // Create profile based on role
+  if (role === 'PATIENT') {
+    profile = await authService.createPatientProfile({
+      accountId: newAccount.id,
+      hn: generateHN(),
+      firstName,
+      lastName,
+      phone
+    });
+  } else if (role === 'DOCTOR') {
+    profile = await authService.createDoctorProfile({
+      accountId: newAccount.id,
+      firstName,
+      lastName,
+      phone
+    });
+  } else {
+    throw createError(400, 'Invalid role for profile creation');
+  }
 
-
-// authController.login = async (req, res, next) => {
-//   const { email, password } = req.body
-//   const findEmail = await authService.findUserByEmail(email)
-//   if (!findEmail) {
-//     throw createError(401, 'Email or password invalid!')
-//   }
-
-//   if (!findEmail.enabled) {
-//     throw createError(403, "Your account has been disabled. Please contact support.");
-//   }
-
-//   const isMatchPassword = await hashService.comparePassword(password, findEmail.password)
-//   if (!isMatchPassword) {
-//     throw createError(401, 'Email or password invalid!!')
-//   }
-//   await authService.updateLastLogin(findEmail.id)
-
-
-//   const accessToken = await jwtService.genToken({ id: findEmail.id, role: findEmail.role })
-//   const { password: userPassword, ...userWithoutPassword } = findEmail;
-//   res.status(200).json({
-//     success: true,
-//     accessToken,
-//     user: userWithoutPassword
-//   });
-// }
-
-// authController.getMe = async (req, res, next) => {
-//   if (!req.user) {
-//     throw createError(401, "Unauthorization")
-//   }
-//   const user = req.user
-//   if (!user) {
-//     throw createError(404, "User not found");
-//   }
-
-//   const { password, ...userWithoutPassword } = user
-
-//   res.status(200).json({ user: userWithoutPassword })
-// }
+  res.status(201).json({ message: "Register User Successfully", account: newAccount, profile })
+}
 
 
-// authController.forgotPassword = async (req, res, next) => {
-//   const { email } = req.body;
-//   if (!email) throw createError(400, "Email is required.");
+authController.login = async (req, res, next) => {
+  const { email, password } = req.body
+  const findEmail = await authService.findAccountByEmail(email)
+  if (!findEmail) {
+    throw createError(401, 'Invalid Email or Password!')
+  }
 
-//   await authService.requestPasswordReset(email);
+  // if (!findEmail.enabled) {
+  //   throw createError(403, "Your account has been disabled. Please contact support.");
+  // }
 
-//   res.status(200).json({ message: "Password reset link sent." });
-// };
+  const isMatchPassword = await hashService.comparePassword(password, findEmail.password)
+  if (!isMatchPassword) {
+    throw createError(401, 'Invalid Email or Password!')
+  }
+  // await authService.updateLastLogin(findEmail.id)
 
 
-// authController.resetPassword = async (req, res, next) => {
-//   const { token, newPassword } = req.body;
-//   if (!token || !newPassword) throw createError(400, "Token and new password are required.");
+  const accessToken = await jwtService.genToken({ id: findEmail.id, role: findEmail.role })
+  const { password: userPassword, ...userWithoutPassword } = findEmail;
+  res.status(200).json({
+    success: true,
+    accessToken,
+    user: userWithoutPassword
+  });
+}
 
-//   await authService.resetPasswordWithToken(token, newPassword);
+authController.googleLogin = async (req, res, next) => {
+  const { idToken, role = 'PATIENT' } = req.body;
 
-//   res.status(200).json({ message: "Password has been reset successfully." });
-// };
+  // Verify the ID token with Google
+  const ticket = await client.verifyIdToken({
+    idToken,
+    audience: process.env.GOOGLE_CLIENT_ID
+  });
 
-// export default authController
+  const { email, given_name, family_name, picture } = ticket.getPayload();
+
+  // Check if the user already exists
+  let account = await authService.findAccountByEmail(email);
+  let profile;
+  if (!account) {
+    // Create new account
+    account = await authService.createAccount({
+      email,
+      password: crypto.randomBytes(32).toString('hex'),
+      role
+    });
+    const { phone } = req.body;
+    if (role === 'PATIENT') {
+      profile = await authService.createPatientProfile({
+        accountId: account.id,
+        hn: generateHN(),
+        firstName: given_name,
+        lastName: family_name,
+        phone
+      });
+    } else if (role === 'DOCTOR') {
+      profile = await authService.createDoctorProfile({
+        accountId: account.id,
+        firstName: given_name,
+        lastName: family_name,
+        phone
+      });
+    } else {
+      throw createError(400, 'Invalid role for profile creation');
+    }
+  } else {
+    // Optionally fetch profile if needed
+    profile = null;
+  }
+
+  // Generate JWT token
+  const accessToken = await jwtService.genToken({ id: account.id, role: account.role });
+
+  res.status(200).json({
+    success: true,
+    accessToken,
+    account: {
+      id: account.id,
+      email: account.email,
+      role: account.role,
+      picture
+    },
+    profile
+  });
+}
+
+authController.getMe = async (req, res, next) => {
+  if (!req.user) {
+    throw createError(401, "Unauthorization")
+  }
+  const user = req.user
+  if (!user) {
+    throw createError(404, "User not found");
+  }
+
+  const { password, ...userWithoutPassword } = user
+
+  res.status(200).json({ user: userWithoutPassword })
+}
+
+
+authController.forgotPassword = async (req, res, next) => {
+  const { email } = req.body;
+  if (!email) throw createError(400, "Email is required.");
+
+  await authService.requestPasswordReset(email);
+
+  res.status(200).json({ message: "Password reset link sent." });
+};
+
+
+authController.resetPassword = async (req, res, next) => {
+  const { token, newPassword } = req.body;
+  if (!token || !newPassword) throw createError(400, "Token and new password are required.");
+
+  await authService.resetPasswordWithToken(token, newPassword);
+
+  res.status(200).json({ message: "Password has been reset successfully." });
+};
+
+export default authController

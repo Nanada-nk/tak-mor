@@ -1,0 +1,51 @@
+### Register Patient
+POST http://localhost:9090/api/auth/register
+Content-Type: application/json
+
+{
+  "firstName": "John1",
+  "lastName": "Doe1",
+  "phone": "0812345678",
+  "email": "john1@example.com",
+  "password": "Test1234",
+  "confirmPassword": "Test1234",
+  "role": "PATIENT"
+}
+
+### Register Doctor
+POST http://localhost:9090/api/auth/register
+Content-Type: application/json
+
+{
+  "email": "doctor1@example.com",
+  "password": "Test1234",
+  "confirmPassword": "Test1234",
+  "firstName": "Jane",
+  "lastName": "Smith",
+  "phone": "0898765432",
+  "role": "DOCTOR"
+}
+
+### Login
+POST http://localhost:9090/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "john1@example.com",
+  "password": "Test1234"
+}
+
+### Get Me (requires Authorization header)
+GET http://localhost:9090/api/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Miwicm9sZSI6IlBBVElFTlQiLCJpYXQiOjE3NTMxNzIyMDEsImV4cCI6MTc1NDQ2ODIwMX0.-NW_f8voBf7npKj1Y2Yt2VAHF7l2YkdbxGb5LTubhh4
+
+### Google Login
+POST http://localhost:9090/api/auth/google-login
+Content-Type: application/json
+
+{
+  "idToken": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImI1MDljNTEzODc2OGY3Y2YyZTgyN2UwNGIyN2U3ZTRjYmM3YmI5MTkiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMDU3ODcwMTQwNTM1NTI3NTY3NjQiLCJlbWFpbCI6InRha21vci5vbmxpbmUyMTA3QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJhdF9oYXNoIjoiYVUwT0tITmFFNnJnTmNxSElvSmRVQSIsImlhdCI6MTc1MzE3NDc4OCwiZXhwIjoxNzUzMTc4Mzg4fQ.RV3iYwuIUVXPh587PUQOPPPCi7xnDJrCOsE4r3-ErTO_CtHu8VHUqie3n1rfCtDVZTXCRRzvJVbYFtPOS3zNb8gCmuRdkfp2Ib618dAsS0W4LlkYrt0nz3BMj3uOVNlaSYcc4CF3MTWTyrCO13RvMPqWYcRtxqgSFq1DQ8psP7M8hPbrSu4xIy6pSc3Yu_tRGDjBZgUGFYm7a7gs4bgYPN1ZnD9iGIo0A_1zP4UULYxokCTnUk9cEWEu2at_FxFzA8TuYQgZt146TOKopoM2jRN2sZBFdY9mZa5w0Z2lKhKWnCT8SMXd0rj-CzKlhU1M7AEH6wsQIZ-x_vBtOYbm_A",
+  "role": "PATIENT",
+  "phone": "0812345678" 
+
+}

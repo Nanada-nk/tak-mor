@@ -7,6 +7,7 @@ import authenticateUser from './middlewares/authenticate.middleware.js'
 import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
+import authRouter from './routes/auth.route.js'
 
 
 const app = express()
