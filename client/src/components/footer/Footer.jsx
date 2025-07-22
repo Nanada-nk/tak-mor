@@ -16,15 +16,15 @@ function Footer() {
                 </nav>
                 <nav>
                     <h6 className="font-bold text-base text-black py-3">ทักหมอ</h6>
-                    <a className="py-1 text-black">หน้าแรก</a>
-                    <a className="py-1 text-black">แพทย์</a>
-                    <a className="py-1 text-black">การปรึกษาทางวิดีโอ</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">หน้าแรก</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">แพทย์</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">การปรึกษาทางวิดีโอ</a>
                 </nav>
                 <nav>
                     <h6 className="font-bold text-base text-black py-3">แผนก</h6>
-                    <a className="py-1 text-black">ระบบประสาทและสมอง</a>
-                    <a className="py-1 text-black">หัวใจและหลอดเลือด</a>
-                    <a className="py-1 text-black">ทันตกรรม</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">ระบบประสาทและสมอง</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">หัวใจและหลอดเลือด</a>
+                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">ทันตกรรม</a>
                 </nav>
                 <nav>
                     <h6 className="font-bold text-base text-black py-3">ติดต่อเรา</h6>
@@ -33,30 +33,30 @@ function Footer() {
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
                             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
                         </svg>
-                        <a className="py-1 text-black w-36 break-words">35 อาคารวรรณสรณ์ แขวงพญาไท เขตราชเทวี กทม. 10400</a>
+                        <a className="py-1 px-2 text-black w-36 break-words hover:text-blue-600 cursor-pointer">35 อาคารวรรณสรณ์ แขวงพญาไท เขตราชเทวี กทม. 10400</a>
                     </div>
                     <div className='flex justify-center items-center'>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 0 0 2.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 0 1-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 0 0-1.091-.852H4.5A2.25 2.25 0 0 0 2.25 4.5v2.25Z" />
                         </svg>
-                        <a className="py-1 text-black">08-xxxx-xxxx</a>
+                        <a className="py-1 text-black px-2 hover:text-blue-600 cursor-pointer">08-xxxx-xxxx</a>
                     </div>
                     <div className='flex justify-center items-center' >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5">
                             <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75" />
                         </svg>
-                        <a className="py-1 text-black">tak-mor@gmail.com</a>
+                        <a className="py-1 text-black px-2 hover:text-blue-600 cursor-pointer">tak-mor@gmail.com</a>
                     </div>
                 </nav>
                 <form>
-                    <h6 className="font-bold text-base text-black py-4">Join Our Newsletter</h6>
+                    <h6 className="font-bold text-base text-black py-4">สมัครรับข่าวสารกับเรา</h6>
                     <fieldset className="w-80">
                         {/* <label>Enter your email address</label> */}
-                        <div className="join">
+                        <div className="join mb-3">
                             <input
                                 type="text"
                                 placeholder="กรอก อีเมลล์"
-                                className="input input-bordered join-item ]" />
+                                className="input input-bordered join-item " />
                             <button className="btn btn-primary join-item bg-[#3B80F5]">ยืนยัน</button>
                         </div>
                         <div className='flex'>
