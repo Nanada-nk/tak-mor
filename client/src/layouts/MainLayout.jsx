@@ -1,18 +1,14 @@
-// import { Outlet } from "react-router"
-// import Header from "./Header.jsx"
-// import CartDrawer from "../components/CartDrawer.jsx"
+import { Outlet } from "react-router"
+import HeaderNavBar from "../components/HeaderNavBar"
 
 
-// function MainLayout() {
-//   return (
-//     <>
-//       <Header />
-//       <CartDrawer />
-//       <main>
-//         <Outlet />
-//       </main>
 
-//     </>
-//   )
-// }
-// export default MainLayout
+function MainLayout() {
+  return (
+    <>
+    <HeaderNavBar />
+    <Outlet />
+    </>
+  )
+}
+export default MainLayout
