@@ -1,8 +1,8 @@
-import Footer from "../layouts/Footer"
-import CategorySection from "./home/CategorySection.jsx"
-import FeaturedProduct from "./home/FeaturedProduct.jsx"
-import HeroSection from "./home/HeroSection.jsx"
-import ProductList from "./home/ProductList.jsx"
+// import Footer from "../layouts/Footer"
+// import CategorySection from "./home/CategorySection.jsx"
+// import FeaturedProduct from "./home/FeaturedProduct.jsx"
+// import HeroSection from "./home/HeroSection.jsx"
+// import ProductList from "./home/ProductList.jsx"
 
 
 
@@ -12,12 +12,13 @@ function HomePage() {
     <div className="bg-pri-wh">
      
       <main>
-        <HeroSection />
+        Home
+        {/* <HeroSection />
         <CategorySection />
         <FeaturedProduct />
-        <ProductList />
+        <ProductList /> */}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   )
 }
