@@ -1,4 +1,4 @@
-import HeroSection from "./Landing/HeroSection"
+import HeroSection from "./landing/HeroSection.jsx"
 
 
 function HomePage() {
