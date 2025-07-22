@@ -28,12 +28,13 @@ enum PaymentStatus {
 }
 
 model Account {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int       @id @default(autoincrement())
+  email     String    @unique
   password  String
-  role      UserRole @default(PATIENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      UserRole  @default(PATIENT)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  // lastLogin DateTime?
 
   patientProfile Patient?
   doctorProfile  Doctor?
@@ -45,10 +46,9 @@ model Patient {
   hn           String        @unique
   firstName    String
   lastName     String
-  address      String
+  address      String?
   birthDate    DateTime?
-  phone        String?
-  lastLogin    DateTime?
+  phone        String
   medicalFiles MedicalFile[]
   appointments Appointment[]
 
@@ -61,11 +61,12 @@ model Doctor {
   accountId   Int     @unique
   firstName   String
   lastName    String
+  phone       String
   bio         String?
-  specialtyId Int
+  specialtyId Int?
 
   appointments       Appointment[]
-  specialty          Specialty            @relation(fields: [specialtyId], references: [id])
+  specialty          Specialty?            @relation(fields: [specialtyId], references: [id])
   account            Account              @relation(fields: [accountId], references: [id])
   DoctorAvailability DoctorAvailability[]
 }

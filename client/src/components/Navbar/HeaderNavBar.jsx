@@ -1,4 +1,5 @@
-import { LoginIcon, SearchIcon, SignUpIcon } from "../icons";
+import { LoginIcon, SignUpIcon } from "../icons";
+import SearchBar from "../SearchBar";
 import DropdownNavBar from "./DropdownNavBar";
 
 
@@ -15,10 +16,7 @@ function HeaderNavBar() {
       <div className="flex gap-8">
         <DropdownNavBar />
       </div>
-       <label className="input rounded-full bg-white text-black flex items-center border-none">
-          <SearchIcon className="w-5 opacity-60" />
-          <input type="text" placeholder="Search" className="flex-1" />
-        </label>
+      <SearchBar />
       <div className="flex gap-2">
         <button className="btn bg-black text-white rounded-full">
           <SignUpIcon className="w-5" />
