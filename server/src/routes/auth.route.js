@@ -1,19 +1,19 @@
-// import express from 'express'
-// import authController from '../controllers/auth.controller.js'
-// import authenticateUser from '../middlewares/authenticate.middleware.js'
-// import validator from '../middlewares/validator.js'
-// import { schemaLogin, schemaRegister } from '../utils/shema.auth.js'
+import express from 'express'
+import authController from '../controllers/auth.controller.js'
+import authenticateUser from '../middlewares/authenticate.middleware.js'
+import validator from '../middlewares/validator.js'
+import { schemaLogin, schemaRegister } from '../utils/shema.auth.js'
 
 
-// const authRouter = express.Router()
+const authRouter = express.Router()
 
-// authRouter.post('/register', validator(schemaRegister), authController.register)
-// authRouter.post('/login', validator(schemaLogin), authController.login)
-// authRouter.get('/me', authenticateUser, authController.getMe)
-// authRouter.post('/forgot-password', authController.forgotPassword);
-// authRouter.post('/reset-password', authController.resetPassword);
-
-
+authRouter.post('/register', validator(schemaRegister), authController.register)
+authRouter.post('/login', validator(schemaLogin), authController.login)
+authRouter.get('/me', authenticateUser, authController.getMe)
+authRouter.post('/forgot-password', authController.forgotPassword);
+authRouter.post('/reset-password', authController.resetPassword);
 
 
-// export default authRouter
+
+
+export default authRouter
