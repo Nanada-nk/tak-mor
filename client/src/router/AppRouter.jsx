@@ -8,7 +8,8 @@ import LoginPage from '../pages/auth/LoginPage.jsx';
 import RegisterPage from '../pages/auth/RegisterPage.jsx';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.jsx';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage.jsx';
-
+import NewsPage from "../pages/news/NewsPage.jsx"
+import NewContentPage from "../pages/news/NewsContentPage.jsx"'
 
 
 // import ChangePasswordPage from '../pages/users/ChangePasswordPage.jsx';
@@ -39,7 +40,8 @@ function AppRouter() {
           <Route path='register' element={<RegisterPage />} />
           <Route path='forgot-password' element={<ForgotPasswordPage />} />
           <Route path='reset-password' element={<ResetPasswordPage />} /> 
-         
+         <Route path='news' element={<NewsPage/>}/>
+          <Route path='news/:id' element={<NewContentPage/>}/>
         </Route>
 
          <Route element={<ProtectedRoute />}>
