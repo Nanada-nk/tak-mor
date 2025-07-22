@@ -1,5 +1,10 @@
+
 import { Check } from "lucide-react"
-import "cally";
+
+
+
+// import "cally";
+
 import SearchBar from "../../components/SearchBar";
 
 function HeroSection() {

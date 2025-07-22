@@ -6,11 +6,13 @@ import HeaderNavBar from "../components/Navbar/HeaderNavBar";
 function MainLayout() {
   return (
     <>
+
       <div className="flex justify-center items-center">
         <HeaderNavBar />
       </div>
       <Outlet />
       <Footer />
+
     </>
   );
 }
