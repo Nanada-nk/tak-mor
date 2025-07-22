@@ -13,13 +13,13 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const authController = {}
 
-authController.register = async (req, res, next) => {
+authController.registerPatient = async (req, res, next) => {
   const { email, phone, firstName, lastName, password, confirmPassword, role } = req.body;
   let profile;
 
-  if (!['PATIENT', 'DOCTOR'].includes(role)) {
-    throw createError(400, 'Role must be PATIENT or DOCTOR')
-  }
+  // if (!['PATIENT', 'DOCTOR'].includes(role)) {
+  //   throw createError(400, 'Role must be PATIENT or DOCTOR')
+  // }
 
   if (password !== confirmPassword) {
     throw createError(400, 'Password and Confirm Password do not match')
@@ -36,33 +36,82 @@ authController.register = async (req, res, next) => {
   const accountData = {
     email,
     password: hashPassword,
-    role,
+    role: 'PATIENT',
   };
   const newAccount = await authService.createAccount(accountData);
 
   // Create profile based on role
-  if (role === 'PATIENT') {
-    profile = await authService.createPatientProfile({
-      accountId: newAccount.id,
-      hn: generateHN(),
-      firstName,
-      lastName,
-      phone
-    });
-  } else if (role === 'DOCTOR') {
-    profile = await authService.createDoctorProfile({
-      accountId: newAccount.id,
-      firstName,
-      lastName,
-      phone
-    });
-  } else {
-    throw createError(400, 'Invalid role for profile creation');
-  }
+  // if (role === 'PATIENT') {
+  //   profile = await authService.createPatientProfile({
+  //     accountId: newAccount.id,
+  //     hn: generateHN(),
+  //     firstName,
+  //     lastName,
+  //     phone
+  //   });
+  // } else if (role === 'DOCTOR') {
+  //   profile = await authService.createDoctorProfile({
+  //     accountId: newAccount.id,
+  //     firstName,
+  //     lastName,
+  //     phone
+  //   });
+  // } else {
+  //   throw createError(400, 'Invalid role for profile creation');
+  // }
 
   res.status(201).json({ message: "Register User Successfully", account: newAccount, profile })
 }
 
+authController.registerDoctor = async (req, res, next) => {
+  const { email, phone, firstName, lastName, password, confirmPassword, role } = req.body;
+  let profile;
+
+  // if (!['PATIENT', 'DOCTOR'].includes(role)) {
+  //   throw createError(400, 'Role must be PATIENT or DOCTOR')
+  // }
+
+  if (password !== confirmPassword) {
+    throw createError(400, 'Password and Confirm Password do not match')
+  }
+
+  const findAccount = await authService.findAccountByEmail(email)
+  if (findAccount) {
+    throw createError(400, 'Email already exists')
+  }
+
+  const hashPassword = await hashService.hash(password)
+
+  // Create Account
+  const accountData = {
+    email,
+    password: hashPassword,
+    role: 'DOCTOR',
+  };
+  const newAccount = await authService.createAccount(accountData);
+
+  // Create profile based on role
+  // if (role === 'PATIENT') {
+  //   profile = await authService.createPatientProfile({
+  //     accountId: newAccount.id,
+  //     hn: generateHN(),
+  //     firstName,
+  //     lastName,
+  //     phone
+  //   });
+  // } else if (role === 'DOCTOR') {
+  //   profile = await authService.createDoctorProfile({
+  //     accountId: newAccount.id,
+  //     firstName,
+  //     lastName,
+  //     phone
+  //   });
+  // } else {
+  //   throw createError(400, 'Invalid role for profile creation');
+  // }
+
+  res.status(201).json({ message: "Register User Successfully", account: newAccount, profile })
+}
 
 authController.login = async (req, res, next) => {
   const { email, password } = req.body

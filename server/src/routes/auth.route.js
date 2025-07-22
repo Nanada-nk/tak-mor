@@ -8,7 +8,8 @@ import { schemaLogin, schemaRegister } from '../validations/schema.auth.js'
 const authRouter = express.Router()
 
 
-authRouter.post('/register', validator(schemaRegister), authController.register)
+authRouter.post('/register/patient', validator(schemaRegister), authController.registerPatient)
+authRouter.post('/register/doctor', validator(schemaRegister), authController.registerDoctor)
 authRouter.post('/login', validator(schemaLogin), authController.login)
 authRouter.post('/google-login', authController.googleLogin)
 // authRouter.get('/me', authenticateUser, authController.getMe)
