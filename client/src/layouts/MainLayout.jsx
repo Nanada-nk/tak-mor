@@ -1,5 +1,7 @@
 import { Outlet } from "react-router"
-import HeaderNavBar from "../components/HeaderNavBar"
+
+import Footer from "../components/footer/Footer"
+import HeaderNavBar from "../components/Navbar/HeaderNavBar";
 
 
 
@@ -8,7 +10,8 @@ function MainLayout() {
     <>
     <HeaderNavBar />
     <Outlet />
+    <Footer/>
     </>
-  )
+  );
 }
-export default MainLayout
+export default MainLayout;

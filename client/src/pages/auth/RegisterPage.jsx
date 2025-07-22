@@ -5,8 +5,8 @@ import { schemaRegister } from "../../validator/schema.js";
 import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authApi from "../../api/authApi.js";
-import AuthLayout from "../../components/AuthLayout.jsx";
-import AuthFormCard from "../../components/AuthFormCard.jsx";
+import AuthLayout from "../../components/auth/AuthLayout.jsx";
+import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 
 
 function RegisterPage() {
