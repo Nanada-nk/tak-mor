@@ -13,6 +13,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@tailwindcss/vite": "^4.1.11",
     "axios": "^1.10.0",
+    "cally": "^0.8.0",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.23.6",
     "gauge-chart": "^1.0.0",
