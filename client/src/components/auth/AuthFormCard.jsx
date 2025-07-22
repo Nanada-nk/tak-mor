@@ -26,7 +26,7 @@ function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, butto
         <button
           type="submit"
           disabled={isSubmitting}
-          className="flex justify-center w-full bg-pri-gr1 hover:bg-[#5a6e47] text-white font-bold py-3 rounded-lg text-base transition-colors mt-4 disabled:bg-gray-400"
+          className="flex justify-center w-full bg-pri-gr1 bg-[#3B80F5] text-white font-bold py-3 rounded-lg text-base transition-colors mt-4 disabled:bg-gray-400"
         >
           {isSubmitting ? (
             <div className="flex items-center space-x-2">

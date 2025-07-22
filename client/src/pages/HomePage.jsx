@@ -12,7 +12,11 @@ function HomePage() {
       <main>
         <div>HomePage</div>
         <HeroSection />
+        <CategorySection />
+        <FeaturedProduct />
+        <ProductList />
       </main>
+      <Footer />
     </div>
   );
 }

@@ -6,11 +6,11 @@ import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authStore from "../../stores/authStore.js";
 import { useEffect } from "react";
-import AuthLayout from "../../components/AuthLayout.jsx";
-import AuthFormCard from "../../components/AuthFormCard.jsx";
+import AuthLayout from "../../components/auth/AuthLayout.jsx";
+import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 
 function LoginPage() {
-  const actionLogin = authStore((state) => state.actionLogin);
+  const actionLogin = authStore((state)  => state.actionLogin);
   const isLoggedIn = authStore((state) => state.isLoggedIn);
   const user = authStore((state) => state.user);
   const isLoading = authStore((state) => state.isLoading);
@@ -22,9 +22,15 @@ function LoginPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    watch,
   } = useForm({
     resolver: yupResolver(schemaLogin),
-    mode: 'onBlur'
+    mode: 'onBlur',
+    defaultValues: {
+      email: "",
+      password: "",
+      remember: false
+    }
   });
   
   const onSubmit = async (data) => {
@@ -54,10 +60,17 @@ function LoginPage() {
     handleLoginRedirect()
   }, [isLoggedIn, user, isLoading, navigate]);
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("rememberEmail");
+    if (savedEmail) {
+      reset({ email: savedEmail, remember: true });
+    }
+  }, [reset]);
+
   return (
-    <AuthLayout>
+    // <AuthLayout>
       <AuthFormCard
-        title={["Welcome Back", "to Nimble.Glow !"]}
+        title={["Sign in"]}
         onSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         buttonText="Login"
@@ -65,8 +78,13 @@ function LoginPage() {
         bottomLinkPath="/register"
         bottomLinkText="Sign Up"
       >
+        <h1 className="text-2xl font-semibold">Sign in</h1>
+        <p className="text-slate-400 text-xs">
+        We will send a confirmation code to your email.
+        </p>
+
         <FormInput
-          label="Your Email"
+          label="Email"
           name="email"
           type="email"
           register={register}
@@ -74,12 +92,24 @@ function LoginPage() {
         />
 
         <FormInput
-          label="Your Password"
+          label="Password"
           name="password"
           type="password"
           register={register}
           error={errors.password}
         />
+
+         {/* ✅ Remember Me checkbox */}
+      <div className="flex justify-between items-center mb-2">
+
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            {...register("remember")}
+            className="checkbox checkbox-sm"
+          />
+          Remember me
+        </label>
 
         <div className="text-right text-sm">
           <Link to="/forgot-password" className="font-medium text-pri-gr1 hover:underline">
@@ -87,8 +117,10 @@ function LoginPage() {
           </Link>
         </div>
 
+      </div>
       </AuthFormCard>
-    </AuthLayout>
+    // </AuthLayout>
+    
   )
 }
 
