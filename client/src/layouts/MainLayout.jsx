@@ -1,16 +1,16 @@
-import { Outlet } from "react-router"
+import { Outlet } from "react-router";
 
-import Footer from "../components/footer/Footer"
+import Footer from "../components/footer/Footer";
 import HeaderNavBar from "../components/Navbar/HeaderNavBar";
-
-
 
 function MainLayout() {
   return (
     <>
-    <HeaderNavBar />
-    <Outlet />
-    <Footer/>
+      <div className="flex justify-center items-center">
+        <HeaderNavBar />
+      </div>
+      <Outlet />
+      <Footer />
     </>
   );
 }
