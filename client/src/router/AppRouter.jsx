@@ -9,7 +9,7 @@ import RegisterPage from '../pages/auth/RegisterPage.jsx';
 import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.jsx';
 import ResetPasswordPage from '../pages/auth/ResetPasswordPage.jsx';
 import NewsPage from "../pages/news/NewsPage.jsx"
-import NewContentPage from "../pages/news/NewsContentPage.jsx"'
+import NewContentPage from "../pages/news/NewsContentPage.jsx"
 
 
 // import ChangePasswordPage from '../pages/users/ChangePasswordPage.jsx';
