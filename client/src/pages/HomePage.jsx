@@ -1,5 +1,5 @@
 import HeroSection from "./landing/HeroSection.jsx"
-import Footer from "../components/footer/Footer.jsx"
+
 
 
 function HomePage() {
@@ -9,7 +9,7 @@ function HomePage() {
         <HeroSection />
 
       </main>
-      <Footer />
+     
     </div>
   );
 }
