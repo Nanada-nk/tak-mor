@@ -13,6 +13,7 @@ authService.findAccountByEmail = (email) => {
 }
 
 authService.findAccountById = (id) => {
+  
   return prisma.account.findUnique({
     where: { id },
     include: { 
