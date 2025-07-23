@@ -44,16 +44,16 @@ function AppRouter() {
           <Route path='news/:id' element={<NewContentPage/>}/>
         </Route>
 
-         <Route element={<ProtectedRoute />}>
+         {/* <Route element={<ProtectedRoute />}>
           <Route path='/' element={<MainLayout />}>
     
-             {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} />  */}
+             <Route path='reviews/history' element={<UserReviewHistoryPage />} /> 
           </Route>
-        </Route> 
+        </Route>  */}
  
         <Route element={<AdminRoute />}>
           <Route path='/admin' element={<AdminLayout />}>
-            {/* <Route path='reviews' element={<AdminReviewManagementPage />} />  */}
+            <Route path='reviews' element={<AdminReviewManagementPage />} /> 
           </Route>
         </Route> 
 
