@@ -32,6 +32,20 @@ authService.createDoctorProfile = (data) => {
 }
 
 
+// Find patient profile by accountId
+authService.findPatientProfileByAccountId = (accountId) => {
+  return prisma.patient.findUnique({
+    where: { accountId }
+  });
+};
+
+// Find doctor profile by accountId
+authService.findDoctorProfileByAccountId = (accountId) => {
+  return prisma.doctor.findUnique({
+    where: { accountId }
+  });
+};
+
 authService.updateLastLogin = (userId) => {
   return prisma.account.update({
     where: { id: userId },

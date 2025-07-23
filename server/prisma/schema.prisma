@@ -46,7 +46,7 @@ model Account {
 model Patient {
   id        Int       @id @default(autoincrement())
   accountId Int       @unique
-  hn        String    @unique
+  hn        String?    @unique
   firstName String
   lastName  String
   address   String?
@@ -64,7 +64,7 @@ model Doctor {
   accountId   Int     @unique
   firstName   String
   lastName    String
-  phone       String
+  // phone       String
   bio         String?
   specialtyId Int?
 
