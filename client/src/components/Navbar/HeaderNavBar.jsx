@@ -21,7 +21,7 @@ function HeaderNavBar() {
 
 
   return (
-    <div className="navbar flex justify-between w-[1200px] h-14 mt-2">
+    <div className="navbar flex justify-between w-[1200px] h-14 mt-2 mb-5">
       <a onClick={navigateHome} className="hover:cursor-pointer">
         <img
           src="../../public/takmor.svg"
