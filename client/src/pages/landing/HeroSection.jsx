@@ -33,7 +33,7 @@ function HeroSection() {
         <div className="flex justify-between items-center bg-white w-xl h-12 rounded-lg p-2">
           <SearchBar placeholder="ค้นหา หมอ" />
 
-          <button className="btn bg-[#0E82FD] text-white rounded-full">
+          <button className="btn bg-[#0E82FD] text-white rounded-full hover:text-black hover:bg-[#FCEFEA]">
             ค้นหา
           </button>
         </div>
@@ -58,7 +58,7 @@ function HeroSection() {
           </div>
           <p className="text-center pt-2">จอร์น โด</p>
           <p className="text-center text-xs ">แพทย์</p>
-          <button className="btn bg-gray-300 w-fit h-fit text-[8px] rounded-full mt-2.5 font-thin">
+          <button className="btn bg-gray-300 w-fit h-fit text-[8px] rounded-full mt-2.5 font-thin hover:bg-[#0E82FD] hover:text-white">
             จองเลย
           </button>
         </div>
