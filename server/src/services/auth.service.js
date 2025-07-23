@@ -15,7 +15,9 @@ authService.findAccountByEmail = (email) => {
 authService.findAccountById = (id) => {
   return prisma.account.findUnique({
     where: { id },
-    include: { addresses: true }
+    include: { 
+      patientProfile: true,
+      doctorProfile: true }
   })
 }
 
