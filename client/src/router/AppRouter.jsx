@@ -1,28 +1,28 @@
+import { useEffect } from "react";
+import { BrowserRouter, Route, Routes } from "react-router";
+import MainLayout from "../layouts/MainLayout.jsx";
+import AdminLayout from "../layouts/AdminLayout.jsx";
 
-import { useEffect } from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router';
-import MainLayout from '../layouts/MainLayout.jsx';
-import AdminLayout from '../layouts/AdminLayout.jsx';
-
-import LoginPage from '../pages/auth/LoginPage.jsx';
-import RegisterPage from '../pages/auth/RegisterPage.jsx';
-import ForgotPasswordPage from '../pages/auth/ForgotPasswordPage.jsx';
-import ResetPasswordPage from '../pages/auth/ResetPasswordPage.jsx';
-import NewsPage from "../pages/news/NewsPage.jsx"
-import NewContentPage from "../pages/news/NewsContentPage.jsx"
-
+import LoginPage from "../pages/auth/LoginPage.jsx";
+import RegisterPage from "../pages/auth/RegisterPage.jsx";
+import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
+import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
+import NewsPage from "../pages/news/NewsPage.jsx";
+import NewContentPage from "../pages/news/NewsContentPage.jsx";
 
 // import ChangePasswordPage from '../pages/users/ChangePasswordPage.jsx';
 // import UserReviewHistoryPage from '../pages/reviews/UserReviewHistoryPage.jsx';
 
-import NotFoundPage from '../pages/utils/NotFoundPage.jsx';
-import HomePage from '../pages/HomePage.jsx';
+import HomePage from "../pages/HomePage.jsx";
 // import authStore from '../stores/authStore.js';
 
 // import AdminReviewManagementPage from '../pages/admin/AdminReviewManagementPage.jsx';
-import ProtectedRoute from './ProtectedRoute.jsx';
-import AdminRoute from './AdminRoute.jsx';
-
+import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminRoute from "./AdminRoute.jsx";
+import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx"
+import MaintenancePage from "../pages/utils/MaintenancePage.jsx"
+import ServerErrorPage from "../pages/utils/ServerErrorPage.jsx";
+import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
 
 function AppRouter() {
   // const checkAuth = authStore((state) => state.checkAuth)
@@ -33,32 +33,32 @@ function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-
-        <Route path='/' element={<MainLayout />}>
+        <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
-           <Route path='login' element={<LoginPage />} />
-          <Route path='register' element={<RegisterPage />} />
-          <Route path='forgot-password' element={<ForgotPasswordPage />} />
-          <Route path='reset-password' element={<ResetPasswordPage />} /> 
-         <Route path='news' element={<NewsPage/>}/>
-          <Route path='news/:id' element={<NewContentPage/>}/>
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="news" element={<NewsPage />} />
+          <Route path="news/:id" element={<NewContentPage />} />
         </Route>
 
-         <Route element={<ProtectedRoute />}>
-          <Route path='/' element={<MainLayout />}>
-    
-             {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} />  */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/" element={<MainLayout />}>
+            {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} />  */}
           </Route>
-        </Route> 
- 
+        </Route>
+
         <Route element={<AdminRoute />}>
-          <Route path='/admin' element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminLayout />}>
             {/* <Route path='reviews' element={<AdminReviewManagementPage />} />  */}
           </Route>
-        </Route> 
+        </Route>
 
-
-        <Route path='*' element={<NotFoundPage />} />
+        <Route path="/coming-soon" element={<ComingSoonPage />} />
+        <Route path="/maintenance" element={<MaintenancePage />} />
+        <Route path="/server-error" element={<ServerErrorPage />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );
