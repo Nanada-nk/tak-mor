@@ -48,6 +48,7 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import authStore from '../stores/authStore.js';
 import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDoctorDashboardMenagementPage.jsx";
+import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/AdminAppointmentDashboardManagementPage.jsx";
 
 
 function AppRouter() {
@@ -110,9 +111,11 @@ function AppRouter() {
           <Route path="/admin" element={<AdminLayout />}>
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
+          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
           </Route>
         {/* </Route> */}
 
+        
         <Route path="*" element={<NotFoundPage />} />
 
       </Routes>
