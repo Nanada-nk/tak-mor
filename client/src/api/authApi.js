@@ -5,7 +5,7 @@ const authApi = {};
 
 // 2. ใช้ apiClient เรียกไปยัง endpoint ต่างๆ
 authApi.register = (body) => {
-  return apiClient.post("/auth/register", body);
+  return apiClient.post("/auth/register/patient", body);
 };
 
 authApi.login = (body) => {
