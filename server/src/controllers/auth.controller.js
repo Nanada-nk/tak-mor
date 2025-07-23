@@ -13,8 +13,8 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const authController = {}
 
-authController.registerPatient = async (req, res, next) => {
-  const { email, phone, firstName, lastName, password, confirmPassword, role } = req.body;
+authController.register = async (req, res, next) => {
+  const { email, phone, firstName, lastName, password, confirmPassword, role} = req.body;
   let profile;
 
   // if (!['PATIENT', 'DOCTOR'].includes(role)) {
@@ -36,82 +36,33 @@ authController.registerPatient = async (req, res, next) => {
   const accountData = {
     email,
     password: hashPassword,
-    role: 'PATIENT',
+    phone: phone
   };
   const newAccount = await authService.createAccount(accountData);
 
   // Create profile based on role
-  // if (role === 'PATIENT') {
-  //   profile = await authService.createPatientProfile({
-  //     accountId: newAccount.id,
-  //     hn: generateHN(),
-  //     firstName,
-  //     lastName,
-  //     phone
-  //   });
-  // } else if (role === 'DOCTOR') {
-  //   profile = await authService.createDoctorProfile({
-  //     accountId: newAccount.id,
-  //     firstName,
-  //     lastName,
-  //     phone
-  //   });
-  // } else {
-  //   throw createError(400, 'Invalid role for profile creation');
-  // }
+  if (role === 'PATIENT') {
+    profile = await authService.createPatientProfile({
+      accountId: newAccount.id,
+      hn: generateHN(),
+      firstName,
+      lastName,
+      phone
+    });
+  } else if (role === 'DOCTOR') {
+    profile = await authService.createDoctorProfile({
+      accountId: newAccount.id,
+      firstName,
+      lastName,
+      phone
+    });
+  } else {
+    throw createError(400, 'Invalid role for profile creation');
+  }
 
   res.status(201).json({ message: "Register User Successfully", account: newAccount, profile })
 }
 
-authController.registerDoctor = async (req, res, next) => {
-  const { email, phone, firstName, lastName, password, confirmPassword, role } = req.body;
-  let profile;
-
-  // if (!['PATIENT', 'DOCTOR'].includes(role)) {
-  //   throw createError(400, 'Role must be PATIENT or DOCTOR')
-  // }
-
-  if (password !== confirmPassword) {
-    throw createError(400, 'Password and Confirm Password do not match')
-  }
-
-  const findAccount = await authService.findAccountByEmail(email)
-  if (findAccount) {
-    throw createError(400, 'Email already exists')
-  }
-
-  const hashPassword = await hashService.hash(password)
-
-  // Create Account
-  const accountData = {
-    email,
-    password: hashPassword,
-    role: 'DOCTOR',
-  };
-  const newAccount = await authService.createAccount(accountData);
-
-  // Create profile based on role
-  // if (role === 'PATIENT') {
-  //   profile = await authService.createPatientProfile({
-  //     accountId: newAccount.id,
-  //     hn: generateHN(),
-  //     firstName,
-  //     lastName,
-  //     phone
-  //   });
-  // } else if (role === 'DOCTOR') {
-  //   profile = await authService.createDoctorProfile({
-  //     accountId: newAccount.id,
-  //     firstName,
-  //     lastName,
-  //     phone
-  //   });
-  // } else {
-  //   throw createError(400, 'Invalid role for profile creation');
-  // }
-
-  res.status(201).json({ message: "Register User Successfully", account: newAccount, profile })
-}
 
 authController.login = async (req, res, next) => {
   const { email, password } = req.body
@@ -149,7 +100,7 @@ authController.googleLogin = async (req, res, next) => {
     audience: process.env.GOOGLE_CLIENT_ID
   });
 
-  const { email, given_name, family_name, picture } = ticket.getPayload();
+  const { email, firstName, lastName, picture } = ticket.getPayload();
 
   // Check if the user already exists
   let account = await authService.findAccountByEmail(email);
@@ -166,15 +117,15 @@ authController.googleLogin = async (req, res, next) => {
       profile = await authService.createPatientProfile({
         accountId: account.id,
         hn: generateHN(),
-        firstName: given_name,
-        lastName: family_name,
+        firstName: firstName,
+        lastName: lastName,
         phone
       });
     } else if (role === 'DOCTOR') {
       profile = await authService.createDoctorProfile({
         accountId: account.id,
-        firstName: given_name,
-        lastName: family_name,
+        firstName: firstName,
+        lastName: lastName,
         phone
       });
     } else {
