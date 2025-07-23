@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authApi from "../../api/authApi.js";
 import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
-import authStore from "../../stores/authStore.js";
+// import authStore from "../../stores/authStore.js";
 
 
 function RegisterPage() {

@@ -75,7 +75,6 @@ authController.registerDoctor = async (req, res, next) => {
 
 
 
-
 authController.login = async (req, res, next) => {
   const { email, password } = req.body;
   const findEmail = await authService.findAccountByEmail(email);
@@ -226,47 +225,82 @@ authController.googleLoginDoctor = async (req, res, next) => {
 };
 
 
-  authController.getMe = async (req, res, next) => {
-    try {
-      if (!req.user) {
-        throw createError(401, "Unauthorized");
-      }
-      const account = req.user
-      // const account = await authService.findAccountById(req.user.id);
-      // console.log('account', account)
-
-      if (!account) {
-        throw createError(404, "User not found");
-      }
-
-  //     const account = await authService.findAccountById(userId);
-  // console.log(account.patientProfile);
-
-      const { password, ...userWithoutPassword } = account;
-      res.status(200).json({ user: userWithoutPassword });
-    } catch (error) {
-      console.log("getMe error", error)
-      next(error);
+authController.getMe = async (req, res, next) => {
+  try {
+    if (!req.user) {
+      throw createError(401, "Unauthorized");
     }
+    const account = req.user
+    // const account = await authService.findAccountById(req.user.id);
+    // console.log('account', account)
+
+    if (!account) {
+      throw createError(404, "User not found");
+    }
+
+    //     const account = await authService.findAccountById(userId);
+    // console.log(account.patientProfile);
+
+    const { password, ...userWithoutPassword } = account;
+    res.status(200).json({ user: userWithoutPassword });
+  } catch (error) {
+    console.log("getMe error", error)
+    next(error);
   }
+}
 
+//ByNada
 authController.forgotPassword = async (req, res, next) => {
-  const { email } = req.body;
-  if (!email) throw createError(400, "Email is required.");
+  try {
+    const { email } = req.body;
+    if (!email) throw createError(400, "Email is required.");
 
-  await authService.requestPasswordReset(email);
+    await authService.requestPasswordReset(email);
 
-  res.status(200).json({ message: "Password reset link sent." });
+    res.status(200).json({ message: "OTP has been sent to your email." });
+  } catch (err) {
+    next(err);
+  }
 };
 
+//ByNada
+// NEW: Controller to verify the OTP
+authController.verifyOtp = async (req, res, next) => {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
+      throw createError(400, "Email and OTP are required.");
+    }
+    if (otp.length !== 4) {
+      throw createError(400, "OTP must be 4 digits.")
+    }
+
+    const resetToken = await authService.verifyOtp(email, otp);
+
+    res.status(200).json({
+      message: "OTP verified successfully. You can now reset your password.",
+      resetToken: resetToken // This token is sent to the client
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+//ByNada
+// MODIFIED: Now requires a token from OTP verification
 authController.resetPassword = async (req, res, next) => {
-  const { token, newPassword } = req.body;
-  if (!token || !newPassword)
-    throw createError(400, "Token and new password are required.");
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword)
+      throw createError(400, "Token and new password are required.");
 
-  await authService.resetPasswordWithToken(token, newPassword);
+    await authService.resetPasswordWithToken(token, newPassword);
 
-  res.status(200).json({ message: "Password has been reset successfully." });
+    res.status(200).json({ message: "Password has been reset successfully." });
+  } catch (err) {
+    next(err);
+  }
 };
+
 
 export default authController;
