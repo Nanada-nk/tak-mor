@@ -52,11 +52,15 @@ import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/Ad
 
 
 function AppRouter() {
-  const checkAuth = authStore((state) => state.checkAuth)
-  useEffect(() => {
-    checkAuth();
-  }, [])
+  //   const { checkAuth, isLoggedIn, isLoading } = authStore((state) => state);
 
+  // useEffect(() => {
+  //   checkAuth(); // ตรวจสอบและโหลดข้อมูลผู้ใช้เมื่อหน้าเว็บถูกรีเฟรช
+  // }, [checkAuth]);
+
+  // if (isLoading) {
+  //   return <div>Loading...</div>;
+  // }
   return (
     <BrowserRouter>
       <Routes>

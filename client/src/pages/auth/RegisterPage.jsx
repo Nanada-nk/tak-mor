@@ -5,14 +5,14 @@ import { schemaRegister } from "../../validator/schema.js";
 import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authApi from "../../api/authApi.js";
-import AuthLayout from "../../components/auth/AuthLayout.jsx";
 import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
+import authStore from "../../stores/authStore.js";
 
 
 function RegisterPage() {
 
   const navigate = useNavigate();
-
+  // const actionRegister = authStore((state)=>state.actionRegister)
   const {
     register,
     handleSubmit,
@@ -24,22 +24,25 @@ function RegisterPage() {
   });
 
   const onSubmit = async (data) => {
+    console.log("Attempting to submit registration with data:", data);
     try {
       await new Promise(resolve => setTimeout(resolve, 1000))
-      await authApi.register(data);
-      // console.log('resp', resp);
+      const resp = await authApi.registerPatient(data);
+      // actionRegister(data)
+      console.log('resp', resp);
       toast.success("Registration successful! Please log in.");
+      alert('Register Successful')
       reset();
       navigate("/login");
     } catch (error) {
-      // console.error("Registration failed:", error);
+      console.error("Registration failed:", error);
       toast.error(error.response?.data?.message || "Registration failed.");
     }
   };
 
 
   return (
-    // <AuthLayout>
+ 
       <AuthFormCard
         title={["Register"]}
         onSubmit={handleSubmit(onSubmit)}
@@ -101,7 +104,7 @@ function RegisterPage() {
         />
 
       </AuthFormCard>
-    // </AuthLayout>
+    
   )
 }
 

@@ -15,17 +15,20 @@ const authenticateUser = async (req, res, next) => {
 
   try {
     const payload = await jwtService.verifyToken(token)
+    console.log("decoded JWT", payload)
     if (!payload.id) {
       return next(createError(401, 'Unauthorized'))
     }
-
-    const user = await authService.findUserById(payload.id)
+    
+    const user = await authService.findAccountById(payload.id)
     if (!user) {
-      return next(createError(403, 'Unauthorized'))
+      return next(createError(403, 'Unauthorized User not found'))
     }
-   
+    
     req.user = user
-
+    
+    console.log("User from DB", user)
+    console.log("User ID:", req.user)
     next()
   } catch (error) {
     return next(createError(401, 'Invalid token'))
