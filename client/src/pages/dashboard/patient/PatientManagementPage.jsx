@@ -20,7 +20,7 @@
 //   { value: "SUPERADMIN", label: "Super Admin" }
 // ];
 
-// function AdminUserManagementPage() {
+function PatientManagementPage() {
 //   const navigate = useNavigate();
 //   const confirm = useConfirm();
 
@@ -170,6 +170,6 @@
 //       </Modal>
 //     </div>
 //   );
-// }
+}
 
-// export default AdminUserManagementPage;
+export default PatientManagementPage

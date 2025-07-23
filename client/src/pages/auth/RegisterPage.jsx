@@ -66,11 +66,11 @@ function RegisterPage() {
         />
 
         <FormInput
-          label="Mobile"
-          name="mobile"
+          label="Phone"
+          name="phone"
           register={register}
-          error={errors.mobile}
-          placeholder="Enter Mobile"
+          error={errors.phone}
+          placeholder="Enter Phone"
         />
 
         <FormInput
