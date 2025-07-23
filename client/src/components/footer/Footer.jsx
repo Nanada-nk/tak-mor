@@ -2,7 +2,7 @@ import React from 'react'
 
 function Footer() {
     return (
-        <div>
+        <div className='mt-5'>
             <footer className="footer sm:footer-horizontal  text-base-content px-20 bg-[#EEF7FB] pt-6 pb-10">
 
 
@@ -82,7 +82,12 @@ function Footer() {
                     <p>Copyright © {new Date().getFullYear()} - Tak-mor, All Right Reserved</p>
                 </aside>
                 <aside>
-                    <p>นโยบายความเป็นส่วนตัว | ข้อกำหนดและเงื่อนไข</p>
+                    <div>
+
+                    <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
+                    <p className='hover:text-blue-600 cursor-pointer'> | ข้อกำหนกและเงื่อนไข </p>
+                    </div>
+
                 </aside>
             </footer>
         </div>

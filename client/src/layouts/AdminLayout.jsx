@@ -32,20 +32,21 @@ function AdminLayout() {
   }, []);
 
 
-  if (isLoading || !user) {
-    return (
-      <div className="flex items-center justify-center h-screen bg-gray-100">
-        <BubblesIcon className="w-10 h-10 animate-spin text-pri-gr1" />
-      </div>
-    );
-  }
+  // if (isLoading || !user) {
+  //   return (
+  //     <div className="flex items-center justify-center h-screen bg-gray-100">
+  //       <BubblesIcon className="w-10 h-10 animate-spin text-pri-gr1" />
+  //     </div>
+  //   );
+  // }
 
 
   return (
+    
     <div className="flex h-screen bg-gray-100">
       <AdminSidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-
+      
         <main className="flex-1 overflow-x-hidden overflow-y-auto bg-white p-8">
           <Outlet />
         </main>

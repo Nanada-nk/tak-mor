@@ -31,7 +31,7 @@ import CallingPage from "../pages/tele/calling/CallingPage.jsx";
 import ChatPage from "../pages/tele/chat/ChatPage.jsx";
 import VideoCallPage from "../pages/tele/videoCall/VideoCallPage.jsx";
 
-import AdminDashboardManagementPage from "../pages/dashboard/admin/AdminDashboardManagementPage.jsx";
+import AdminPatientDashboardManagementPage from "../pages/dashboard/admin/AdminPatientDashboardManagementPage.jsx";
 import PatientProfilePage from "../pages/dashboard/patient/PatientProfilePage.jsx";
 import PatientManagementPage from "../pages/dashboard/patient/PatientManagementPage.jsx"
 import EditProfilePage from "../pages/dashboard/patient/EditProfilePage.jsx";
@@ -47,6 +47,7 @@ import ServerErrorPage from "../pages/utils/ServerErrorPage.jsx";
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import authStore from '../stores/authStore.js';
+import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDoctorDashboardMenagementPage.jsx";
 
 
 function AppRouter() {
@@ -107,7 +108,8 @@ function AppRouter() {
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
-          <Route path="dashboard" element={<AdminDashboardManagementPage />} />
+          <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
+          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
           </Route>
         {/* </Route> */}
 
