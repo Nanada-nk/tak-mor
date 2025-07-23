@@ -1,60 +1,39 @@
-import { useState, useEffect } from 'react';
-import categoriesApi from "../../api/categoriesApi.js"
-import { BubblesIcon } from 'lucide-react';
-import { Link } from 'react-router';
+import { useState, useEffect } from "react";
+import { CalendarSearch, Hospital } from "lucide-react";
+import { Link } from "react-router";
 
 function CategorySection() {
-
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const fetchCategories = async () => {
-    setIsLoading(true);
-    try {
-      const resp = await categoriesApi.getAll();
-      setCategories(resp.data.categories || []);
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchCategories();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-96">
-        <BubblesIcon className="w-12 h-12 animate-spin text-pri-gr1" />
-      </div>
-    );
-  }
-
   return (
-    <section id="categories" className="py-12 min-[1920px]:py-20 bg-bg-cr4 ">
-      <div className="container mx-auto px-4 text-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-8">Shop By Category</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 duration-1000">
-          {categories.map((category) => (
-            <div key={category.name} className="flex flex-col items-center hover:animate-pulse">
-              <Link to={`/categories?categoryName=${encodeURIComponent(category.name)}`}>
-                <div className="w-50 h-80 rounded-br-4xl rounded-md overflow-hidden shadow-md">
-                  <img
-                    src={category.products?.[0]?.images?.[0]?.url || "https://res.cloudinary.com/dhoyopcr7/image/upload/v1752044189/ad-product-svgrepo-com_zogf2n.png"}
-                    alt={category.name}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-                <p className="mt-4 font-semibold text-gray-700">{category.name}</p>
-              </Link>
-            </div>
-          ))}
+    <div className="container h-100 mx-auto px-4">
+      <div className="flex gap-6 pt-10 pl-60">
+        <div className="w-60 h-30 rounded-xl shadow-xl flex flex-col gap-4 justify-center items-center hover:cursor-pointer hover:bg-[#FCEFEA]">
+          <div className="w-10 h-10 rounded-full flex justify-center items-center text-[#6938EF] bg-[#F2EDFE]">
+            <CalendarSearch />
+          </div>
+          <p className="text-sm">นัดหมาย</p>
+        </div>
+        <div className="w-60 h-30 rounded-xl shadow-xl flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
+          <div className="w-10 h-10 rounded-full flex justify-center items-center text-[#E04F16] bg-[#FFE8E8]">
+            <Hospital />
+          </div>
+          <p className="text-sm">โรงพยาบาล/คลีนิค</p>
+        </div>
+        <div className="w-60 h-30 rounded-xl shadow-xl flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
+          <div className="w-10 h-10 rounded-full flex justify-center items-center text-[#DD2590] bg-[#FCEBF5]">
+            <CalendarSearch />
+          </div>
+          <p className="text-sm">ทักหมอ</p>
+        </div>
+        <div className="w-60 h-30 rounded-xl shadow-xl flex flex-col gap-4 justify-center items-center hover:cursor-pointer">
+          <div className="w-10 h-10 rounded-full flex justify-center items-center text-[#E04F16] bg-[#FFE8E8]">
+            <CalendarSearch />
+          </div>
+          <p className="text-sm">บริการฉุกเฉิน</p>
         </div>
       </div>
-    </section>
-  )
+      <p className="text-xl p-6 ml-30 ">แผนก</p>
+    </div>
+  );
 }
 
-export default CategorySection
+export default CategorySection;
