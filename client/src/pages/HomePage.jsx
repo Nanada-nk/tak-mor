@@ -1,4 +1,5 @@
 import CategorySection from "./landing/CategorySection.jsx";
+import DocList from "./landing/DocList.jsx";
 import HeroSection from "./landing/HeroSection.jsx"
 
 
@@ -9,6 +10,7 @@ function HomePage() {
       <main>
         <HeroSection />
         <CategorySection />
+        <DocList />
       </main>
      
     </div>
