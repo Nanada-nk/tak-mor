@@ -55,6 +55,7 @@ function AppRouter() {
     checkAuth();
   }, [])
 
+  
   return (
     <BrowserRouter>
       <Routes>
