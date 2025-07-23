@@ -100,6 +100,7 @@ authController.login = async (req, res, next) => {
     id: findEmail.id,
     role: findEmail.role,
   });
+  console.log('new access token check', accessToken)
   const { password: userPassword, ...userWithoutPassword } = findEmail;
   res.status(200).json({
     success: true,
@@ -225,19 +226,29 @@ authController.googleLoginDoctor = async (req, res, next) => {
 };
 
 
-authController.getMe = async (req, res, next) => {
-  if (!req.user) {
-    throw createError(401, "Unauthorization");
-  }
-  const user = req.user;
-  if (!user) {
-    throw createError(404, "User not found");
-  }
+  authController.getMe = async (req, res, next) => {
+    try {
+      if (!req.user) {
+        throw createError(401, "Unauthorized");
+      }
+      const account = req.user
+      // const account = await authService.findAccountById(req.user.id);
+      // console.log('account', account)
 
-  const { password, ...userWithoutPassword } = user;
+      if (!account) {
+        throw createError(404, "User not found");
+      }
 
-  res.status(200).json({ user: userWithoutPassword });
-};
+  //     const account = await authService.findAccountById(userId);
+  // console.log(account.patientProfile);
+
+      const { password, ...userWithoutPassword } = account;
+      res.status(200).json({ user: userWithoutPassword });
+    } catch (error) {
+      console.log("getMe error", error)
+      next(error);
+    }
+  }
 
 authController.forgotPassword = async (req, res, next) => {
   const { email } = req.body;
