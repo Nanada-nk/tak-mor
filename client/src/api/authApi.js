@@ -19,6 +19,11 @@ authApi.forgotPassword = (body) => {
   return apiClient.post("/auth/forgot-password", body);
 };
 
+//Nada
+authApi.verifyOtp = (body) => {
+  return apiClient.post("/auth/verify-otp", body);
+};
+
 authApi.resetPassword = (body) => {
   return apiClient.post("/auth/reset-password", body);
 };

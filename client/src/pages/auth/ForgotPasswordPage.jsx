@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authApi from "../../api/authApi.js";
 import { schemaForgotPassword } from "../../validator/schema.js";
-import AuthLayout from "../../components/auth/AuthLayout.jsx";
 import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 
 
@@ -25,27 +24,29 @@ function ForgotPasswordPage() {
   const onSubmit = async (data) => {
     try {
       const resp = await authApi.forgotPassword({ email: data.email });
-      toast.success(resp.data.message || "Password reset link has been sent.");
+      console.log('resp', resp)
+
+      toast.success(resp.data.message || "OTP has been sent to your email.");
       reset();
-      navigate("/login");
+      navigate("/otp", { state: { email: data.email } });
 
     } catch (error) {
-      // console.error("Forgot password failed:", error);
-      toast.error(error.response?.data?.message || "Failed to send reset link.");
+      console.error("Forgot password failed:", error);
+      toast.error(error.response?.data?.message || "Failed to send OTP.");
     }
   };
 
   return (
-    <AuthLayout>
+    <>
       <AuthFormCard
-        title="Forgot Your Password?"
-        subtitle="Enter your email to receive a password reset link."
+        title="Forgot Password?"
+        subtitle="Enter your email and we will send you an OTP code to reset your password."
         onSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
-        buttonText="Send Reset Link"
+        buttonText="Send OTP"
         bottomText="Remembered your password?"
         bottomLinkPath="/login"
-        bottomLinkText="Back to Login"
+        bottomLinkText="Sign In"
       >
 
         <FormInput
@@ -58,7 +59,7 @@ function ForgotPasswordPage() {
         />
 
       </AuthFormCard>
-    </AuthLayout>
+    </>
   );
 }
 
