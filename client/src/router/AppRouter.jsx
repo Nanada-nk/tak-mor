@@ -6,7 +6,6 @@ import AdminLayout from "../layouts/AdminLayout.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/auth/LoginPage.jsx";
 import RegisterPage from "../pages/auth/RegisterPage.jsx";
-import DoctorRegisterPage from "../pages/auth/doctor/DoctorRegisterPage.jsx";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
@@ -64,7 +63,6 @@ function AppRouter() {
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
-          <Route path="registerdoctor" element={<DoctorRegisterPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="otp" element={<EmailOTPPage />} />
