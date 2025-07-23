@@ -3,7 +3,6 @@ import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
 
-<<<<<<< HEAD
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/auth/LoginPage.jsx";
 import RegisterPage from "../pages/auth/RegisterPage.jsx";
@@ -50,28 +49,6 @@ import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 import authStore from '../stores/authStore.js';
 
-=======
-import LoginPage from "../pages/auth/LoginPage.jsx";
-import RegisterPage from "../pages/auth/RegisterPage.jsx";
-import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
-import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
-import NewsPage from "../pages/news/NewsPage.jsx";
-import NewContentPage from "../pages/news/NewsContentPage.jsx";
-
-// import ChangePasswordPage from '../pages/users/ChangePasswordPage.jsx';
-// import UserReviewHistoryPage from '../pages/reviews/UserReviewHistoryPage.jsx';
-
-import HomePage from "../pages/HomePage.jsx";
-// import authStore from '../stores/authStore.js';
-
-// import AdminReviewManagementPage from '../pages/admin/AdminReviewManagementPage.jsx';
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import AdminRoute from "./AdminRoute.jsx";
-import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx"
-import MaintenancePage from "../pages/utils/MaintenancePage.jsx"
-import ServerErrorPage from "../pages/utils/ServerErrorPage.jsx";
-import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
->>>>>>> a293c6f5aa673509d214e0cbbbd92bc4c6ac3c25
 
 function AppRouter() {
   const checkAuth = authStore((state) => state.checkAuth)
@@ -84,7 +61,6 @@ function AppRouter() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
-<<<<<<< HEAD
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
@@ -106,19 +82,10 @@ function AppRouter() {
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
           <Route path="servererror" element={<ServerErrorPage />} />
-=======
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="reset-password" element={<ResetPasswordPage />} />
-          <Route path="news" element={<NewsPage />} />
-          <Route path="news/:id" element={<NewContentPage />} />
->>>>>>> a293c6f5aa673509d214e0cbbbd92bc4c6ac3c25
         </Route>
 
         <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainLayout />}>
-<<<<<<< HEAD
           {/* Telecommunication */}
           <Route path="call" element={<CallingPage />} />
           <Route path="chat" element={<ChatPage />} />
@@ -137,31 +104,17 @@ function AppRouter() {
           <Route path="editprofile" element={<EditProfilePage />} />
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
-=======
-            {/* <Route path='reviews/history' element={<UserReviewHistoryPage />} />  */}
->>>>>>> a293c6f5aa673509d214e0cbbbd92bc4c6ac3c25
           </Route>
         </Route>
 
         <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
-<<<<<<< HEAD
           <Route path="dashboard" element={<AdminDashboardManagementPage />} />
           </Route>
         </Route>
 
         <Route path="*" element={<NotFoundPage />} />
 
-=======
-            {/* <Route path='reviews' element={<AdminReviewManagementPage />} />  */}
-          </Route>
-        </Route>
-
-        <Route path="/coming-soon" element={<ComingSoonPage />} />
-        <Route path="/maintenance" element={<MaintenancePage />} />
-        <Route path="/server-error" element={<ServerErrorPage />} />
-        <Route path="*" element={<NotFoundPage />} />
->>>>>>> a293c6f5aa673509d214e0cbbbd92bc4c6ac3c25
       </Routes>
     </BrowserRouter>
   );
