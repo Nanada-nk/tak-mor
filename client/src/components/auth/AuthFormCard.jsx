@@ -1,5 +1,6 @@
 import { Link } from "react-router"
 import { BubblesIcon } from 'lucide-react'
+import AuthLayout from "./AuthLayout";
 
 function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, buttonText, bottomLinkPath, bottomLinkText, bottomText }) {
 
@@ -15,6 +16,7 @@ function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, butto
   }
 
   return (
+    
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="text-center">
         {renderTitle()}
@@ -23,6 +25,7 @@ function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, butto
 
       <form onSubmit={onSubmit} className="bg-bg-cr4 p-8 rounded-3xl shadow-lg space-y-4">
         {children}
+        
         <button
           type="submit"
           disabled={isSubmitting}
@@ -48,6 +51,7 @@ function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, butto
         </p>
       )}
     </div>
+
   )
 }
 

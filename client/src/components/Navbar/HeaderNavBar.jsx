@@ -6,13 +6,20 @@ import { useNavigate } from "react-router";
 import { DropdownIcon } from "../icons";
 
 function HeaderNavBar() {
+  
 
   const navigate = useNavigate()
   const navigateHome = () => {
     navigate('/')
   }
 
+
+
   const user = authStore((state)=>state.user)
+  const actionLogout = authStore((state)=>state.actionLogout)
+  //  const checkAuth = authStore((state) => state.checkAuth);
+
+
   return (
     <div className="navbar flex justify-between w-[1200px] h-14 mt-2">
       <a onClick={navigateHome} className="hover:cursor-pointer">
@@ -49,7 +56,7 @@ function HeaderNavBar() {
             tabIndex={0}
             role="button"
             className="btn bg-[#0E82FD] text-white rounded-full">
-           John {user.firstName} {user.lastName} Doe
+           John {user.patientProfile?.firstName} {user.lastName} Doe
             <DropdownIcon className="w-4 ml-2" />
           </div>
           <ul
@@ -60,7 +67,7 @@ function HeaderNavBar() {
             </li>
             <li>
               <a onClick={() => {
-                  logout();
+                  actionLogout();
                   navigate('/login') }}>
                 ออกจากระบบ
               </a>
