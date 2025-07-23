@@ -54,7 +54,6 @@ function AppRouter() {
   useEffect(() => {
     checkAuth();
   }, [])
-
   
   return (
     <BrowserRouter>
