@@ -31,28 +31,28 @@ model Account {
   id        Int      @id @default(autoincrement())
   email     String   @unique
   password  String
+  phone     String
   role      UserRole @default(PATIENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   // lastLogin DateTime?
 
+  facebookId     String?  @unique
+  isActive       Boolean  @default(true)
   patientProfile Patient?
   doctorProfile  Doctor?
 
-  //ByNada
-  facebookId String? @unique
-  isActive   Boolean @default(true)
 }
 
 model Patient {
-  id           Int           @id @default(autoincrement())
-  accountId    Int           @unique
-  hn           String        @unique
-  firstName    String
-  lastName     String
-  address      String?
-  birthDate    DateTime?
-  phone        String
+  id        Int       @id @default(autoincrement())
+  accountId Int       @unique
+  hn        String?    @unique
+  firstName String
+  lastName  String
+  address   String?
+  birthDate DateTime?
+
   medicalFiles MedicalFile[]
   appointments Appointment[]
 
@@ -65,7 +65,7 @@ model Doctor {
   accountId   Int     @unique
   firstName   String
   lastName    String
-  phone       String
+  // phone       String
   bio         String?
   specialtyId Int?
 
@@ -160,8 +160,7 @@ model WebhookLog {
   paymentId  Int
   rawData    Json
   receivedAt DateTime @default(now())
-
-  payment Payment @relation(fields: [paymentId], references: [id])
+  payment    Payment  @relation(fields: [paymentId], references: [id])
 }
 
 model MedicalFile {
@@ -173,6 +172,6 @@ model MedicalFile {
   description   String
   uploadedAt    DateTime @default(now())
 
-  apointment Appointment @relation(fields: [appointmentId], references: [id])
-  patient    Patient     @relation(fields: [patientId], references: [id])
+  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  patient     Patient     @relation(fields: [patientId], references: [id])
 }

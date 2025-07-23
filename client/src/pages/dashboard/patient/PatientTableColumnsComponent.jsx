@@ -1,7 +1,7 @@
 // import { PencilIcon, UserX2Icon } from 'lucide-react';
 
 
-// function useUserTableColumns({ currentUserRole, onEditUser, onDisableUser }) {
+function PatientTableColumns({ currentUserRole, onEditUser, onDisableUser }) {
   
 //   const baseColumns = [
 //     { name: 'ID', selector: row => row.id, sortable: true, width: '80px' },
@@ -45,5 +45,5 @@
 
 
 //   return columns
-// }
-// export default useUserTableColumns
+}
+export default PatientTableColumns

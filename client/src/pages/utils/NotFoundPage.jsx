@@ -1,24 +1,27 @@
-import { Link } from 'react-router';
-
-
+import { Link } from "react-router";
 
 function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center text-center">
       <div className="space-y-4">
-        <h1 className="text-9xl font-bold tracking-tighter text-pri-gr1">404</h1>
+        <img
+          src="../../public/404BG.svg"
+          alt="404BG"
+          className="w-full h-full object-contain"
+        />
         <div className="space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">Page Not Found</h2>
-          <p className="text-muted-foreground">ขออภัย เราไม่พบหน้าที่คุณกำลังค้นหา</p>
+          <h2 className="text-2xl font-bold tracking-tight text-foreground">
+            อุ๊ย! ไม่พบหน้านี้
+          </h2>
+          <p className="text-sm">
+            หน้าที่คุณกำลังมองหาไม่เคยปรากฏอยู่
+          </p>
         </div>
-        <Link to="/"
-
-          className="inline-flex h-10 items-center justify-center rounded-md bg-pri-gr2 px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-p/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
-        >
-          กลับไปหน้าหลัก
+        <Link to="/" className="btn bg-[#0E82FD] text-white rounded-full mt-3">
+          กลับสู่หน้าแรก
         </Link>
       </div>
     </div>
-  )
+  );
 }
-export default NotFoundPage
+export default NotFoundPage;
