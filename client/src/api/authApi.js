@@ -1,4 +1,6 @@
+import apiClient from "./apiClient";
 
+const authApi = {};
 
 // 2. ใช้ apiClient เรียกไปยัง endpoint ต่างๆ
 authApi.registerPatient = (body) => {
