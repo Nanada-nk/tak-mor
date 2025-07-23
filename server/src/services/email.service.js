@@ -9,125 +9,30 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-emailService.sendPasswordResetEmail = async (to, token) => {
-  const resetUrl = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
 
+emailService.sendOtpEmail = async (to, otp) => {
   const mailOptions = {
-    from: `"Nimble.Glow Support" <${process.env.EMAIL_USER}>`,
+    from: `"ทักหมอ (TakMor)" <${process.env.EMAIL_USER}>`,
     to: to,
-    subject: "Reset Your Nimble.Glow Password",
+    subject: `รหัสยืนยันสำหรับเปลี่ยนรหัสผ่านบนเว็บ ทักหมอ`,
     html: `
-    <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; line-height: 1.6; color: #333333; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+    <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; line-height: 1.6; color: #7F8C8D; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
         <div style="padding: 20px; text-align: center;">
-          <h2 style="color: #2F3C25; margin-bottom: 20px;">Password Reset Request</h2>
-          <p>We received a request to reset the password for your Nimble.Glow account.</p>
-          <p>To create a new password, please click the button below. For your security, this link is valid for the next 10 minutes.</p>
-          
-          <a 
-            href="${resetUrl}" 
-            target="_blank" 
-            style="background-color: #7D8A70; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold; margin: 20px 0;"
-          >Reset Your Password</a>
-            
-          <p style="font-size: 14px; color: #666666;">If you did not request a password reset, please ignore this email. No changes will be made to your account.</p>
+          <h2 style="color: #34495E; margin-bottom: 20px;">รหัสยืนยันตัวตนของคุณ</h2>
+          <p>กรุณาใช้รหัสยืนยันด้านล่างนี้เพื่อดำเนินการตั้งรหัสผ่านใหม่ให้เสร็จสิ้น</p>
+          <p>รหัสนี้มีอายุการใช้งาน 5 นาที</p>
+          <div style="background-color: #EAF8FA; border-radius: 5px; padding: 10px 20px; margin: 20px 0; display: inline-block;">
+            <p style="font-size: 24px; font-weight: bold; color: #34495E; letter-spacing: 5px; margin: 0;">${otp}</p>
+          </div>
+          <p style="font-size: 14px; color: #7F8C8D;">หากคุณไม่ได้เป็นผู้ร้องขอเปลี่ยนรหัสผ่าน กรุณาเพิกเฉยอีเมลฉบับนี้</p>
         </div>
         <div style="background-color: #f7f7f7; padding: 20px; text-align: left;">
-          <p style="margin: 0; font-size: 14px;">Best regards,<br>The Nimble.Glow Team</p>
+          <p style="margin: 0; font-size: 14px;">ขอแสดงความนับถือ,<br>ทีมงาน ทักหมอ</p>
           <img 
-            src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1751854695/logo_bp3ha8.png" 
-            alt="Nimble.Glow Logo" 
+            src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1753282411/takmor_2_vkivfo.png" 
+            alt="TakMor Logo" 
             style="width: 120px; height: auto; margin-top: 15px;"
           >
-        </div>
-      </div>
-        `,
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    // console.log("Password reset email sent to:", to);
-  } catch (error) {
-    console.error("Error sending email:", error);
-    throw new Error("Failed to send password reset email.")
-  }
-}
-
-
-emailService.sendPaymentConfirmationEmail = async (payment) => {
-
-  const { user, order } = payment;
-  const shippingAddress = order.shipping?.address?.address || 'N/A';
-  const formattedOrderDate = new Date(order.createdAt).toLocaleDateString('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
-  const mailOptions = {
-    from: `"Nimble.Glow" <${process.env.EMAIL_USER}>`,
-    to: user.email,
-    subject: `Receipt for your Nimble.Glow Order #${order.orderNumber}`,
-    html: `
-      <div style="font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px;">
-        
-        <div style="padding: 25px; border-bottom: 1px solid #e0e0e0;">
-          <h2 style="color: #2F3C25; margin: 0;">Thank you for your order, ${user.firstName}!</h2>
-          <p style="margin: 5px 0 0;">Here is your receipt for order #${order.orderNumber}</p>
-          <p style="margin: 5px 0 0; font-size: 14px; color: #666;">Order Date: ${formattedOrderDate}</p>
-        </div>
-
-        <div style="padding: 25px;">
-          <h3 style="color: #333; margin-top: 0;">Order Summary</h3>
-          <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
-            <tbody>
-              ${order.products.map(item => `
-                <tr style="border-bottom: 1px solid #eee;">
-                  <td style="padding: 10px 0;">
-                    <img src="${item.product.images[0]?.url || ''}" alt="${item.product.title}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 4px;">
-                  </td>
-                  <td style="padding: 10px; vertical-align: middle;">
-                    <p style="margin: 0; font-weight: bold;">${item.product.title}</p>
-                    <p style="margin: 0; font-size: 12px; color: #666;">Qty: ${item.count}</p>
-                  </td>
-                  <td style="padding: 10px; text-align: right; vertical-align: middle;">
-                    ${(item.price * item.count).toFixed(2)} THB
-                  </td>
-                </tr>
-              `).join('')}
-            </tbody>
-          </table>
-
-          <table style="width: 100%; border-collapse: collapse;">
-            <tbody>
-              <tr>
-                <td style="padding: 5px 0;">Subtotal</td>
-                <td style="padding: 5px 0; text-align: right;">${order.cartTotal.toFixed(2)} THB</td>
-              </tr>
-              ${order.orderDiscount > 0 ? `
-                <tr>
-                  <td style="padding: 5px 0;">Coupon Discount</td>
-                  <td style="padding: 5px 0; text-align: right;">- ${order.orderDiscount.toFixed(2)} THB</td>
-                </tr>
-              ` : ''}
-              <tr>
-                <td style="padding: 5px 0; border-bottom: 2px solid #333;">Shipping</td>
-                <td style="padding: 5px 0; text-align: right; border-bottom: 2px solid #333;">${(order.shippingFee || 0).toFixed(2)} THB</td>
-              </tr>
-              <tr>
-                <td style="padding: 10px 0; font-weight: bold; font-size: 18px;">Total Paid</td>
-                <td style="padding: 10px 0; text-align: right; font-weight: bold; font-size: 18px;">${payment.amount.toFixed(2)} THB</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-
-        <div style="padding: 25px; border-top: 1px solid #e0e0e0; background-color: #f7f7f7;">
-            <h3 style="color: #333; margin-top: 0;">Address:</h3>
-            <p style="margin: 0;">${shippingAddress}</p>
-        </div>
-
-        <div style="padding: 20px; text-align: left;">
-          <img src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1751854695/logo_bp3ha8.png" alt="Nimble.Glow Logo" style="width: 120px; height: auto;">
         </div>
       </div>
     `,
@@ -135,10 +40,82 @@ emailService.sendPaymentConfirmationEmail = async (payment) => {
 
   try {
     await transporter.sendMail(mailOptions);
-    // console.log(`Receipt email sent for Order #${order.orderNumber}`);
   } catch (error) {
-    console.error("Error sending receipt email:", error);
+    console.error("Error sending OTP email:", error);
+    throw new Error("Failed to send OTP email.");
   }
-};
+}
+
+
+// emailService.sendAppointmentConfirmationEmail = async (appointmentDetails) => {
+//   const { 
+//     patientEmail, 
+//     patientName, 
+//     doctorName, 
+//     appointmentDateTime, // Expects a JavaScript Date object
+//     telemedicineUrl, 
+//     telemedicineRoomId 
+//   } = appointmentDetails;
+
+//   // Format date and time for Thai locale
+//   const formattedDate = new Date(appointmentDateTime).toLocaleDateString('th-TH', {
+//     year: 'numeric',
+//     month: 'long',
+//     day: 'numeric',
+//     weekday: 'long',
+//   });
+//   const formattedTime = new Date(appointmentDateTime).toLocaleTimeString('th-TH', {
+//     hour: '2-digit',
+//     minute: '2-digit',
+//   });
+
+//   const mailOptions = {
+//     from: `"ทักหมอ (TakMor)" <${process.env.EMAIL_USER}>`,
+//     to: patientEmail,
+//     subject: `ยืนยันการนัดหมายแพทย์กับ ${doctorName}สำเร็จ`,
+//     html: `
+//     <div style="font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; line-height: 1.6; color: #7F8C8D; max-width: 600px; margin: auto; border: 1px solid #e0e0e0; border-radius: 8px; overflow: hidden;">
+//         <div style="padding: 25px; text-align: center; border-bottom: 1px solid #e0e0e0;">
+//             <h2 style="color: #34495E; margin: 0;">ยืนยันการนัดหมายสำเร็จ</h2>
+//             <p>สวัสดีคุณ ${patientName}, การนัดหมายของคุณได้รับการยืนยันเรียบร้อยแล้ว</p>
+//         </div>
+//         <div style="padding: 25px;">
+//             <h3 style="color: #34495E; margin-top: 0;">รายละเอียดการนัดหมาย:</h3>
+//             <div style="background-color: #f8f9fa; padding: 20px; border-radius: 5px;">
+//                 <p style="margin: 5px 0;"><strong>แพทย์:</strong> ${doctorName}</p>
+//                 <p style="margin: 5px 0;"><strong>ผู้ป่วย:</strong> ${patientName}</p>
+//                 <p style="margin: 5px 0;"><strong>วันที่นัด:</strong> ${formattedDate}</p>
+//                 <p style="margin: 5px 0;"><strong>เวลา:</strong> ${formattedTime} น.</p>
+//                 <p style="margin: 5px 0;"><strong>รหัสห้อง Telemedical:</strong> ${telemedicineRoomId}</p>
+//             </div>
+//             <div style="text-align: center; margin: 30px 0;">
+//                 <a href="${telemedicineUrl}" target="_blank" style="background-color: #2D9CDB; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block;">
+//                     เข้าห้องตรวจออนไลน์
+//                 </a>
+//             </div>
+//             <p style="font-size: 14px; text-align: center; color: #7F8C8D;">กรุณาเข้าสู่ระบบและไปที่หน้า 'การนัดหมายของฉัน' เพื่อดูรายละเอียดเพิ่มเติม หรือเตรียมตัวล่วงหน้าก่อนถึงเวลานัดหมาย</p>
+//         </div>
+//         <div style="background-color: #f7f7f7; padding: 20px; text-align: left;">
+//             <p style="margin: 0; font-size: 14px;">ขอแสดงความนับถือ,<br>ทีมงาน ทักหมอ</p>
+//             <img 
+//               src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1753282411/takmor_2_vkivfo.png" 
+//               alt="TakMor Logo" 
+//               style="width: 120px; height: auto; margin-top: 15px;"
+//             >
+//         </div>
+//     </div>
+//     `,
+//   };
+
+//   try {
+//     await transporter.sendMail(mailOptions);
+//     console.log(`Appointment confirmation email sent to: ${patientEmail}`);
+//   } catch (error) {
+//     console.error("Error sending appointment confirmation email:", error);
+//     throw new Error("Failed to send appointment confirmation email.");
+//   }
+// };
+
+
 
 export default emailService

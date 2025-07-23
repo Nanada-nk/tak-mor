@@ -2,7 +2,7 @@ import express from 'express'
 import authController from '../controllers/auth.controller.js'
 import authenticateUser from '../middlewares/authenticate.middleware.js'
 import validator from '../validations/validator.js'
-import { schemaLogin, schemaRegister } from '../validations/schema.auth.js'
+import { schemaLogin, schemaRegister, schemaVerifyOtp } from '../validations/schema.auth.js'
 
 
 const authRouter = express.Router()
@@ -14,10 +14,13 @@ authRouter.post('/login', validator(schemaLogin), authController.login)
 authRouter.post('/google-login/patient', authController.googleLoginPatient)
 authRouter.post('/google-login/doctor', authController.googleLoginDoctor)
 authRouter.get('/me', authenticateUser, authController.getMe)
-// authRouter.post('/forgot-password', authController.forgotPassword);
-// authRouter.post('/reset-password', authController.resetPassword);
 
 
+// ByNada
+// Password Reset Flow with OTP
+authRouter.post('/forgot-password', authController.forgotPassword);
+authRouter.post('/verify-otp',validator(schemaVerifyOtp), authController.verifyOtp);
+authRouter.post('/reset-password', authController.resetPassword);
 
 
 export default authRouter
