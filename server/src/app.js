@@ -8,12 +8,9 @@ import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
-<<<<<<< HEAD
 import cookieParser from 'cookie-parser'
-=======
 import bookingRouter from './routes/booking.route.js'
 
->>>>>>> ae9d3cd92ebc82c4ab0e514dce71d00d1bdefd9c
 
 const app = express()
 
