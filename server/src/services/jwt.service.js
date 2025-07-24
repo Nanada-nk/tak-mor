@@ -23,4 +23,28 @@ jwtService.verifyToken = async (token) => {
   }
 }
 
+jwtService.refreshToken = async (userId) => {
+  try {
+    return jwt.sign(
+      { id: userId },
+      process.env.REFRESH_TOKEN_SECRET || 'your_super_strong_refresh_secret',
+      {expiresIn: '1m'}
+    )
+  } catch (error) {
+    throw new Error("Error generating refresh token");
+  }
+}
+
+jwtService.newAccessToken = async (userId) => {
+  try {
+    return jwt.sign(
+       { userId: userId },
+       process.env.ACCESS_SECRET || 'access-secret',
+       {expiresIn: '20s'}
+    )
+  } catch (error) {
+    throw new Error("Error generating newAccessToken");
+  }
+}
+
 export default jwtService

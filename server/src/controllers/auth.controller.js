@@ -5,6 +5,9 @@ import generateHN from "../utils/generateHN.js";
 import { OAuth2Client } from "google-auth-library";
 import createError from "../utils/create-error.js";
 import crypto from "crypto";
+import prisma from "../config/prisma.config.js";
+import { token } from "morgan";
+
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -100,9 +103,35 @@ authController.login = async (req, res, next) => {
     role: findEmail.role,
   });
   console.log('new access token check', accessToken)
+
+  //ByNada
+  const refreshToken = await jwtService.refreshToken(findEmail.id)
+
+  await prisma.refreshToken.create({
+    data: {
+      token: refreshToken,
+      expiresAt: new Date(Date.now() + 60 * 1000), // 1 minutes
+      account: {
+        connect: {
+          id: findEmail.id
+        }
+      }
+    }
+  })
+
+  res.cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    sameSite: 'strict',
+    secure: true,
+    maxAge: 60 * 24 * 60 * 60 * 1000
+  })
+
+
+
   const { password: userPassword, ...userWithoutPassword } = findEmail;
   res.status(200).json({
     success: true,
+    message: "Login successful",
     accessToken,
     user: userWithoutPassword,
   });
@@ -302,5 +331,67 @@ authController.resetPassword = async (req, res, next) => {
   }
 };
 
+
+
+//ByNada
+authController.refresh = async (req, res, next) => {
+  try {
+    // console.log('sdgsrtgvrstrbymrtkybjrkrtkyjrtkyjkr')
+    const oldToken = req.cookies.refreshToken
+    console.log('oldTeq.cookie', oldToken)
+
+    if (!oldToken) {
+      throw createError(401, 'unauth')
+    }
+
+    let userId
+    const oldRefresh = await prisma.refreshToken.findFirst({
+      where: {
+        token: oldToken
+      },
+      select: {
+        accountId: true,
+        expiresAt: true
+      }
+    })
+
+    if (!oldRefresh) {
+      throw createError(401, 'Invalid token');
+    }
+
+    userId = oldRefresh.accountId
+
+    if (new Date() < oldRefresh.expiresAt) createError(401)
+
+
+
+    const newRefreshToken = await jwtService.newAccessToken(userId)
+
+    await prisma.refreshToken.create({
+      data: {
+        token: newRefreshToken,
+        expiresAt: new Date(Date.now() + 60 * 1000), // 1 min
+        account: {
+          connect: {
+            id: userId 
+          }
+        }
+      }
+    })
+
+    res.cookie('refreshToken', newRefreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+      // maxAge: 60 * 24 * 60 * 60 * 1000 // 60 days
+      maxAge: 60 * 1000 // 1 min
+    })
+
+    res.status(200).json({ accessToken: newRefreshToken })
+
+  } catch (err) {
+    console.log('err', err)
+  }
+}
 
 export default authController;

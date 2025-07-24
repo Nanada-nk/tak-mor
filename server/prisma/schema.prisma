@@ -45,6 +45,21 @@ model Account {
 
   patientProfile Patient?
   doctorProfile  Doctor?
+
+  //ByNada
+  RefreshToken   RefreshToken[]
+}
+
+//ByNada
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  accountId Int
+  account   Account  @relation(fields: [accountId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
 }
 
 model Patient {

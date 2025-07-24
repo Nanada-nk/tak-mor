@@ -8,7 +8,7 @@ import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
-
+import cookieParser from 'cookie-parser'
 
 const app = express()
 
@@ -22,6 +22,9 @@ app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
 }))
+
+//ByNada
+app.use(cookieParser())
 app.use(limiter)
 app.use(express.json())
 app.use(morgan("dev"))
