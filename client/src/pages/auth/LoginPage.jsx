@@ -69,6 +69,7 @@ function LoginPage() {
 
   return (
     // <AuthLayout>
+    <div className="my-5">
       <AuthFormCard
         title={["Sign in"]}
         onSubmit={handleSubmit(onSubmit)}
@@ -119,6 +120,8 @@ function LoginPage() {
 
       </div>
       </AuthFormCard>
+
+    </div>
     // </AuthLayout>
     
   )

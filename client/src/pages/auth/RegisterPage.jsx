@@ -42,7 +42,8 @@ function RegisterPage() {
 
 
   return (
- 
+    <div className="my-5">
+
       <AuthFormCard
         title={["Register"]}
         onSubmit={handleSubmit(onSubmit)}
@@ -104,6 +105,7 @@ function RegisterPage() {
         />
 
       </AuthFormCard>
+    </div>
     
   )
 }
