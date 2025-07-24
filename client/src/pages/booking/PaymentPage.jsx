@@ -1,204 +1,71 @@
-// import { useEffect, useState, useRef } from 'react';
-// import { useParams, useNavigate } from 'react-router';
-// import { toast } from 'react-toastify';
-// import { BubblesIcon, UploadCloudIcon } from 'lucide-react';
-
-// import Footer from '../../layouts/Footer.jsx';
-// import authStore from '../../stores/authStore.js';
-// import ordersApi from '../../api/ordersApi.js';
-// import paymentsApi from '../../api/paymentsApi.js';
-
+import React from 'react';
+import { useNavigate } from "react-router";
+import { PinIcon, StarIcon } from "../../components/icons"; 
+import useBookingStore from "../../stores/bookingStore";
+import FormInput from "../../components/FormInput";
 
 function PaymentPage() {
-//   const { orderId } = useParams();
-//   const navigate = useNavigate();
-//   const token = authStore((state) => state.token);
-
-//   const [order, setOrder] = useState(null);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [slipFile, setSlipFile] = useState(null);
-//   const [slipPreview, setSlipPreview] = useState('');
-//   const [isSubmitting, setIsSubmitting] = useState(false);
-//   const fileInputRef = useRef(null);
-
-
-//   const fetchOrderDetails = async () => {
-//     if (!token || !orderId) return;
-//     try {
-//       setIsLoading(true);
-//       const response = await ordersApi.getOrderById(orderId, token);
-//       // console.log('response', response)
-//       setOrder(response.data.order);
-//     } catch (error) {
-//       // console.log('error', error)
-//       toast.error("Failed to load order details.");
-//       navigate('/');
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchOrderDetails();
-//   }, [orderId, token, navigate]);
-
-
-//   const handleFileChange = (e) => {
-//     const file = e.target.files[0];
-//     // console.log('file', file)
-//     if (file) {
-//       setSlipFile(file);
-//       setSlipPreview(URL.createObjectURL(file));
-//     }
-//   };
-
-//   const handleConfirmPayment = async () => {
-//     if (!slipFile) {
-//       return toast.error("Please upload your payment slip.");
-//     }
-//     if (!order || !order.payment) {
-//       return toast.error("Payment information for this order not found.");
-//     }
-//     try {
-//       setIsSubmitting(true);
-//       const formData = new FormData();
-//       // console.log('formData', formData)
-
-//       formData.append('slipImage', slipFile);
-
-//       const uploadSlip = await paymentsApi.uploadSlip(order.payment.id, formData, token);
-//       // console.log('uploadSlip', uploadSlip)
-
-//       toast.success("Payment confirmation sent successfully!"); 
-//       navigate(`/orders/${order.id}`);
-//     } catch (error) {
-//       // console.log('error', error)
-//       toast.error(error.response?.data?.message || "Failed to confirm payment.");
-//     } finally {
-//       setIsSubmitting(false);
-//     }
-//   };
-
-//   if (isLoading || !order) {
-//     return (
-//       <div className="flex justify-center items-center h-screen">
-//         <BubblesIcon className="w-12 h-12 animate-spin text-pri-gr1" />
-//       </div>
-//     );
-//   }
-
-//   return (
-//     <div className='bg-bg-cr4'>
-//       <div className="p-10 flex justify-center">
-//         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start duration-700">
-
-
-//           <div className='w-[427px]'>
-//             <div className='pb-6'>
-//               <h2 className='text-xl font-bold'>ขั้นตอนการชำระเงิน</h2>
-//               <h3 className='font-bold mb-4'>Payment process</h3>
-//               <ul className='list-disc list-inside space-y-2 text-gray-700'>
-//                 <li className='font-semibold'>ตรวจสอบจำนวนเงินที่ต้องโอน</li>
-//                 <p className='ml-6'>Check the amount to be transferred.</p>
-//                 <li className='font-semibold'>สแกน QR Code หรือโอนเงินผ่าน Mobile Banking</li>
-//                 <p className='ml-6'>Scan QR Code or transfer money via Mobile Banking.</p>
-//                 <li className='font-semibold'>บันทึกสลิปการโอนเงินให้ถูกต้อง</li>
-//                 <p className='ml-6'>Record the transfer slip correctly.</p>
-//                 <li className='font-semibold'>อัปโหลดสลิปและกดยืนยันการชำระเงิน</li>
-//                 <p className='ml-6'>Upload the slip and confirm payment.</p>
-//                 <li className='font-semibold'>ระบบจะแสดงหลักฐาน/สรุปการโอนเงิน</li>
-//                 <p className='ml-6'>The system will display proof/summary of the money transfer.</p>
-//               </ul>
-//             </div>
-
-
-//             <div className='mt-8 mb-4'>
-//               <h2 className='text-xl font-bold mb-4'>Shipping to:</h2>
-//               <div className="p-4 rounded-lg bg-gray-50 shadow">
-//                 <p className="text-gray-700">{order.shipping?.address?.address || 'No address selected.'}</p>
-//               </div>
-//             </div>
-
-//             <div className='p-6 bg-gray-50 rounded-lg shadow'>
-//               <h3 className='text-lg font-bold'>Your Order ID: {order.orderNumber}</h3>
-//               <div className='mt-4 space-y-4'>
-//                 {order.products.map(item => (
-//                   <div key={item.id} className="flex justify-between items-center">
-//                     <div className="flex items-center">
-//                       <img src={item.product.images[0]?.url} alt={item.product.title} className="w-16 h-16 object-cover rounded-md mr-4" />
-//                       <div>
-//                         <p className='font-semibold text-sm'>{item.product.title}</p>
-//                         <p className='text-sm text-gray-500'>Qty: {item.count}</p>
-//                       </div>
-//                     </div>
-//                     <p className='font-semibold text-sm'>{(item.price * item.count).toFixed(2)} THB</p>
-//                   </div>
-//                 ))}
-//               </div>
-
-//               <div className="mt-4 pt-4 border-t space-y-2">
-//                 <div className="flex justify-between text-gray-600">
-//                   <span>Subtotal</span>
-//                   <span>{order.cartTotal.toFixed(2)} THB</span>
-//                 </div>
-
-
-//                 {order.orderDiscount > 0 && (
-//                   <div className="flex justify-between text-green-600">
-//                     <span>Coupon Discount</span>
-//                     <span>- {order.orderDiscount.toFixed(2)} THB</span>
-//                   </div>
-//                 )}
-
-
-//                 <div className="flex justify-between font-bold text-xl mt-2">
-//                   <span>TOTAL</span>
-//                   <span className='text-pri-gr1'>{order.payment?.amount.toFixed(2)} THB</span>
-//                 </div>
-//               </div>
-
-
-//             </div>
-//           </div>
-
-
-
-//           <div className='outline-2 outline-pri-gr1 bg-white py-10 px-6 h-auto w-[427px] rounded-lg flex flex-col items-center shadow-lg shadow-pri-gr1 duration-700'>
-//             <h2 className='text-2xl font-bold mb-2'>THAI QR PAYMENT</h2>
-//             <img src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1752200246/QRcode_nofkwy.jpg" alt="QR Code" className='h-[500px]' />
-//             <div className='w-full max-w-sm mt-4'>
-//               <label className='block text-sm font-medium text-gray-700 mb-2'>
-//                 อัปโหลดสลิปการโอนเงิน
-//               </label>
-//               <div
-//                 onClick={() => fileInputRef.current.click()}
-//                 className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md cursor-pointer"
-//               >
-//                 {slipPreview ? (
-//                   <img src={slipPreview} alt="Slip preview" className="max-h-48 rounded-md" />
-//                 ) : (
-//                   <div className="space-y-1 text-center">
-//                     <UploadCloudIcon className="mx-auto h-12 w-12 text-gray-400" />
-//                     <p className="text-sm text-gray-600">Click to upload a file</p>
-//                   </div>
-//                 )}
-//               </div>
-//               <input type="file" ref={fileInputRef} onChange={handleFileChange} className='hidden' accept="image/*" />
-//             </div>
-
-//             <button
-//               onClick={handleConfirmPayment}
-//               disabled={isSubmitting}
-//               className="btn btn-primary w-full max-w-sm mt-6"
-//             >
-//               {isSubmitting ? <span className="loading loading-spinner"></span> : "แจ้งยืนยันการชำระเงิน"}
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//       <Footer />
-//     </div>
-//   );
+  const navigate = useNavigate();
+  const { specialty, appointmentType, clinic, service, dateTime } = useBookingStore
+  const selectedDate = dateTime?.date || null;
+  const selectedTime = dateTime?.time || null;
+  return (
+    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
+         <div className="h-1/7 w-full flex items-center justify-center">
+           <ul className="steps h-full">
+             <li data-content="✓" className="step step-primary step-success">Specialty</li>
+             <li data-content="✓" className="step step-primary step-success">Appointment Type</li>
+             <li data-content="✓" className="step step-primary step-success">Date & Time</li>
+             <li data-content="✓" className="step step-primary step-success">Patient Information</li>
+             <li data-content="5" className="step step-primary">Payment</li>
+             <li data-content="6" className="step">Confirmation</li>
+           </ul>
+         </div>
+         <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
+           <div className="h-fit mt-4 flex flex-col items-center justify-center">
+             <div className="py-3 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex flex-col rounded-2xl">
+               <div className="flex w-full">
+                 <div className="w-1/5 avatar flex items-center justify-center">
+                   <div className="w-25 rounded-full">
+                     <img
+                       src="https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
+                       alt="doctor"
+                     />
+                   </div>
+                 </div>
+                 <div className="w-4/5 p-1 flex flex-col justify-between items-start">
+                   <div className="flex items-start gap-2">
+                     <div className="flex flex-col items-start ">
+                       <div className="font-bold">Dr.John Nontakaeng</div>
+                       <div className="text-blue-700 ">Psychologist</div>
+                     </div>
+                     <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">
+                       <StarIcon className="h-4" />
+                       <div className="text-white text-sm">5.0</div>
+                     </div>
+                   </div>
+                   <div className="flex items-center justify-start">
+                     <PinIcon className="h-5" />
+                     <div className="text-gray-500">742 Evergreen Terrace, Springfield</div>
+                   </div>
+                 </div>
+               </div>
+               {/* Main Booking Info Section - Specialty, Service, Date & Time, Appointment Type */}
+              
+             </div>
+           </div>
+           <div className="h-[300px] flex flex-col items-center pt-4 gap-3">
+             <div className="flex flex-row p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
+               
+             </div>
+           </div>
+           <div className=" h-1/10 flex justify-between items-center px-5">
+             <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
+             <button onClick={() => navigate("/payment")} className="btn btn-primary">Select Payment {" >"}</button>
+           </div>
+         </div>
+       </div>
+  );
 }
 
 export default PaymentPage;
