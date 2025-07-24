@@ -20,6 +20,7 @@ import ContactUsPage from "../pages/ContactUsPage.jsx";
 
 import DoctorListPage from "../pages/doctor/DoctorListPage.jsx";
 import DoctorAvailabilityPage from "../pages/doctor/DoctorAvailabilityPage.jsx";
+import DoctorProfilePage from "../pages/dashboard/doctor/DoctorProfilePage.jsx"
 
 import AppointmentTypePage from "../pages/booking/AppointmentTypePage.jsx";
 import BookingComfirmationPage from "../pages/booking/BookingComfirmationPage.jsx";
@@ -78,6 +79,7 @@ function AppRouter() {
           <Route path="otp" element={<EmailOTPPage />} />
           <Route path="rolepick" element={<SignupRolePick />} />
 
+
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
           <Route path="news/:id" element={<NewContentPage />} />
@@ -88,6 +90,8 @@ function AppRouter() {
           {/* Doctor */}
           <Route path="doctorlist" element={<DoctorListPage />} />
           <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
+          <Route path="doctorprofile" element={<DoctorProfilePage />} />
+
           {/* Utils Page */}
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />

@@ -1,12 +1,14 @@
 // /** @format */
 
-// import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import PatientProfile from "../../../components/profile/patientProfile";
 // import { Link } from "react-router";
 // import { BubblesIcon } from "lucide-react";
 // import authStore from "../../../stores/authStore.js";
 // import ProfileLayout from "../../components/ProfileLayout.jsx";
 
 function PatientProfilePage() {
+  
   // const user = authStore((state) => state.user);
   // const userRole = user?.role;
   // const checkAuth = authStore((state) => state.checkAuth);
@@ -25,7 +27,11 @@ function PatientProfilePage() {
   //   );
   // }
 
-  // return (
+  return (
+    <div>
+      <PatientProfile/>
+    </div>
+   
   //   <ProfileLayout title={`Hello, ${user.firstName || "User"}!`}>
   //     <div className="bg-bg-cr3 p-8 rounded-3xl shadow-lg space-y-4">
   //       <div className="flex flex-col items-center mb-6">
@@ -107,7 +113,7 @@ function PatientProfilePage() {
   //       )}
   //     </div>
   //   </ProfileLayout>
-  // );
+  );
 }
 
 export default PatientProfilePage;
