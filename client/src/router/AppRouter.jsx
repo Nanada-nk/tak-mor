@@ -6,9 +6,11 @@ import AdminLayout from "../layouts/AdminLayout.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/auth/LoginPage.jsx";
 import RegisterPage from "../pages/auth/RegisterPage.jsx";
+import RegisterDoctorPage from "../pages/auth/RegisterDoctorPage.jsx";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
+import SignupRolePick from "../pages/auth/SignupRolePick.jsx";
 
 import NewsPage from "../pages/news/NewsPage.jsx";
 import NewContentPage from "../pages/news/NewsContentPage.jsx";
@@ -68,10 +70,12 @@ function AppRouter() {
           <Route index element={<HomePage />} />
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route path="registerpatient" element={<RegisterPage />} />
+          <Route path="registerdoctor" element={<RegisterDoctorPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="otp" element={<EmailOTPPage />} />
+          <Route path="rolepick" element={<SignupRolePick />} />
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
@@ -88,7 +92,7 @@ function AppRouter() {
           <Route path="servererror" element={<ServerErrorPage />} />
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/" element={<MainLayout />}>
           {/* Telecommunication */}
           <Route path="call" element={<CallingPage />} />
@@ -109,7 +113,7 @@ function AppRouter() {
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
