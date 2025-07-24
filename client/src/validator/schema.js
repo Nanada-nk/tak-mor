@@ -26,7 +26,10 @@ export const schemaRegister = Yup.object({
   confirmPassword:
     Yup.string()
       .oneOf([Yup.ref("password"), null], "Passwords must match")
-      .required("Confirm password is required")
+      .required("Confirm password is required"),
+  agreeToTerms:
+    Yup.boolean()
+      .oneOf([true], 'You must accept the Terms of Service and Privacy Policy')
 }).noUnknown()
 
 export const schemaLogin = Yup.object({

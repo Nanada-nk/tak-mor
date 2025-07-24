@@ -14,6 +14,16 @@ authApi.login = (body) => {
   return axiosInstance.post("/auth/login", body);
 };
 
+
+authApi.googleLoginPatient = (body) => {
+  return axiosInstance.post("/auth/google-login/patient", body);
+};
+
+
+authApi.googleLoginDoctor = (body) => {
+  return axiosInstance.post("/auth/google-login/doctor", body);
+};
+
 authApi.getMe = () => {
   return axiosInstance.get("/auth/me");
 };

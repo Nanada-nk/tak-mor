@@ -19,7 +19,9 @@ const authStore = create(
 
       checkAuth: async () => {
         console.log("1. checkAuth action STARTING...")
+
         const currentToken = get().token;
+        
         console.log("2. Token from store is:", currentToken);
 
         if (currentToken) {
@@ -54,12 +56,19 @@ const authStore = create(
           const { accessToken, user } = response.data;
           // console.log("actionLogin: Login successful, accessToken =", accessToken, "user =", user)
           set({ token: accessToken, user: user, isLoggedIn: true, isLoading: false });
+          console.log('response', response)
           return response
         } catch (error) {
-          console.error("actionLogin: Login failed, error =", error)
+          console.error("Login action failed:", error);
           set({ isLoading: false });
-          throw error; 
+          throw error;
         }
+      },
+
+      actionSocialLogin: (data) => {
+        const { accessToken, user } = data;
+        console.log('data', data)
+        set({ token: accessToken, user: user, isLoggedIn: true, isLoading: false });
       },
 
       actionLogout: () => {
@@ -72,12 +81,13 @@ const authStore = create(
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({ 
-        token: state.token, 
-        user: state.user, 
-        isLoggedIn: state.isLoggedIn  }),
+      partialize: (state) => ({
+        token: state.token,
+        user: state.user,
+        isLoggedIn: state.isLoggedIn
+      }),
     }
   )
 );
-
+authStore.getState().checkAuth();
 export default authStore;

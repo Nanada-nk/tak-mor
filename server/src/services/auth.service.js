@@ -23,7 +23,6 @@ authService.findAccountByEmail = async (email) => {
 }
 
 authService.findAccountById = (id) => {
-  
   return prisma.account.findUnique({
     where: { id },
     include: { 
@@ -166,5 +165,43 @@ authService.resetPasswordWithToken = async (token, newPassword) => {
     }
   });
 };
+
+//ByNada
+authService.reactivateAndLinkFacebook = (id, facebookId) => {
+  return prisma.account.update({
+    where: { id },
+    data: {
+      isActive: true,
+      facebookId: facebookId,
+    },
+  });
+};
+
+//ByNada
+authService.linkFacebookToAccount = (id, facebookId) => {
+    return prisma.account.update({
+        where: { id },
+        data: { facebookId: facebookId },
+    });
+};
+
+//ByNada
+authService.deactivateAccountByFacebookId = async (facebookId) => {
+  const account = await prisma.account.findUnique({
+    where: { facebookId },
+  });
+
+  if (!account) {
+    console.warn(`Deactivation request for non-existent facebookId: ${facebookId}`);
+    return;
+  }
+
+  return prisma.account.update({
+    where: { id: account.id },
+    data: { isActive: false },
+  });
+};
+
+
 
 export default authService
