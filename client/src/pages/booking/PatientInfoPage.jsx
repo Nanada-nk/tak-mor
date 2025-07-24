@@ -2,7 +2,7 @@ import { useNavigate } from "react-router";
 import useBookingStore from "../../stores/bookingStore";
 import { PinIcon, StarIcon } from "../../components/icons";
 import { useState } from "react";
-import FormInput from "../../components/FormInput";
+import {BookingFormInput} from "../../components/FormInput";
 
 function PatientInfoPage() {
   const [form, setForm] = useState({
@@ -104,28 +104,28 @@ function PatientInfoPage() {
              <div className="flex flex-row p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
                 <form className="w-full flex flex-col gap-5" encType="multipart/form-data">
                 <div className="flex justify-between gap-2 items-start pt-2 mx-2">
-                   <FormInput
+                   <BookingFormInput
                     label="First Name"
                     name="firstname"
                     value={form.firstname}
                     onChange={handleInputChange}
                     required
                   />
-                  <FormInput
+                  <BookingFormInput
                     label="Last Name"
                     name="lastname"
                     value={form.lastname}
                     onChange={handleInputChange}
                     required
                   />
-                  <FormInput
+                  <BookingFormInput
                     label="Phone Number"
                     name="phonenumber"
                     value={form.phonenumber}
                     onChange={handleInputChange}
                     required
                   />
-                  <FormInput
+                  <BookingFormInput
                     label="Email Address"
                     name="emailaddress"
                     value={form.emailaddress}
@@ -135,7 +135,7 @@ function PatientInfoPage() {
                   />
                 </div>
                 <div className="flex justify-center gap-3 mx-2 pt-2 w-49/50">
-                  <FormInput
+                  <BookingFormInput
                     label="Symptoms"
                     name="symptoms"
                     value={form.symptoms}
@@ -144,7 +144,7 @@ function PatientInfoPage() {
                     className="w-full border border-gray-200 rounded-lg focus:outline-0"
                     divClassName=" w-1/2 h-24 "
                   />
-                  <FormInput
+                  <BookingFormInput
                     label="Reason for Visit"
                     name="reason"
                     value={form.reason}
@@ -155,7 +155,7 @@ function PatientInfoPage() {
                   />
                 </div>
                 <div className="flex justify-start gap-3 mx-2 pt-2 w-49/50">
-                  <FormInput
+                  <BookingFormInput
                     label="Attachment:"
                     name="attachment"
                     onChange={handleInputChange}
