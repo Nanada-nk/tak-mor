@@ -31,7 +31,6 @@ function RegisterDoctorPage() {
       // actionRegister(data)
       console.log('resp', resp);
       toast.success("Registration successful! Please log in.");
-      alert('Register Successful')
       reset();
       navigate("/login");
     } catch (error) {
@@ -82,7 +81,7 @@ function RegisterDoctorPage() {
           type="email"
           register={register}
           error={errors.email}
-          placeholder="Enter Email"
+          placeholder="you@example.com"
         />
 
         <FormInput

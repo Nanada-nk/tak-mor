@@ -1,16 +1,15 @@
 import axios from "axios";
 
-//ByNada
-const instance = axios.create({
+const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
   withCredentials: true
 })
 
-instance.interceptors.request.use(
+axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem('accessToken')
-    
-    if(accessToken) {
+
+    if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
     }
     return config
@@ -20,37 +19,38 @@ instance.interceptors.request.use(
   }
 )
 
-instance.interceptors.response.use(
+axiosInstance.interceptors.response.use(
   (res) => res,
   async (err) => {
     const originalRequest = err.config;
 
-    if(err.response.status === 401) {
+    if (err.response && err.response.status === 401 && !originalRequest._retry) {
 
       // ดัก 401 all method
-      if(originalRequest._retry){
+      if (originalRequest._retry ) {
         return Promise.reject(err)
       }
 
       originalRequest._retry = true
 
       try {
-        const response = await instance.get('auth/refresh', {_retry: true})
+        const response = await axiosInstance.get('auth/refresh', { _retry: true })
 
 
         const newAccessToken = response.data.accessToken
         localStorage.setItem('accessToken', newAccessToken)
         originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`
-        return instance(originalRequest)
+        return axiosInstance(originalRequest)
       } catch (error) {
+        console.error("Session expired, logging out.", error);
         localStorage.removeItem('accessToken')
         return Promise.reject(error)
       }
 
     }
-
+    return Promise.reject(err);
   }
 )
 
 
-export default instance
+export default axiosInstance

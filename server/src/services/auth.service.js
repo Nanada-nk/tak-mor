@@ -66,7 +66,7 @@ authService.updateLastLogin = (userId) => {
   })
 }
 
-//ByNada
+
 authService.requestPasswordReset = async (email) => {
   const account = await prisma.account.findUnique({ where: { email } });
   if (!account) throw createError(404, "Account with this email not found.");
@@ -99,7 +99,7 @@ authService.requestPasswordReset = async (email) => {
   }
 };
 
-//ByNada
+
 // NEW: Verifies OTP and generates a secure token for password reset
 authService.verifyOtp = async (email, otp) => {
   const account = await prisma.account.findUnique({
@@ -138,7 +138,7 @@ authService.verifyOtp = async (email, otp) => {
   return resetToken;
 };
 
-//ByNada
+
 // MODIFIED: Uses the token from OTP verification to reset the password
 authService.resetPasswordWithToken = async (token, newPassword) => {
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');

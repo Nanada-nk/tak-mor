@@ -79,62 +79,69 @@ authController.registerDoctor = async (req, res, next) => {
 
 
 authController.login = async (req, res, next) => {
-  const { email, password } = req.body;
-  const findEmail = await authService.findAccountByEmail(email);
-  if (!findEmail) {
-    throw createError(401, "Invalid Email or Password!");
-  }
+  try {
+    const { email, password } = req.body;
+    const findEmail = await authService.findAccountByEmail(email);
+    if (!findEmail) {
+      throw createError(401, "Invalid Email or Password!");
+    }
 
-  // if (!findEmail.enabled) {
-  //   throw createError(403, "Your account has been disabled. Please contact support.");
-  // }
+    // if (!findEmail.enabled) {
+    //   throw createError(403, "Your account has been disabled. Please contact support.");
+    // }
 
-  const isMatchPassword = await hashService.comparePassword(
-    password,
-    findEmail.password
-  );
-  if (!isMatchPassword) {
-    throw createError(401, "Invalid Email or Password!");
-  }
-  // await authService.updateLastLogin(findEmail.id)
+    const isMatchPassword = await hashService.comparePassword(
+      password,
+      findEmail.password
+    );
+    if (!isMatchPassword) {
+      throw createError(401, "Invalid Email or Password!");
+    }
+    // await authService.updateLastLogin(findEmail.id)
 
-  const accessToken = await jwtService.genToken({
-    id: findEmail.id,
-    role: findEmail.role,
-  });
-  console.log('new access token check', accessToken)
+    const accessToken = await jwtService.genAccessToken({
+      id: findEmail.id,
+      role: findEmail.role,
+    });
+    console.log('new access token check', accessToken)
 
-  //ByNada
-  const refreshToken = await jwtService.refreshToken(findEmail.id)
 
-  await prisma.refreshToken.create({
-    data: {
-      token: refreshToken,
-      expiresAt: new Date(Date.now() + 60 * 1000), // 1 minutes
-      account: {
-        connect: {
-          id: findEmail.id
+    const refreshToken = await jwtService.genRefreshToken(findEmail.id)
+    const sevenDaysInMs = 7 * 24 * 60 * 60 * 1000;
+    const expiresAt = new Date(Date.now() + sevenDaysInMs);
+
+    await prisma.refreshToken.create({
+      data: {
+        token: refreshToken,
+        expiresAt: expiresAt,
+        account: {
+          connect: {
+            id: findEmail.id
+          }
         }
       }
-    }
-  })
+    })
 
-  res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    sameSite: 'strict',
-    secure: true,
-    maxAge: 60 * 24 * 60 * 60 * 1000
-  })
-
+    res.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      sameSite: 'strict',
+      secure: true,
+      maxAge: sevenDaysInMs
+    })
 
 
-  const { password: userPassword, ...userWithoutPassword } = findEmail;
-  res.status(200).json({
-    success: true,
-    message: "Login successful",
-    accessToken,
-    user: userWithoutPassword,
-  });
+
+    const { password: userPassword, ...userWithoutPassword } = findEmail;
+    res.status(200).json({
+      success: true,
+      message: "Login successful",
+      accessToken,
+      user: userWithoutPassword,
+    });
+  } catch (error) {
+    next(error);
+  }
+
 };
 
 // Google Login for Patient
@@ -278,7 +285,7 @@ authController.getMe = async (req, res, next) => {
   }
 }
 
-//ByNada
+
 authController.forgotPassword = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -292,7 +299,7 @@ authController.forgotPassword = async (req, res, next) => {
   }
 };
 
-//ByNada
+
 // NEW: Controller to verify the OTP
 authController.verifyOtp = async (req, res, next) => {
   try {
@@ -315,7 +322,7 @@ authController.verifyOtp = async (req, res, next) => {
   }
 };
 
-//ByNada
+
 // MODIFIED: Now requires a token from OTP verification
 authController.resetPassword = async (req, res, next) => {
   try {
@@ -333,65 +340,50 @@ authController.resetPassword = async (req, res, next) => {
 
 
 
-//ByNada
 authController.refresh = async (req, res, next) => {
   try {
-    // console.log('sdgsrtgvrstrbymrtkybjrkrtkyjrtkyjkr')
-    const oldToken = req.cookies.refreshToken
-    console.log('oldTeq.cookie', oldToken)
-
-    if (!oldToken) {
-      throw createError(401, 'unauth')
+   
+    const oldRefreshToken = req.cookies.refreshToken;
+    console.log('oldRefreshToken', oldRefreshToken)
+    if (!oldRefreshToken) {
+      throw createError(401, 'Authentication required.');
     }
 
-    let userId
+ 
     const oldRefresh = await prisma.refreshToken.findFirst({
       where: {
-        token: oldToken
+        token: oldRefreshToken
       },
       select: {
         accountId: true,
         expiresAt: true
       }
-    })
+    });
+    console.log('oldRefresh', oldRefresh)
 
     if (!oldRefresh) {
       throw createError(401, 'Invalid token');
     }
 
-    userId = oldRefresh.accountId
+    if (new Date() < oldRefresh.expiresAt) {
+      throw createError(401, 'Token has not expired yet.');
+    }
 
-    if (new Date() < oldRefresh.expiresAt) createError(401)
+    const userId = oldRefresh.accountId;
+    console.log('userId', userId)
 
+    const newAccessToken = jwtService.genAccessToken({ id: userId });
+    console.log('newAccessToken', newAccessToken)
 
+    res.status(200).json({
+      success: true,
+      accessToken: newAccessToken
+    });
 
-    const newRefreshToken = await jwtService.newAccessToken(userId)
-
-    await prisma.refreshToken.create({
-      data: {
-        token: newRefreshToken,
-        expiresAt: new Date(Date.now() + 60 * 1000), // 1 min
-        account: {
-          connect: {
-            id: userId 
-          }
-        }
-      }
-    })
-
-    res.cookie('refreshToken', newRefreshToken, {
-      httpOnly: true,
-      sameSite: 'strict',
-      secure: true,
-      maxAge: 60 * 24 * 60 * 60 * 1000 // 60 days
-      // maxAge: 60 * 1000 // 1 min
-    })
-
-    res.status(200).json({ accessToken: newRefreshToken })
 
   } catch (err) {
-    console.log('err', err)
+    next(err);
   }
-}
+};
 
 export default authController;

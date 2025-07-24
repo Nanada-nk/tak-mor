@@ -2,49 +2,39 @@ import jwt from 'jsonwebtoken'
 
 const jwtService = {}
 
-jwtService.genToken = async (payload) => {
+jwtService.genAccessToken = async (payload) => {
   try {
     return jwt.sign(payload, process.env.JWT_SECRET, {
       algorithm: "HS256",
-      expiresIn: "15d"
+      expiresIn: "15m"
     })
   } catch (error) {
-    throw new Error('Error generating token')
+    throw new Error('Invalid token!')
   }
 }
 
-jwtService.verifyToken = async (token) => {
-  try {
-    return jwt.verify(token, process.env.JWT_SECRET, {
-      algorithms: ['HS256']
-    })
-  } catch (error) {
-    throw new Error('Invalid token')
-  }
-}
-
-jwtService.refreshToken = async (userId) => {
+jwtService.genRefreshToken = async (userId) => {
   try {
     return jwt.sign(
       { id: userId },
-      process.env.REFRESH_TOKEN_SECRET || 'your_super_strong_refresh_secret',
-      {expiresIn: '1m'}
+      process.env.REFRESH_TOKEN_SECRET,
+      {expiresIn: '7d'}
     )
   } catch (error) {
-    throw new Error("Error generating refresh token");
+    throw new Error("Invalid token!!");
   }
 }
 
-jwtService.newAccessToken = async (userId) => {
+jwtService.verifyToken = async (token, secret) => {
   try {
-    return jwt.sign(
-       { userId: userId },
-       process.env.ACCESS_SECRET || 'access-secret',
-       {expiresIn: '20s'}
-    )
+    return jwt.verify(token,secret,{
+      algorithms: ['HS256']
+    })
   } catch (error) {
-    throw new Error("Error generating newAccessToken");
+    throw new Error('Invalid token!!!')
   }
 }
+
+
 
 export default jwtService

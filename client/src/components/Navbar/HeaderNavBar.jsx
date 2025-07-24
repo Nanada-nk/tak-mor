@@ -4,6 +4,7 @@ import SearchBar from "../SearchBar";
 import DropdownNavBar from "./DropdownNavBar";
 import { useNavigate } from "react-router";
 import { DropdownIcon } from "../icons";
+import { toast } from "react-toastify";
 
 function HeaderNavBar() {
   
@@ -70,7 +71,7 @@ function HeaderNavBar() {
             <li>
               <a onClick={() => {
                   actionLogout();
-                  alert('Logout Successful')
+                  toast.success('Logout Successful')
                   navigate('/login') }}>
                 ออกจากระบบ
               </a>

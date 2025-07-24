@@ -52,7 +52,7 @@ const authStore = create(
         try {
           const response = await authApi.login(loginData);
           const { accessToken, user } = response.data;
-          console.log("actionLogin: Login successful, accessToken =", accessToken, "user =", user)
+          // console.log("actionLogin: Login successful, accessToken =", accessToken, "user =", user)
           set({ token: accessToken, user: user, isLoggedIn: true, isLoading: false });
           return response
         } catch (error) {

@@ -15,23 +15,12 @@ authRouter.post('/google-login/patient', authController.googleLoginPatient)
 authRouter.post('/google-login/doctor', authController.googleLoginDoctor)
 authRouter.get('/me', authenticateUser, authController.getMe)
 
-
-// ByNada
-// Password Reset Flow with OTP
 authRouter.post('/forgot-password', authController.forgotPassword);
 authRouter.post('/verify-otp',validator(schemaVerifyOtp), authController.verifyOtp);
 authRouter.post('/reset-password', authController.resetPassword);
 
-//ByNada
-// Refresh Token
 authRouter.get('/refresh', authController.refresh);
 
-authRouter.get('/testToken', authenticateUser, async (req,res,next) => {
-  try {
-    res.status(200).json({msg:'ok'})
-  } catch (error) {
-    next(error)
-  }
-})
+
 
 export default authRouter

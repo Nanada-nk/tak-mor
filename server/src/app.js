@@ -25,9 +25,9 @@ app.use(cors({
   credentials: true
 }))
 
-//ByNada
-app.use(cookieParser())
+
 app.use(limiter)
+app.use(cookieParser())
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(compression())

@@ -1,13 +1,18 @@
-import MainLayout from "./layouts/MainLayout"
 import AppRouter from "./router/AppRouter"
+import { Slide, ToastContainer } from "react-toastify"
 
 
 function App() {
-  
+
   return (
-    <div>
+    <>
       <AppRouter />
-    </div>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        transition={Slide}
+      />
+    </>
   )
 }
 export default App

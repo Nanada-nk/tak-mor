@@ -6,24 +6,22 @@ import { toast } from "react-toastify";
 import FormInput from "../../components/FormInput.jsx";
 import authStore from "../../stores/authStore.js";
 import { useEffect } from "react";
-import AuthLayout from "../../components/auth/AuthLayout.jsx";
 import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
-import axios from "../../config/axios.js";
+
 
 function LoginPage() {
-  const actionLogin = authStore((state)  => state.actionLogin);
+  const actionLogin = authStore((state) => state.actionLogin);
   const isLoggedIn = authStore((state) => state.isLoggedIn);
   const user = authStore((state) => state.user);
   const isLoading = authStore((state) => state.isLoading);
   const navigate = useNavigate();
 
-  
+
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    watch,
   } = useForm({
     resolver: yupResolver(schemaLogin),
     mode: 'onBlur',
@@ -33,47 +31,47 @@ function LoginPage() {
       remember: false
     }
   });
-  
+
   const onSubmit = async (data) => {
     try {
+      // จัดการ "Remember Me"
+      if (data.remember) {
+        localStorage.setItem("rememberEmail", data.email);
+      } else {
+        localStorage.removeItem("rememberEmail");
+      }
+
       await actionLogin(data);
       toast.success("Login successful!");
-      alert('Login Successful')
-      reset();
-      
+
+      reset({
+        email: data.remember ? data.email : "",
+        password: "",
+        remember: data.remember
+      });
+
     } catch (error) {
-      // console.error("Login failed:", error);
+      console.error("Login failed:", error);
       toast.error(error.response?.data?.message || "Login failed.");
     }
   };
-  
+
   const handleLoginRedirect = () => {
     if (!isLoading && isLoggedIn && user) {
-      if (user.role === 'SUPERADMIN' || user.role === 'ADMIN') {
-        navigate("/admin/users", { replace: true });
+      if (user.role === 'ADMIN') {
+        navigate("/admin/patientdashboard", { replace: true });
       } else {
         navigate("/", { replace: true });
       }
     }
   }
 
-  const test = async () => {
-    try {
-      console.log('test')
-      const res = await axios.get('auth/refresh')
-    } catch (error) {
-      console.log('error', error)
-      if(error.response.status === 401) {
-        alert('Token expired')
-      }
-    }
-  }
+
 
   useEffect(() => {
-    // handleLoginRedirect()
-    
+    handleLoginRedirect()
   }, [isLoggedIn, user, isLoading, navigate]);
-  
+
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     if (savedEmail) {
@@ -82,7 +80,7 @@ function LoginPage() {
   }, [reset]);
 
   return (
-    // <AuthLayout>
+
     <div className="my-5">
       <AuthFormCard
         title={["Sign in"]}
@@ -90,12 +88,12 @@ function LoginPage() {
         isSubmitting={isSubmitting}
         buttonText="Login"
         bottomText="Don't have an account ?"
-        bottomLinkPath="/register"
+        bottomLinkPath="/rolepick"
         bottomLinkText="Sign Up"
       >
         <h1 className="text-2xl font-semibold">Sign in</h1>
         <p className="text-slate-400 text-xs">
-        We will send a confirmation code to your email.
+          We will send a confirmation code to your email.
         </p>
 
         <FormInput
@@ -104,6 +102,7 @@ function LoginPage() {
           type="email"
           register={register}
           error={errors.email}
+          placeholder="you@example.com"
         />
 
         <FormInput
@@ -112,36 +111,34 @@ function LoginPage() {
           type="password"
           register={register}
           error={errors.password}
+          placeholder="Enter Password"
         />
 
-         {/* ✅ Remember Me checkbox */}
-      <div className="flex justify-between items-center mb-2">
+        {/* ✅ Remember Me checkbox */}
+        <div className="flex justify-between items-center mb-2">
 
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            {...register("remember")}
-            className="checkbox checkbox-sm"
-          />
-          Remember me
-        </label>
+          <label className="flex items-center gap-2 text-sm">
+            <input
+              type="checkbox"
+              {...register("remember")}
+              className="checkbox checkbox-sm"
+            />
+            Remember me
+          </label>
 
-        <div className="text-right text-sm">
-          <Link to="/forgot-password" className="font-medium text-pri-gr1 hover:underline">
-            Forgot password?
-          </Link>
+          <div className="text-right text-sm">
+            <Link to="/forgot-password" className="font-medium text-pri-gr1 hover:underline">
+              Forgot password?
+            </Link>
+          </div>
+
+
         </div>
-
-        <button 
-        type="button"
-        onClick={test}>Test Refresh Token</button>
-
-      </div>
       </AuthFormCard>
 
     </div>
-    // </AuthLayout>
-    
+
+
   )
 }
 
