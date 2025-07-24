@@ -51,7 +51,7 @@ function PaymentPage() {
                  </div>
                </div>
                {/* Main Booking Info Section - Specialty, Service, Date & Time, Appointment Type */}
-              
+              abc
              </div>
            </div>
            <div className="h-[300px] flex flex-col items-center pt-4 gap-3">
