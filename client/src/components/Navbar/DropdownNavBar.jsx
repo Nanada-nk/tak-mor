@@ -1,6 +1,7 @@
 import { DropdownIcon } from "../icons";
-
+import { useNavigate } from "react-router";
 function DropdownNavBar() {
+  const navigate = useNavigate()
   return (
     <>
       <div className="dropdown dropdown-start">
@@ -30,10 +31,10 @@ function DropdownNavBar() {
           className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
         >
           <li>
-            <a>Item 1</a>
+            <a onClick={()=>navigate('/doctorlist')}>รายชื่อแพทย์ทั้งหมด</a>
           </li>
           <li>
-            <a>Item 2</a>
+            <a onClick={()=>navigate('/doctoravailability')}>ตารางเวลาการให้บริการแพทย์</a>
           </li>
         </ul>
       </div>

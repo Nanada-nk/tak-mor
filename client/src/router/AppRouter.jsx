@@ -6,9 +6,11 @@ import AdminLayout from "../layouts/AdminLayout.jsx";
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/auth/LoginPage.jsx";
 import RegisterPage from "../pages/auth/RegisterPage.jsx";
+import RegisterDoctorPage from "../pages/auth/RegisterDoctorPage.jsx";
 import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
+import SignupRolePick from "../pages/auth/SignupRolePick.jsx";
 
 import NewsPage from "../pages/news/NewsPage.jsx";
 import NewContentPage from "../pages/news/NewsContentPage.jsx";
@@ -18,6 +20,7 @@ import ContactUsPage from "../pages/ContactUsPage.jsx";
 
 import DoctorListPage from "../pages/doctor/DoctorListPage.jsx";
 import DoctorAvailabilityPage from "../pages/doctor/DoctorAvailabilityPage.jsx";
+import DoctorProfilePage from "../pages/dashboard/doctor/DoctorProfilePage.jsx"
 
 import AppointmentTypePage from "../pages/booking/AppointmentTypePage.jsx";
 import BookingComfirmationPage from "../pages/booking/BookingComfirmationPage.jsx";
@@ -49,6 +52,7 @@ import AdminRoute from "./AdminRoute.jsx";
 import authStore from '../stores/authStore.js';
 import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDoctorDashboardMenagementPage.jsx";
 import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/AdminAppointmentDashboardManagementPage.jsx";
+import AboutUsPage from "../pages/AboutUsPage.jsx";
 
 
 function AppRouter() {
@@ -68,10 +72,13 @@ function AppRouter() {
           <Route index element={<HomePage />} />
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
+          <Route path="registerpatient" element={<RegisterPage />} />
+          <Route path="registerdoctor" element={<RegisterDoctorPage />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="otp" element={<EmailOTPPage />} />
+          <Route path="rolepick" element={<SignupRolePick />} />
+
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
@@ -79,16 +86,19 @@ function AppRouter() {
           <Route path="policy" element={<PolicyPage />} />
           <Route path="terms" element={<TermsConditionsPage />} />
           <Route path="contactus" element={<ContactUsPage />} />
+          <Route path="aboutus" element={<AboutUsPage />} />
           {/* Doctor */}
           <Route path="doctorlist" element={<DoctorListPage />} />
           <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
+          <Route path="doctorprofile" element={<DoctorProfilePage />} />
+
           {/* Utils Page */}
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
           <Route path="servererror" element={<ServerErrorPage />} />
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/" element={<MainLayout />}>
           {/* Telecommunication */}
           <Route path="call" element={<CallingPage />} />
@@ -109,7 +119,7 @@ function AppRouter() {
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>

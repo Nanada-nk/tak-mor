@@ -1,8 +1,19 @@
 import { PinIcon, StarIcon } from "../../components/icons";
 import { useState } from "react";
+import { useNavigate } from "react-router";
+import useBookingStore from "../../stores/bookingStore";
+
 
 function BookingPage() {
-  const [selectedService, setSelectedService] = useState("");
+  const navigate = useNavigate();
+  const {
+    specialty: selectedSpecialty,
+    setSpecialty,
+    service: selectedService,
+    setService,
+  } = useBookingStore();
+  const [localSpecialty, setLocalSpecialty] = useState(selectedSpecialty || "");
+  const [localService, setLocalService] = useState(selectedService || "");
   const services = [
     { name: "Echocardiogram", price: 1200 },
     { name: "Blood Test", price: 500 },
@@ -20,6 +31,21 @@ function BookingPage() {
     { name: "Cholesterol Screening", price: 550 },
     { name: "Vision Test", price: 400 },
   ];
+  // Handle specialty change
+  const handleSpecialtyChange = (e) => {
+    const value = e.target.value;
+    setLocalSpecialty(value);
+    setSpecialty(value);
+    setLocalService("");
+    setService("");
+  };
+
+  // Handle service change
+  const handleServiceClick = (serviceName) => {
+    setLocalService(serviceName);
+    setService(serviceName);
+  };
+
   return (
     <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
       <div className="h-1/7 w-full flex items-center justify-center">
@@ -76,16 +102,20 @@ function BookingPage() {
             </div>
           </div>
         </div>
-        <div className="h-6/10 flex flex-col items-center justify-center">
-          <div className="flex flex-col p-3 bg-white border border-gray-200 h-9/10 min-h-[275px] w-19/20 rounded-2xl">
+        <div className="h-[360px] flex flex-col items-center pt-4 gap-3">
+          <div className="flex flex-col p-3 bg-white border border-gray-200 h-full min-h-[275px] w-19/20 rounded-2xl">
             <div className="flex flex-col gap-1 items-start border-b border-gray-200 pb-2 mb-2">
               <h1>Select Specialty</h1>
               <fieldset className="fieldset w-full">
-                <select defaultValue="Select a specialty" className="select">
-                  <option disabled={true}>Select a Specialty</option>
-                  <option>Psychology</option>
-                  <option>Cardiology</option>
-                  <option>Dermatology</option>
+                <select
+                  value={localSpecialty || ""}
+                  onChange={handleSpecialtyChange}
+                  className="select"
+                >
+                  <option value="" disabled={true}>Select a Specialty</option>
+                  <option value="Psychology">Psychology</option>
+                  <option value="Cardiology">Cardiology</option>
+                  <option value="Dermatology">Dermatology</option>
                 </select>
               </fieldset>
             </div>
@@ -96,16 +126,17 @@ function BookingPage() {
                 {services.map((service) => (
                   <button
                     key={service.name}
-                    className={`flex flex-row items-center justify-between border rounded-xl px-3 pt-2 h-17 w-full bg-white shadow-sm transition-all ${selectedService === service.name ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
-                    onClick={() => setSelectedService(service.name)}
+                    className={`flex flex-row items-center justify-between border rounded-xl px-3 pt-2 h-17 w-full bg-white shadow-sm transition-all ${localService === service.name ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
+                    onClick={() => handleServiceClick(service.name)}
                     type="button"
+                    disabled={!localSpecialty}
                   >
                     <div className="flex flex-col items-start">
                       <div className="font-semibold text-base mb-1">{service.name}</div>
                       <div className="text-gray-500 text-sm mb-2">฿{service.price}</div>
                     </div>
                     <div className="flex items-center h-full">
-                      {selectedService === service.name && (
+                      {localService === service.name && (
                         <span className="text-blue-500 font-bold text-xl">&#10003;</span>
                       )}
                     </div>
@@ -116,8 +147,8 @@ function BookingPage() {
           </div>
         </div>
         <div className="h-1/10 flex justify-between items-center px-5">
-          <button className="btn btn-error">{"<"} Back</button>
-          <button className="btn btn-primary">Select Appointment Type {" >"}</button>
+          <button onClick={() => navigate(-1) } className="btn btn-error">{"<"} Back</button>
+          <button onClick={() => navigate("/appointment")} className="btn btn-primary">Select Appointment Type {" >"}</button>
         </div>
       </div>
     </div>

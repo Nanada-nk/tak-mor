@@ -6,13 +6,24 @@ import createError from "../utils/create-error.js"
 
 const authService = {}
 
-authService.findAccountByEmail = (email) => {
-  return prisma.account.findUnique({
-    where: { email }
-  })
+// authService.findAccountByEmail = (email) => {
+//   return prisma.account.findUnique({
+//     where: { email }
+//   })
+// }
+
+authService.findAccountByEmail = async (email) => {
+  return await prisma.account.findUnique({
+    where: { email },
+    include: {
+      patientProfile: true, 
+      doctorProfile: true
+    },
+  });
 }
 
 authService.findAccountById = (id) => {
+  
   return prisma.account.findUnique({
     where: { id },
     include: { 

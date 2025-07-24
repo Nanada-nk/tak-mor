@@ -38,6 +38,7 @@ function LoginPage() {
     try {
       await actionLogin(data);
       toast.success("Login successful!");
+      alert('Login Successful')
       reset();
       
     } catch (error) {
@@ -82,6 +83,7 @@ function LoginPage() {
 
   return (
     // <AuthLayout>
+    <div className="my-5">
       <AuthFormCard
         title={["Sign in"]}
         onSubmit={handleSubmit(onSubmit)}
@@ -136,6 +138,8 @@ function LoginPage() {
 
       </div>
       </AuthFormCard>
+
+    </div>
     // </AuthLayout>
     
   )
