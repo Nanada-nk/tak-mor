@@ -1,10 +1,3 @@
-// function SignupRolePick() {
-//   return (
-//     <div>SignupRolePick</div>
-//   )
-// }
-// export default SignupRolePick
-
 import { useNavigate } from 'react-router';
 
 export default function SignupRolePick() {
