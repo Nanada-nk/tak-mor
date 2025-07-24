@@ -8,6 +8,7 @@ import authStore from "../../stores/authStore.js";
 import { useEffect } from "react";
 import AuthLayout from "../../components/auth/AuthLayout.jsx";
 import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
+import axios from "../../config/axios.js";
 
 function LoginPage() {
   const actionLogin = authStore((state)  => state.actionLogin);
@@ -55,9 +56,21 @@ function LoginPage() {
     }
   }
 
+  const test = async () => {
+    try {
+      console.log('test')
+      const res = await axios.get('auth/refresh')
+    } catch (error) {
+      console.log('error', error)
+      if(error.response.status === 401) {
+        alert('Token expired')
+      }
+    }
+  }
 
   useEffect(() => {
-    handleLoginRedirect()
+    // handleLoginRedirect()
+    
   }, [isLoggedIn, user, isLoading, navigate]);
   
   useEffect(() => {
@@ -116,6 +129,10 @@ function LoginPage() {
             Forgot password?
           </Link>
         </div>
+
+        <button 
+        type="button"
+        onClick={test}>Test Refresh Token</button>
 
       </div>
       </AuthFormCard>

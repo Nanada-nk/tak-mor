@@ -3,6 +3,7 @@ import authStore from "../stores/authStore.js";
 // สร้างและตั้งค่า Axios instance
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL,
+  withCredentials: true
 });
 
 // ตั้งค่า Interceptor เพื่อดักจับ request ก่อนส่งออกไป
