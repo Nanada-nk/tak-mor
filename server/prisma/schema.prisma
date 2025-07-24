@@ -37,8 +37,12 @@ model Account {
   updatedAt DateTime @updatedAt
   // lastLogin DateTime?
 
-  facebookId     String?  @unique
-  isActive       Boolean  @default(true)
+  facebookId String? @unique
+  isActive   Boolean @default(true)
+
+  passwordResetToken   String?
+  passwordResetExpires DateTime?
+
   patientProfile Patient?
   doctorProfile  Doctor?
 }
@@ -46,7 +50,7 @@ model Account {
 model Patient {
   id        Int       @id @default(autoincrement())
   accountId Int       @unique
-  hn        String?    @unique
+  hn        String?   @unique
   firstName String
   lastName  String
   address   String?

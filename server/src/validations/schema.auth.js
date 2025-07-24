@@ -52,6 +52,17 @@ export const schemaForgotPassword = Yup.object({
       .required("Email is required")
 }).noUnknown()
 
+//ByNada
+export const schemaVerifyOtp = Yup.object({
+  email:
+    Yup.string()
+      .email("Email is invalid")
+      .required("Email is required"),
+  otp:
+    Yup.string()
+      .matches(/^[0-9]{4}$/, "OTP must be exactly 4 digits")
+      .required("OTP is required")
+}).noUnknown()
 
 export const schemaResetPassword = Yup.object({
   newPassword:
