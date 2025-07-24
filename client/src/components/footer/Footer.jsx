@@ -82,10 +82,11 @@ function Footer() {
                     <p>Copyright © {new Date().getFullYear()} - Tak-mor, All Right Reserved</p>
                 </aside>
                 <aside>
-                    <div className='flex '>
+                    <div className='flex gap-2 '>
 
-                    <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว  </p>
-                    <p className='hover:text-blue-600 cursor-pointer'> | ข้อกำหนกและเงื่อนไข </p>
+                    <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
+                    <p> | </p>
+                    <p className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
                     </div>
 
                 </aside>

@@ -18,6 +18,7 @@ import ContactUsPage from "../pages/ContactUsPage.jsx";
 
 import DoctorListPage from "../pages/doctor/DoctorListPage.jsx";
 import DoctorAvailabilityPage from "../pages/doctor/DoctorAvailabilityPage.jsx";
+import DoctorProfilePage from "../pages/dashboard/doctor/DoctorProfilePage.jsx"
 
 import AppointmentTypePage from "../pages/booking/AppointmentTypePage.jsx";
 import BookingComfirmationPage from "../pages/booking/BookingComfirmationPage.jsx";
@@ -72,6 +73,7 @@ function AppRouter() {
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="otp" element={<EmailOTPPage />} />
+          
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
@@ -82,13 +84,15 @@ function AppRouter() {
           {/* Doctor */}
           <Route path="doctorlist" element={<DoctorListPage />} />
           <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
+          <Route path="doctorprofile" element={<DoctorProfilePage />} />
+
           {/* Utils Page */}
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
           <Route path="servererror" element={<ServerErrorPage />} />
         </Route>
 
-        <Route element={<ProtectedRoute />}>
+        {/* <Route element={<ProtectedRoute />}> */}
           <Route path="/" element={<MainLayout />}>
           {/* Telecommunication */}
           <Route path="call" element={<CallingPage />} />
@@ -109,7 +113,7 @@ function AppRouter() {
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
           </Route>
-        </Route>
+        {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
