@@ -88,7 +88,7 @@ function AppRouter() {
           <Route path="servererror" element={<ServerErrorPage />} />
         </Route>
 
-        {/* <Route element={<ProtectedRoute />}> */}
+        <Route element={<ProtectedRoute />}>
           <Route path="/" element={<MainLayout />}>
           {/* Telecommunication */}
           <Route path="call" element={<CallingPage />} />
@@ -109,7 +109,7 @@ function AppRouter() {
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
           </Route>
-        {/* </Route> */}
+        </Route>
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
