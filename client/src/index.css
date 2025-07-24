@@ -1,4 +1,39 @@
 @import "tailwindcss";
- @plugin "daisyui" {
-   themes: light --default;
- }
+@plugin "daisyui" {
+  themes: light --default;
+}
+
+/* Header background */
+.react-datepicker__header {
+  background-color: #3b82f6 !important; /* Blue background */
+  color: white !important;
+}
+
+/* Month/Year text in header */
+.react-datepicker__current-month {
+  color: white !important;
+}
+
+/* Day names (Mon, Tue, etc.) */
+.react-datepicker__day-names .react-datepicker__day-name {
+  color: white !important;
+}
+
+/* Navigation arrows */
+.react-datepicker__navigation {
+  border-color: white !important;
+}
+
+.react-datepicker__navigation:hover {
+  border-color: #e5e7eb !important;
+}
+
+.custom-calendar-header .react-datepicker__header {
+  background-color: #ffffff !important; /* Green header */
+  
+}
+
+.custom-calendar-header .react-datepicker__current-month,
+.custom-calendar-header .react-datepicker__day-name {
+  color: #000000 !important;
+}
