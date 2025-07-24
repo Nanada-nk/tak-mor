@@ -383,8 +383,8 @@ authController.refresh = async (req, res, next) => {
       httpOnly: true,
       sameSite: 'strict',
       secure: true,
-      // maxAge: 60 * 24 * 60 * 60 * 1000 // 60 days
-      maxAge: 60 * 1000 // 1 min
+      maxAge: 60 * 24 * 60 * 60 * 1000 // 60 days
+      // maxAge: 60 * 1000 // 1 min
     })
 
     res.status(200).json({ accessToken: newRefreshToken })
