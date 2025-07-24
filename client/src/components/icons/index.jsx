@@ -13,7 +13,7 @@ export function DropdownIcon(props) {
         fill="white"
       />
     </svg>
-  )
+  );
 }
 
 export function SearchIcon(props) {
@@ -38,7 +38,6 @@ export function SearchIcon(props) {
   );
 }
 
-
 export function SignUpIcon(props) {
   return (
     <svg
@@ -55,7 +54,7 @@ export function SignUpIcon(props) {
         strokeLinejoin="round"
       />
     </svg>
-  )
+  );
 }
 
 export function LoginIcon(props) {
@@ -71,7 +70,7 @@ export function LoginIcon(props) {
         <path d="M11 22H8c-2.828 0-4.243 0-5.121-.879C2 20.243 2 18.828 2 16c0-2.828 0-4.243.879-5.121C3.757 10 5.172 10 8 10h8c2.828 0 4.243 0 5.121.879C22 11.757 22 13.172 22 16c0 2.828 0 4.243-.879 5.121C20.243 22 18.828 22 16 22h-1" />
       </g>
     </svg>
-  )
+  );
 }
 
 export function PinIcon(props) {
@@ -90,7 +89,7 @@ export function PinIcon(props) {
       />
       <circle cx={12} cy={9} r={2} stroke="#000" strokeLinejoin="round" />
     </svg>
-  )
+  );
 }
 
 export function StarIcon(props) {
@@ -108,7 +107,7 @@ export function StarIcon(props) {
         fill="#fff"
       />
     </svg>
-  )
+  );
 }
 
 export function ClinicIcon(props) {
@@ -126,7 +125,7 @@ export function ClinicIcon(props) {
         fill="#333"
       />
     </svg>
-  )
+  );
 }
 
 export function VideoCallIcon(props) {
@@ -141,7 +140,7 @@ export function VideoCallIcon(props) {
         <path d="M10 3H0v10h10V3zM15 3l-3 3v4l3 3h1V3h-1z" />
       </g>
     </svg>
-  )
+  );
 }
 
 export function AudioCallIcon(props) {
@@ -156,7 +155,7 @@ export function AudioCallIcon(props) {
         fillRule="evenodd"
       />
     </svg>
-  )
+  );
 }
 
 export function ChatIcon(props) {
@@ -167,7 +166,7 @@ export function ChatIcon(props) {
         fillRule="evenodd"
       />
     </svg>
-  )
+  );
 }
 
 export function HomeVisitIcon(props) {
@@ -175,24 +174,218 @@ export function HomeVisitIcon(props) {
     <svg viewBox="-4.5 0 32 32" xmlns="http://www.w3.org/2000/svg" {...props}>
       <path d="M19.469 12.594l3.625 3.313c.438.406.313.719-.281.719h-2.719v8.656c0 .594-.5 1.125-1.094 1.125h-4.719v-6.063c0-.594-.531-1.125-1.125-1.125h-2.969c-.594 0-1.125.531-1.125 1.125v6.063H4.343c-.594 0-1.125-.531-1.125-1.125v-8.656H.53c-.594 0-.719-.313-.281-.719l10.594-9.625c.438-.406 1.188-.406 1.656 0l2.406 2.156V6.719c0-.594.531-1.125 1.125-1.125h2.344c.594 0 1.094.531 1.094 1.125v5.875z" />
     </svg>
-  )
+  );
 }
-
-
 
 //ByNada
 export function GoogleIcon() {
   <svg className="w-5 h-5 mr-2" viewBox="0 0 48 48">
-    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"></path>
-    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"></path>
-    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"></path>
-    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C42.012,36.49,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z"></path>
-  </svg>
+    <path
+      fill="#FFC107"
+      d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12s5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24s8.955,20,20,20s20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
+    ></path>
+    <path
+      fill="#FF3D00"
+      d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
+    ></path>
+    <path
+      fill="#4CAF50"
+      d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.222,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
+    ></path>
+    <path
+      fill="#1976D2"
+      d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571l6.19,5.238C42.012,36.49,44,30.638,44,24C44,22.659,43.862,21.35,43.611,20.083z"
+    ></path>
+  </svg>;
 }
 
 //ByNada
 export function FacebookIcon() {
   <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24" fill="currentColor">
     <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.323-1.325z"></path>
-  </svg>
+  </svg>;
+}
+
+export function Shapes(props) {
+  return (
+    <svg
+      width={241}
+      height={190}
+      viewBox="0 0 241 190"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M408.236-190.028c37.722-10.725 72.037-19.248 102.196-21.069 30.137-1.82 55.952 3.062 76.817 18.975 20.879 15.923 37.038 43.071 47.462 86.288 41.68 172.8-64.613 346.67-237.413 388.35-172.799 41.68-346.67-64.613-388.35-237.412-10.43-43.238-9.064-74.626 1.308-98.089C20.613-76.413 40.069-92.2 66.41-103.999c26.373-11.812 59.5-19.558 96.995-26.975 37.441-7.407 79.221-14.482 122.662-24.961 43.44-10.478 84.499-23.383 122.168-34.093z"
+        fill="url(#paint0_linear_255_1914)"
+        fillOpacity={0.1}
+        stroke="url(#paint1_linear_255_1914)"
+        strokeWidth={3}
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_255_1914"
+          x1={246.009}
+          y1={-344.705}
+          x2={397.65}
+          y2={283.975}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#7FB7FF" />
+          <stop offset={1} stopColor="#75ADF5" stopOpacity={0.3} />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_255_1914"
+          x1={246.009}
+          y1={-344.705}
+          x2={397.65}
+          y2={283.975}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#fff" />
+          <stop offset={1} stopColor="#fff" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+export function Shapes2(props) {
+  return (
+    <svg
+      width={286}
+      height={169}
+      viewBox="0 0 286 169"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <circle
+        cx={194.049}
+        cy={193.85}
+        r={191.684}
+        fill="url(#paint0_linear_255_1913)"
+        fillOpacity={0.2}
+        stroke="url(#paint1_linear_255_1913)"
+        strokeWidth={3}
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_255_1913"
+          x1={194.049}
+          y1={0.666016}
+          x2={194.049}
+          y2={387.033}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#7FB7FF" />
+          <stop offset={1} stopColor="#75ADF5" stopOpacity={0.3} />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_255_1913"
+          x1={194.049}
+          y1={0.666016}
+          x2={194.049}
+          y2={387.033}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#fff" />
+          <stop offset={1} stopColor="#EEE" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+export function Shapes3({className, ...rest}) {
+  return (
+    <svg
+      className={className}
+      width="100%"
+      height="100%"
+      viewBox="0 0 148 132"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+    >
+      <path
+        d="M70.665 10.938c11.7-3.975 22.27-7.169 31.611-8.208 9.317-1.037 17.241.09 23.784 4.576 6.557 4.496 11.975 12.534 15.906 25.846 15.707 53.177-14.668 109.018-67.846 124.726C20.942 173.585-34.9 143.209-50.607 90.032c-3.937-13.332-3.953-22.98-1.175-30.234 2.765-7.22 8.402-12.338 16.37-16.402 7.997-4.078 18.197-7.02 29.88-9.952 11.631-2.918 24.718-5.822 38.25-9.819 13.531-3.997 26.297-8.728 37.947-12.687z"
+        fill="url(#paint0_linear_255_1907)"
+        fillOpacity={0.1}
+        stroke="url(#paint1_linear_255_1907)"
+        strokeWidth={3}
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_255_1907"
+          x1={16.815}
+          y1={-36.1339}
+          x2={74.5448}
+          y2={159.317}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#7FB7FF" />
+          <stop offset={1} stopColor="#75ADF5" stopOpacity={0.3} />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_255_1907"
+          x1={16.815}
+          y1={-36.1339}
+          x2={74.5448}
+          y2={159.317}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#fff" />
+          <stop offset={1} stopColor="#fff" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
+}
+
+export function Shapes4({ className, ...rest }) {
+  return (
+    <svg
+      className={className}
+      width="100%"
+      height="100%"
+      viewBox="0 0 154 119"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...rest}
+    >
+      <path
+        d="M76.92-34.432c11.702-3.975 22.271-7.169 31.612-8.208 9.317-1.037 17.241.09 23.784 4.576 6.557 4.496 11.975 12.534 15.906 25.846C163.929 40.959 133.553 96.8 80.376 112.506 27.198 128.214-28.644 97.839-44.351 44.661c-3.938-13.331-3.953-22.978-1.175-30.233 2.765-7.221 8.402-12.338 16.37-16.402 7.997-4.078 18.196-7.02 29.88-9.952 11.631-2.918 24.718-5.822 38.25-9.819 13.53-3.997 26.297-8.729 37.947-12.687z"
+        fill="url(#paint0_linear_255_1906)"
+        fillOpacity={0.4}
+        stroke="url(#paint1_linear_255_1906)"
+        strokeWidth={3}
+      />
+      <defs>
+        <linearGradient
+          id="paint0_linear_255_1906"
+          x1={23.0708}
+          y1={-81.504}
+          x2={80.8006}
+          y2={113.947}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#7FB7FF" />
+          <stop offset={1} stopColor="#75ADF5" stopOpacity={0.3} />
+        </linearGradient>
+        <linearGradient
+          id="paint1_linear_255_1906"
+          x1={23.0708}
+          y1={-81.504}
+          x2={80.8006}
+          y2={113.947}
+          gradientUnits="userSpaceOnUse"
+        >
+          <stop stopColor="#fff" />
+          <stop offset={1} stopColor="#fff" />
+        </linearGradient>
+      </defs>
+    </svg>
+  );
 }

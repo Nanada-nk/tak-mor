@@ -1,3 +1,5 @@
+import Brandner from "../../components/Brandner";
+
 function NewsContentPage() {
   const post = {
   
@@ -20,13 +22,10 @@ function NewsContentPage() {
   return (
     <div>
 
-      <div className="w-full h-40 bg-[#EEF7FB] flex items-center px-8 mb-8  justify-center flex-col">
-
-        <p className="font-bold text-4xl text-black">ข่าวใหม่</p>
-      </div>
+     <Brandner title="ข่าว"/>
 
 
-      <div className="flex flex-2/3 gap-x-8 justify-center mx-30">
+      <div className="flex flex-2/3 gap-x-8 justify-center mx-30 mt-5">
         <div>
           
           
