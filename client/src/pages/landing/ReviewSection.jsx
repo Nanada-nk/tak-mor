@@ -1,11 +1,12 @@
 import PatientReview from "../../components/review/PatientReview";
-function ReviewSection() {
+function ReviewSection({bgColor}) {
+  const defaultBgColor = "bg-[#EEF7FB]";
   return (
     <div
       className="relative flex justify-center items-center gap-3 w-full h-95 pt-8 pb-2 overflow-hidden"
       style={{
         backgroundImage: "url('public/BgGraphics.svg')",
-        backgroundColor: "#EEF7FB",
+        backgroundColor: bgColor || defaultBgColor,
         backgroundRepeat: "no-repeat",
         backgroundSize: "300px",
         backgroundPosition: "top left",

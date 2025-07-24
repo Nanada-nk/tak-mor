@@ -37,6 +37,7 @@ function LoginPage() {
     try {
       await actionLogin(data);
       toast.success("Login successful!");
+      alert('Login Successful')
       reset();
       
     } catch (error) {

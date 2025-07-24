@@ -27,6 +27,13 @@ enum PaymentStatus {
   FAILED
 }
 
+model Specialty {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  doctors     Doctor[]
+}
+
 model Account {
   id        Int      @id @default(autoincrement())
   email     String   @unique
@@ -35,7 +42,10 @@ model Account {
   role      UserRole @default(PATIENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  
   // lastLogin DateTime?
+   //ByNada
+  RefreshToken   RefreshToken[]
 
   facebookId String? @unique
   isActive   Boolean @default(true)
@@ -45,6 +55,18 @@ model Account {
 
   patientProfile Patient?
   doctorProfile  Doctor?
+}
+
+//ByNada
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  accountId Int
+  account   Account  @relation(fields: [accountId], references: [id])
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
 }
 
 model Patient {
@@ -58,9 +80,18 @@ model Patient {
 
   medicalFiles MedicalFile[]
   appointments Appointment[]
+  account      Account       @relation(fields: [accountId], references: [id])
+  Payment      Payment[]
 
-  account Account   @relation(fields: [accountId], references: [id])
-  Payment Payment[]
+  patientMedicalProfile PatientMedicalProfile?
+}
+
+model PatientMedicalProfile {
+  id         Int     @id @default(autoincrement())
+  patientId  Int     @unique
+  congenital String?
+
+  patient Patient @relation(fields: [patientId], references: [id])
 }
 
 model Doctor {
@@ -72,10 +103,11 @@ model Doctor {
   bio         String?
   specialtyId Int?
 
-  appointments       Appointment[]
-  specialty          Specialty?           @relation(fields: [specialtyId], references: [id])
-  account            Account              @relation(fields: [accountId], references: [id])
-  DoctorAvailability DoctorAvailability[]
+  appointments        Appointment[]
+  specialty           Specialty?            @relation(fields: [specialtyId], references: [id])
+  account             Account               @relation(fields: [accountId], references: [id])
+  DoctorAvailability  DoctorAvailability[]
+  DoctorAvailableSlot DoctorAvailableSlot[]
 }
 
 model DoctorAvailability {
@@ -91,11 +123,19 @@ model DoctorAvailability {
   doctor Doctor @relation(fields: [doctorId], references: [id])
 }
 
-model Specialty {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String
-  doctors     Doctor[]
+model DoctorAvailableSlot {
+  id        Int      @id @default(autoincrement())
+  doctorId  Int
+  date      DateTime // วันที่ เช่น 2025-07-28
+  startTime String // เช่น "13:00"
+  endTime   String // เช่น "14:00"
+  source    String // "manual" | "generated"
+  isBooked  Boolean  @default(false)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  doctor Doctor @relation(fields: [doctorId], references: [id])
 }
 
 model Appointment {
@@ -103,14 +143,18 @@ model Appointment {
   vn                 String            @unique
   patientId          Int
   doctorId           Int
-  scheduledAt        DateTime
+  date               DateTime
+  startTime          String
+  endTime            String
   duration           String?
   status             AppointmentStatus @default(PENDING)
   price              Float
   paymentId          Int?
   appointmentSummary String? // หมอสรุปเอง ไม่ผ่าน AI
-  webRTCSession      WebRTCSession?
+  createdAt          DateTime
+  updatedAt          DateTime
 
+  webRTCSession      WebRTCSession?
   patient            Patient              @relation(fields: [patientId], references: [id])
   doctor             Doctor               @relation(fields: [doctorId], references: [id])
   payment            Payment?             @relation(fields: [paymentId], references: [id])

@@ -1,15 +1,13 @@
 
+import Brandner from "../../components/Brandner"
 import NewsBox from "../../components/NewsBox/NewsBox"
 function NewsPage() {
   return (
     <div>
 
-      <div className="w-full h-40 bg-[#EEF7FB] flex items-center px-8 mb-8  justify-center flex-col">
+      <Brandner />
 
-        <p className="font-bold text-4xl text-black">ข่าวใหม่</p>
-      </div>
-
-      <div className="flex flex-2/3 gap-x-8 justify-center mx-30">
+      <div className="flex flex-2/3 gap-x-8 justify-center mx-30 mt-5">
         <div className="grid grid-cols-2 gap-8  ">
           <NewsBox />
           <NewsBox />

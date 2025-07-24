@@ -38,7 +38,7 @@ function HeaderNavBar() {
        {!user ? (
         <div className="flex gap-2 ml-4">
           <button
-            onClick={() => navigate('/register')}
+            onClick={() => navigate('/rolepick')}
             className="btn bg-black text-white rounded-full">
             <SignUpIcon className="w-5" />
             สมัครสมาชิค
@@ -55,9 +55,11 @@ function HeaderNavBar() {
           <div
             tabIndex={0}
             role="button"
-            className="btn bg-[#0E82FD] text-white rounded-full">
-           John {user.patientProfile?.firstName} {user.lastName} Doe
-            <DropdownIcon className="w-4 ml-2" />
+            className="btn bg-[#0E82FD] pl-5 text-white rounded-full">
+           {user?.patientProfile?.firstName && user?.patientProfile?.lastName
+    ? `${user.patientProfile.firstName} ${user.patientProfile.lastName}`
+    : `Doctor ${user.doctorProfile.firstName} ${user.doctorProfile.lastName}`}
+            <DropdownIcon className="w-4 mt-1 text-white" />
           </div>
           <ul
             tabIndex={0}
@@ -68,6 +70,7 @@ function HeaderNavBar() {
             <li>
               <a onClick={() => {
                   actionLogout();
+                  alert('Logout Successful')
                   navigate('/login') }}>
                 ออกจากระบบ
               </a>

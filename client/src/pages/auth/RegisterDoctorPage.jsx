@@ -9,7 +9,7 @@ import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 // import authStore from "../../stores/authStore.js";
 
 
-function RegisterPage() {
+function RegisterDoctorPage() {
 
   const navigate = useNavigate();
   // const actionRegister = authStore((state)=>state.actionRegister)
@@ -42,10 +42,9 @@ function RegisterPage() {
 
 
   return (
-    <div className="my-5">
-
+ 
       <AuthFormCard
-        title={["Patient Sign Up"]}
+        title={["Doctor Sign Up"]}
         onSubmit={handleSubmit(onSubmit)}
         isSubmitting={isSubmitting}
         buttonText="Register"
@@ -105,9 +104,8 @@ function RegisterPage() {
         />
 
       </AuthFormCard>
-    </div>
     
   )
 }
 
-export default RegisterPage
+export default RegisterDoctorPage
