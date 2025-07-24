@@ -6,6 +6,9 @@ const authApi = {};
 authApi.registerPatient = (body) => {
   return apiClient.post("/auth/register/patient", body);
 };
+authApi.registerDoctor = (body) => {
+  return apiClient.post("/auth/register/doctor", body);
+};
 
 authApi.login = (body) => {
   return apiClient.post("/auth/login", body);
