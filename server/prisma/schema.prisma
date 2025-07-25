@@ -42,10 +42,10 @@ model Account {
   role      UserRole @default(PATIENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
+
   // lastLogin DateTime?
 
-  RefreshToken   RefreshToken[]
+  RefreshToken RefreshToken[]
 
   facebookId String? @unique
   isActive   Boolean @default(true)
@@ -55,10 +55,7 @@ model Account {
 
   patientProfile Patient?
   doctorProfile  Doctor?
-
-  
 }
-
 
 model RefreshToken {
   id        Int      @id @default(autoincrement())
@@ -70,8 +67,6 @@ model RefreshToken {
   ipAddress String?
   userAgent String?
 }
-
-
 
 model Patient {
   id        Int       @id @default(autoincrement())
@@ -115,13 +110,13 @@ model Doctor {
 }
 
 model DoctorAvailability {
-  id        Int     @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   doctorId  Int
   dayOfWeek Int
   startTime String
   endTime   String
-  isActive  Boolean @default(true)
-  isDone    Boolean @default(false)
+  isActive  Boolean  @default(true)
+  isDone    Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -129,16 +124,16 @@ model DoctorAvailability {
 }
 
 model DoctorAvailableSlot {
-  id        Int      @id @default(autoincrement())
-  doctorId  Int
-  date      DateTime // วันที่ เช่น 2025-07-28
-  startTime String // เช่น "13:00"
-  endTime   String // เช่น "14:00"
-  source    String // "manual" | "generated"
-  isBooked  Boolean  @default(false)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  doctorId      Int
+  availableDate DateTime // วันที่ เช่น 2025-07-28
+  startTime     String // เช่น "13:00"
+  endTime       String // เช่น "14:00"
+  source        String // "manual" | "generated"
+  isBooked      Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   doctor Doctor @relation(fields: [doctorId], references: [id])
 }
