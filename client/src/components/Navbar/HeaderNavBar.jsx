@@ -17,9 +17,13 @@ function HeaderNavBar() {
 
 
   const user = authStore((state)=>state.user)
+  // const token = authStore((state)=>state.token)
   const actionLogout = authStore((state)=>state.actionLogout)
   //  const checkAuth = authStore((state) => state.checkAuth);
 
+// if(!user) {
+//   return <p>ggggggggggg</p>
+// }
 
   return (
     <div className="navbar flex justify-between w-[1200px] h-14 mt-2 mb-5">

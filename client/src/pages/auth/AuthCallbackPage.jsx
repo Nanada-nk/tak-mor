@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useSearchParams, useNavigate } from 'react-router';
+import { useSearchParams, useNavigate, Navigate } from 'react-router';
 import { toast } from 'react-toastify';
 import authStore from '../../stores/authStore.js';
 import authApi from '../../api/authApi.js';
@@ -7,24 +7,34 @@ import authApi from '../../api/authApi.js';
 function AuthCallbackPage() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  console.log('testtt', searchParams.get('error'))
   
 
-  const { actionSocialLogin, user } = authStore((state) => ({
-    actionSocialLogin: state.actionSocialLogin,
-    user: state.user,
-  }));
+  // const { actionSocialLogin, user,setAuthSocialLogin } = authStore((state) => ({
+  //   actionSocialLogin: state.actionSocialLogin,
+  //   user: state.user,
+  //   setAuthSocialLogin: state.setAuthSocialLogin
+  // }));
+
+  const actionSocialLogin = authStore((state)=> state.actionSocialLogin)
+  const user = authStore((state)=> state.user)
+  const setAuthSocialLogin = authStore((state)=> state.setAuthSocialLogin)
 
  
   useEffect(() => {
    
     const token = searchParams.get('token');
+    console.log('token', token)
+
     const error = searchParams.get('error');
+    console.log('error', error)
 
     if (error) {
-   
       toast.error(error || 'Login failed.');
-      navigate('/login');
+      // navigate('/login');
     } else if (token) {
+
+      console.log('token test', token)
      
       const fetchUser = async () => {
         try {
@@ -33,10 +43,14 @@ function AuthCallbackPage() {
           
          
           const response = await authApi.getMe();
+          console.log('response test', response)
           
- 
-          actionSocialLogin({ accessToken: token, user: response.data.user });
-          
+          setAuthSocialLogin(response.data.user,token)
+          // actionSocialLogin({ accessToken: token, user: response.data.user });
+          // navigate('/');
+          // console.log('window.location', window.location)
+          // window.location.href('/')
+
       
         } catch (fetchError) {
           toast.error('Could not fetch user data after login.');
@@ -45,11 +59,12 @@ function AuthCallbackPage() {
         }
       };
       
+      console.log('fetchUser', fetchUser)
       fetchUser();
     } else {
       
       toast.error('Invalid callback state.');
-      navigate('/login');
+      // navigate('/login');
     }
   }, [searchParams, navigate, actionSocialLogin]); 
 
