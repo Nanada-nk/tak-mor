@@ -23,7 +23,7 @@ function PatientInfoPage() {
     }));
   };
   const navigate = useNavigate();
-  const { specialty, appointmentType, clinic, service, dateTime } = useBookingStore();
+  const { specialty, appointmentType, hospital, service, dateTime } = useBookingStore();
   const selectedDate = dateTime?.date || null;
   const selectedTime = dateTime?.time || null;
   return (
@@ -90,8 +90,8 @@ function PatientInfoPage() {
                      <span className="font-medium  mb-1">Appointment Type</span>
                      <span className="font-semibold text-gray-700">
                        {appointmentType
-                         ? appointmentType === 'Clinic'
-                           ? `Clinic${clinic ? ` (${clinic})` : ''}`
+                         ? appointmentType === 'Hospital'
+                           ? `Hospital${hospital ? ` (${hospital})` : ''}`
                            : appointmentType
                          : <span className="text-gray-400">Not selected</span>}
                      </span>
@@ -169,7 +169,7 @@ function PatientInfoPage() {
              </div>
            </div>
            <div className=" h-1/10 flex justify-between items-center px-5">
-             <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
+             <button onClick={() => navigate("/bookingdatetime")} className="btn btn-error">{"< "} Back</button>
              <button onClick={() => navigate("/payment")} className="btn btn-primary">Select Payment {" >"}</button>
            </div>
          </div>
