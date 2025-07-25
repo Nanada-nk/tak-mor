@@ -15,7 +15,7 @@ import bookingRouter from './routes/booking.route.js'
 const app = express()
 
 const limiter = rateLimit({
-  windowMs: 60 * 60 * 1000,
+  windowMs: 1 * 60 * 1000, // 60
   max: 200,
   message: 'Too many requests, please try again later.'
 })

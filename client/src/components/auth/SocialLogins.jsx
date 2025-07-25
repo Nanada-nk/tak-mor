@@ -56,7 +56,7 @@ function SocialLogins({ role = 'PATIENT', pageType = 'login' }) {
           text={pageType === 'login' ? 'signin_with' : 'signup_with'}
         />
 
-        {/* ปุ่ม Facebook Login (เป็น Link ไปยัง Backend) */}
+        
         <a
           href={`${import.meta.env.VITE_API_BASE_URL}/auth/facebook?role=${role}`}
           className="btn w-full normal-case rounded-3xl"
