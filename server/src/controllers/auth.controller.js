@@ -7,6 +7,7 @@ import createError from "../utils/create-error.js";
 import crypto from "crypto";
 import prisma from "../config/prisma.config.js";
 import { token } from "morgan";
+import axios from 'axios'
 
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
@@ -546,9 +547,9 @@ authController.resetPassword = async (req, res, next) => {
 
 authController.refresh = async (req, res, next) => {
   try {
-
+console.log('req.cookies.refreshToken', req.cookies.refreshToken)
     const oldRefreshToken = req.cookies.refreshToken;
-    console.log('oldRefreshToken', oldRefreshToken)
+    console.log('oldRefreshToken===================', oldRefreshToken)
     if (!oldRefreshToken) {
       throw createError(401, 'Authentication required.');
     }
@@ -569,7 +570,7 @@ authController.refresh = async (req, res, next) => {
       throw createError(401, 'Invalid token');
     }
 
-    if (new Date() < oldRefresh.expiresAt) {
+    if (new Date() > oldRefresh.expiresAt) {
       throw createError(401, 'Token has not expired yet.');
     }
 

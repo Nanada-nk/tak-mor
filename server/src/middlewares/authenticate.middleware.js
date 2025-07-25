@@ -4,6 +4,7 @@ import authService from "../services/auth.service.js"
 
 const authenticateUser = async (req, res, next) => {
   const authHeader = req.headers.authorization
+  console.log('req.headers.authorization=======', req.headers.authorization)
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return next(createError(401, 'Unauthorized'))
   }
@@ -13,9 +14,11 @@ const authenticateUser = async (req, res, next) => {
     return next(createError(401, 'Unauthorized'))
   }
 
+  console.log('token==', token)
+
   try {
-    const payload = await jwtService.verifyToken(token)
-    console.log("decoded JWT", payload)
+    const payload = await jwtService.verifyToken(token,process.env.JWT_SECRET)
+    console.log("decoded JWT======", payload)
     if (!payload.id) {
       return next(createError(401, 'Unauthorized'))
     }
