@@ -6,7 +6,7 @@ function NewBoxSection() {
       {/* Image and Tag Section */}
       <div className="relative p-2 w-[50%] h-auto overflow-hidden">
         
-          <img src="" className="w-full h-full object-contain rounded-sm" />
+          <img src="#" className="w-full h-full object-contain rounded-sm" />
         
       </div>
 

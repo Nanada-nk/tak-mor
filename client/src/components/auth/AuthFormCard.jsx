@@ -1,6 +1,6 @@
 import { Link } from "react-router"
 import { BubblesIcon } from 'lucide-react'
-import AuthLayout from "./AuthLayout";
+
 
 function AuthFormCard({ title, subtitle, children, onSubmit, isSubmitting, buttonText, bottomLinkPath, bottomLinkText, bottomText }) {
 
