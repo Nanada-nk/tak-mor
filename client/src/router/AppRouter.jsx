@@ -11,6 +11,7 @@ import ForgotPasswordPage from "../pages/auth/ForgotPasswordPage.jsx";
 import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
 import SignupRolePick from "../pages/auth/SignupRolePick.jsx";
+import AuthCallbackPage from "../pages/auth/AuthCallbackPage.jsx";
 
 import NewsPage from "../pages/news/NewsPage.jsx";
 import NewContentPage from "../pages/news/NewsContentPage.jsx";
@@ -78,7 +79,7 @@ function AppRouter() {
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="otp" element={<EmailOTPPage />} />
           <Route path="rolepick" element={<SignupRolePick />} />
-
+          <Route path="auth/callback" element={<AuthCallbackPage />} />
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />

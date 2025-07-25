@@ -23,7 +23,6 @@ authService.findAccountByEmail = async (email) => {
 }
 
 authService.findAccountById = (id) => {
-  
   return prisma.account.findUnique({
     where: { id },
     include: { 
@@ -66,7 +65,7 @@ authService.updateLastLogin = (userId) => {
   })
 }
 
-//ByNada
+
 authService.requestPasswordReset = async (email) => {
   const account = await prisma.account.findUnique({ where: { email } });
   if (!account) throw createError(404, "Account with this email not found.");
@@ -99,7 +98,7 @@ authService.requestPasswordReset = async (email) => {
   }
 };
 
-//ByNada
+
 // NEW: Verifies OTP and generates a secure token for password reset
 authService.verifyOtp = async (email, otp) => {
   const account = await prisma.account.findUnique({
@@ -138,7 +137,7 @@ authService.verifyOtp = async (email, otp) => {
   return resetToken;
 };
 
-//ByNada
+
 // MODIFIED: Uses the token from OTP verification to reset the password
 authService.resetPasswordWithToken = async (token, newPassword) => {
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -166,5 +165,43 @@ authService.resetPasswordWithToken = async (token, newPassword) => {
     }
   });
 };
+
+//ByNada
+authService.reactivateAndLinkFacebook = (id, facebookId) => {
+  return prisma.account.update({
+    where: { id },
+    data: {
+      isActive: true,
+      facebookId: facebookId,
+    },
+  });
+};
+
+//ByNada
+authService.linkFacebookToAccount = (id, facebookId) => {
+    return prisma.account.update({
+        where: { id },
+        data: { facebookId: facebookId },
+    });
+};
+
+//ByNada
+authService.deactivateAccountByFacebookId = async (facebookId) => {
+  const account = await prisma.account.findUnique({
+    where: { facebookId },
+  });
+
+  if (!account) {
+    console.warn(`Deactivation request for non-existent facebookId: ${facebookId}`);
+    return;
+  }
+
+  return prisma.account.update({
+    where: { id: account.id },
+    data: { isActive: false },
+  });
+};
+
+
 
 export default authService

@@ -8,6 +8,7 @@ import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
+import cookieParser from 'cookie-parser'
 import bookingRouter from './routes/booking.route.js'
 
 
@@ -23,7 +24,10 @@ app.use(cors({
   origin: process.env.FRONTEND_URL,
   credentials: true
 }))
+
+
 app.use(limiter)
+app.use(cookieParser())
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(compression())

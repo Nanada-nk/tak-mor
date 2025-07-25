@@ -44,7 +44,7 @@ model Account {
   updatedAt DateTime @updatedAt
   
   // lastLogin DateTime?
-   //ByNada
+
   RefreshToken   RefreshToken[]
 
   facebookId String? @unique
@@ -55,9 +55,11 @@ model Account {
 
   patientProfile Patient?
   doctorProfile  Doctor?
+
+  
 }
 
-//ByNada
+
 model RefreshToken {
   id        Int      @id @default(autoincrement())
   token     String   @unique
@@ -68,6 +70,8 @@ model RefreshToken {
   ipAddress String?
   userAgent String?
 }
+
+
 
 model Patient {
   id        Int       @id @default(autoincrement())

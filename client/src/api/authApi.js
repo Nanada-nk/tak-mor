@@ -1,34 +1,44 @@
-import apiClient from "./apiClient";
+import axiosInstance from "../config/axios.js";
 
 const authApi = {};
 
-// 2. ใช้ apiClient เรียกไปยัง endpoint ต่างๆ
+
 authApi.registerPatient = (body) => {
-  return apiClient.post("/auth/register/patient", body);
+  return axiosInstance.post("/auth/register/patient", body);
 };
 authApi.registerDoctor = (body) => {
-  return apiClient.post("/auth/register/doctor", body);
+  return axiosInstance.post("/auth/register/doctor", body);
 };
 
 authApi.login = (body) => {
-  return apiClient.post("/auth/login", body);
+  return axiosInstance.post("/auth/login", body);
+};
+
+
+authApi.googleLoginPatient = (body) => {
+  return axiosInstance.post("/auth/google-login/patient", body);
+};
+
+
+authApi.googleLoginDoctor = (body) => {
+  return axiosInstance.post("/auth/google-login/doctor", body);
 };
 
 authApi.getMe = () => {
-  return apiClient.get("/auth/me");
+  return axiosInstance.get("/auth/me");
 };
 
 authApi.forgotPassword = (body) => {
-  return apiClient.post("/auth/forgot-password", body);
+  return axiosInstance.post("/auth/forgot-password", body);
 };
 
-//Nada
+
 authApi.verifyOtp = (body) => {
-  return apiClient.post("/auth/verify-otp", body);
+  return axiosInstance.post("/auth/verify-otp", body);
 };
 
 authApi.resetPassword = (body) => {
-  return apiClient.post("/auth/reset-password", body);
+  return axiosInstance.post("/auth/reset-password", body);
 };
 
 export default authApi;
