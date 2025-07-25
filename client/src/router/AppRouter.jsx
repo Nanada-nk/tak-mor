@@ -12,6 +12,8 @@ import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
 import SignupRolePick from "../pages/auth/SignupRolePick.jsx";
 import AuthCallbackPage from "../pages/auth/AuthCallbackPage.jsx";
+import TermOfService from "../pages/termOfService/termOfService.jsx";
+import PrivacyPolicy from "../pages/privacyPolicy/privacyPolicy.jsx";
 
 import NewsPage from "../pages/news/NewsPage.jsx";
 import NewContentPage from "../pages/news/NewsContentPage.jsx";
@@ -54,6 +56,7 @@ import authStore from '../stores/authStore.js';
 import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDoctorDashboardMenagementPage.jsx";
 import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/AdminAppointmentDashboardManagementPage.jsx";
 import AboutUsPage from "../pages/AboutUsPage.jsx";
+import FaqPage from "../pages/Faq/FaqPage.jsx";
 
 
 function AppRouter() {
@@ -80,6 +83,9 @@ function AppRouter() {
           <Route path="otp" element={<EmailOTPPage />} />
           <Route path="rolepick" element={<SignupRolePick />} />
           <Route path="auth/callback" element={<AuthCallbackPage />} />
+          <Route path="faq" element={<FaqPage/>}/>
+          <Route path="termsOfService" element={<TermOfService/>} />
+          <Route path="privacyPolicy" element={<PrivacyPolicy/>} />
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />

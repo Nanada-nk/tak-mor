@@ -77,19 +77,31 @@ function Footer() {
                     </fieldset>
                 </form>
             </footer>
-            <footer className="flex justify-between   bg-[#D9E6F7] text-base-content px-20 py-1" >
+            <footer className="  bg-[#D9E6F7] px-20 py-1" >
+                <div className=' flex justify-between items-center'>
                 <aside>
                     <p>Copyright © {new Date().getFullYear()} - Tak-mor, All Right Reserved</p>
                 </aside>
+                
                 <aside>
                     <div className='flex gap-2 '>
 
-                    <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
-                    <p> | </p>
-                    <p className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
+                        <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
+                        <p> | </p>
+                        <p className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
                     </div>
 
                 </aside>
+                <aside>
+                    <div className='flex gap-2'>
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png" alt="Visa" className='w-10 h-4' />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" alt="Mastercard" className="w-11 h-5" />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c5/PromptPay-logo.png" alt="PromptPay" className="w-11 h-5" />
+                        <img src="https://www.leceipt.com/wp-content/uploads/2022/05/paypal-logo.png" alt="Paypal" className="w-8 h-5" />
+                    </div>
+                </aside>
+
+                </div>
             </footer>
         </div>
     )

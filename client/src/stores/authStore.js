@@ -10,6 +10,19 @@ const authStore = create(
       isLoading: true,
       isLoggedIn: false,
 
+      // setToken:(token) => {
+      //   set(() => ({token: token}))
+      // },
+
+      // setAuthSocialLogin: (user,token) => {
+      //   // console.log("setAuthUser: Updating user state.", user);
+      //   set(() => ({ user: user, isLoggedIn: !!user, token }));
+      // },
+
+      setAuth: (data) => {
+        const { user, accessToken } = data;
+        set({ user, token: accessToken, isLoggedIn: true, isLoading: false });
+      },
 
       setAuthUser: (user) => {
         // console.log("setAuthUser: Updating user state.", user);
@@ -21,7 +34,7 @@ const authStore = create(
         console.log("1. checkAuth action STARTING...")
 
         const currentToken = get().token;
-        
+
         console.log("2. Token from store is:", currentToken);
 
         if (currentToken) {
@@ -83,8 +96,8 @@ const authStore = create(
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
         token: state.token,
-        user: state.user,
-        isLoggedIn: state.isLoggedIn
+        // user: state.user,
+        // isLoggedIn: state.isLoggedIn
       }),
     }
   )
