@@ -5,13 +5,23 @@ const useBookingStore = create((set) => ({
   service: '',
   appointmentType: '',
   clinic: '',
-  dateTime: null,
+  selectedDate: null,
+  selectedTime: '',
   setSpecialty: (specialty) => set({ specialty }),
   setService: (service) => set({ service }),
   setAppointmentType: (appointmentType) => set({ appointmentType }),
   setClinic: (clinic) => set({ clinic }),
-  setDateTime: (dateTime) => set({ dateTime }),
-  resetBooking: () => set({ specialty: '', service: '', appointmentType: '', clinic: '', dateTime: null }),
+  setSelectedDate: (selectedDate) => set({ selectedDate }),
+  setSelectedTime: (selectedTime) => set({ selectedTime }),
+  resetBooking: () =>
+    set({
+      specialty: '',
+      service: '',
+      appointmentType: '',
+      clinic: '',
+      selectedDate: null,
+      selectedTime: '',
+    }),
 }));
 
 export default useBookingStore;

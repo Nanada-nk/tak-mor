@@ -19,6 +19,7 @@ function RegisterDoctorPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
+    getValues
   } = useForm({
     resolver: yupResolver(schemaRegister),
     mode: 'onBlur',
@@ -35,13 +36,13 @@ function RegisterDoctorPage() {
   const onSubmit = async (data) => {
     console.log("Attempting to submit registration with data:", data);
 
-    const isAgreed = getValues("agreeToTerms");
+    // const isAgreed = getValues("agreeToTerms");
 
-    if (!isAgreed) {
-      return toast.error("Please accept the Terms of Service and Privacy Policy.");
-    }
+    // if (!isAgreed) {
+    //   return toast.error("Please accept the Terms of Service and Privacy Policy.");
+    // }
 
-    console.log('isAgreed', isAgreed)
+    // console.log('isAgreed', isAgreed)
 
     try {
       await new Promise(resolve => setTimeout(resolve, 1000))

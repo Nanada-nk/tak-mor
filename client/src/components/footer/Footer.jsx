@@ -1,6 +1,8 @@
 import React from 'react'
+import {useNavigate} from 'react-router'
 
 function Footer() {
+    const navigate = useNavigate();
     return (
         <div className=''>
             <footer className="footer sm:footer-horizontal  text-base-content px-20 bg-[#EEF7FB] pt-6 pb-10">
@@ -16,8 +18,8 @@ function Footer() {
                 </nav>
                 <nav>
                     <h6 className="font-bold text-base text-black py-3">ทักหมอ</h6>
-                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">หน้าแรก</a>
-                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">แพทย์</a>
+                    <a onClick={()=>navigate('/')} className="py-1 text-black hover:text-blue-600 cursor-pointer">หน้าแรก</a>
+                    <a onClick={()=>navigate('/doctorlist')} className="py-1 text-black hover:text-blue-600 cursor-pointer">แพทย์</a>
                     <a className="py-1 text-black hover:text-blue-600 cursor-pointer">การปรึกษาทางวิดีโอ</a>
                 </nav>
                 <nav>
@@ -84,9 +86,9 @@ function Footer() {
                 <aside>
                     <div className='flex gap-2 '>
 
-                    <p className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
+                    <p onClick={()=>navigate('/policy')} className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
                     <p> | </p>
-                    <p className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
+                    <p onClick={()=>navigate('/terms')} className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
                     </div>
 
                 </aside>

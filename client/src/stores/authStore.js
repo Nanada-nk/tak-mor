@@ -24,6 +24,8 @@ const authStore = create(
         
         console.log("2. Token from store is:", currentToken);
 
+
+        
         if (currentToken) {
           try {
             const resp = await authApi.getMe();
