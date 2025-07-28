@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 function CategoryCardComponent({
   iconSrc = "../../public/cate1.svg",
   title = "หมวดหมู่",
-  showSubtitle = true,
+  showSubtitle = false,
   doctorCount = 0,
   path = "/",
   widthClass = "w-40",
