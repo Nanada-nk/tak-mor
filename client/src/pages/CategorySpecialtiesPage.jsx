@@ -8,15 +8,14 @@ function CategorySpecialtiesPage() {
       <div className="flex flex-wrap gap-4 justify-center py-5">
         <CategoryCardComponent
           title="หัวใจและหลอดเลือด"
-          subtitle=""
           widthClass="w-100"
           flexClass="flex-row"
           justifyClass="justify-center"
           itemsClass="items-center"
-          gapClass="gap-20"
+          gapClass="gap-10"
           fontWeightClass="font-bold"
         />
-        <CategoryCardComponent title="หัวใจและหลอดเลือด" />
+        <CategoryCardComponent title="หัวใจและหลอดเลือด" showSubtitle={false} />
         <CategoryCardComponent title="หัวใจและหลอดเลือด" />
         <CategoryCardComponent title="หัวใจและหลอดเลือด" />
         <CategoryCardComponent title="หัวใจและหลอดเลือด" />
