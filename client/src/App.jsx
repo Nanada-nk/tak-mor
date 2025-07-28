@@ -1,12 +1,16 @@
-import AppRouter from "./router/AppRouter"
+import { useEffect } from 'react';
+import { fetchCsrfToken } from "./config/axios.js"
+import AppRouter from "./router/AppRouter.jsx"
 import { Slide, ToastContainer } from "react-toastify"
 import 'react-toastify/dist/ReactToastify.css';
 
-
 function App() {
 
+  useEffect(() => {
+    fetchCsrfToken();
+  }, []);
 
-  
+
   return (
     <>
       <AppRouter />

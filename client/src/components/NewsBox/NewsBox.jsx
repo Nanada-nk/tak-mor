@@ -1,5 +1,3 @@
-import React from 'react'
-
 function NewsBox() {
     return (
         <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 h-110">

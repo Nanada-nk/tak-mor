@@ -1,5 +1,5 @@
-import Brandner from "../components/Brandner";
-import CategoryCardComponent from "../components/CategorySection/CategoryCardComponent";
+import Brandner from "../components/Brandner.jsx";
+import CategoryCardComponent from "../components/CategorySection/CategoryCardComponent.jsx";
 
 function CategorySpecialtiesPage() {
   return (

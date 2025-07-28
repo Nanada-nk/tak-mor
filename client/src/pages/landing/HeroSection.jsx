@@ -1,8 +1,7 @@
 import { Check } from "lucide-react";
 
-// import "cally";
 
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "../../components/SearchBar.jsx";
 
 function HeroSection() {
   return (

@@ -1,5 +1,5 @@
-import Brandner from "../../../components/Brandner"
-import CallAndVideo from "../../../components/callandvideo/CallAndVideo"
+import Brandner from "../../../components/Brandner.jsx"
+import CallAndVideo from "../../../components/callandvideo/CallAndVideo.jsx"
 
 function CallingPage() {
   return (

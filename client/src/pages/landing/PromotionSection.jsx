@@ -1,4 +1,4 @@
-import PromotionCard from "../../components/Promotion/PromotionCard"
+import PromotionCard from "../../components/Promotion/PromotionCard.jsx"
 
 function PromotionSection() {
   return (

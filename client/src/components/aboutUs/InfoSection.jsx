@@ -1,4 +1,4 @@
-import { PhoneEmergency } from "../icons";
+import { PhoneEmergency } from "../icons/index.jsx";
 
 function InfoSection() {
   return (

@@ -1,4 +1,4 @@
-import { DropdownIcon } from "../icons";
+import { DropdownIcon } from "../icons/index.jsx";
 import { useNavigate } from "react-router";
 function DropdownNavBar() {
   const navigate = useNavigate();

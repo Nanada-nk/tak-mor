@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router";
-import useBookingStore from "../../stores/bookingStore";
-import { PinIcon, StarIcon } from "../../components/icons";
+import useBookingStore from "../../stores/bookingStore.js";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
 import { useState } from "react";
-import {BookingFormInput} from "../../components/FormInput";
+import {BookingFormInput} from "../../components/FormInput.jsx";
 
 function PatientInfoPage() {
   const [form, setForm] = useState({

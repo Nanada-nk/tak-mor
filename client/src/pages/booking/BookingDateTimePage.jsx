@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { PinIcon, StarIcon } from "../../components/icons";
-import useBookingStore from "../../stores/bookingStore";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
+import useBookingStore from "../../stores/bookingStore.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 

@@ -1,4 +1,3 @@
-import React from 'react'
 import { Phone, Video, Mic } from "lucide-react"
 
 function CallAndVideo() {

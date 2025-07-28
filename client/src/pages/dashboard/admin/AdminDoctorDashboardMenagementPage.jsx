@@ -1,5 +1,4 @@
-import React from 'react'
-import DoctorDashboard from '../../../components/dashboard/DoctorDashboard'
+import DoctorDashboard from '../../../components/dashboard/DoctorDashboard.jsx'
 import { Search } from 'lucide-react'
 
 function AdminDoctorDashboardMenagementPage() {

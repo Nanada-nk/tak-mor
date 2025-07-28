@@ -10,7 +10,7 @@ function AdminRoute() {
     return <Navigate to="/login" replace />;
   }
   
-  if (user?.role !== 'ADMIN' && user?.role !== 'SUPERADMIN') {
+  if (user?.role !== 'ADMIN') {
     return <Navigate to="/" replace />;
   }
   return <Outlet />;

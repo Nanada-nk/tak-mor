@@ -1,6 +1,7 @@
 
-import Brandner from "../../components/Brandner"
-import NewsBox from "../../components/NewsBox/NewsBox"
+import Brandner from "../../components/Brandner.jsx"
+import NewsBox from "../../components/NewsBox/NewsBox.jsx"
+
 function NewsPage() {
   return (
     <div>

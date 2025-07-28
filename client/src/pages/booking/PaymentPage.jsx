@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { CreditCard, QrCode } from 'lucide-react';
 import { useNavigate } from "react-router";
-import { PinIcon, StarIcon } from "../../components/icons"; 
-import useBookingStore from "../../stores/bookingStore";
-import { BookingFormInput } from "../../components/FormInput";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx"; 
+import useBookingStore from "../../stores/bookingStore.js";
+import { BookingFormInput } from "../../components/FormInput.jsx";
 
 
 

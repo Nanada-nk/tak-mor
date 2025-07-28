@@ -1,9 +1,9 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { CheckCircle2, MessageCircle, Phone, Mail, FileText, Send } from 'lucide-react';
-import { PinIcon, StarIcon } from '../../components/icons';
-import useBookingStore from '../../stores/bookingStore';
+import { PinIcon, StarIcon } from '../../components/icons/index.jsx';
+import useBookingStore from '../../stores/bookingStore.js';
 
 
 
