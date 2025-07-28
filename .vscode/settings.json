@@ -29,5 +29,13 @@
     "นโยบายความเป็นส่วนตัว",
     "นสุดรายละเอียดข้อผิดพลาด",
     "รายละเอียดข้อผิดพลาด"
-  ]
+  ],
+  "cSpell.customDictionaries": {
+    "custom-dictionary-workspace": {
+      "name": "custom-dictionary-workspace",
+      "path": "${workspaceFolder:tak-mor}/.cspell/custom-dictionary-workspace.txt",
+      "addWords": true,
+      "scope": "workspace"
+    }
+  }
 }
