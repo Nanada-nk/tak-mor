@@ -6,7 +6,7 @@ function TermOfService() {
         <div>
 
             <div>
-                <Brandner title='ข้อกำหนก และ เงื่อนไข'/>
+                <Brandner title='ข้อกำหนด และเงื่อนไข'/>
             </div>
 
             <div className='px-30 py-10'>
