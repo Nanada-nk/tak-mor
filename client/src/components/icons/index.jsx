@@ -2,7 +2,7 @@ export function DropdownIcon(props) {
   return (
     <svg
       viewBox="0 0 24 24"
-      fill="none"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
@@ -10,7 +10,6 @@ export function DropdownIcon(props) {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M12.707 14.707a1 1 0 01-1.414 0l-5-5a1 1 0 011.414-1.414L12 12.586l4.293-4.293a1 1 0 111.414 1.414l-5 5z"
-        fill="white"
       />
     </svg>
   );
@@ -75,19 +74,25 @@ export function LoginIcon(props) {
 
 export function PinIcon(props) {
   return (
-    <svg
+   <svg
       viewBox="0 0 24 24"
-      fill="none"
+      fill="currentColor"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      <path fill="#fff" d="M0 0H24V24H0z" />
       <path
         d="M18 9c0 4.746-3.754 9.492-5.323 11.269a.892.892 0 01-1.354 0C9.755 18.492 6 13.746 6 9c0-2 1.5-6 6-6s6 4 6 6z"
-        stroke="#000"
+        stroke="currentColor"
         strokeLinejoin="round"
       />
-      <circle cx={12} cy={9} r={2} stroke="#000" strokeLinejoin="round" />
+      <circle
+        cx={12}
+        cy={9}
+        r={3}
+        stroke="currentColor"
+        fill="white"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -149,7 +154,7 @@ export function AudioCallIcon(props) {
       <path
         d="M61.73 7173.996c-.463 1.407-2.277 2.109-3.573 1.992-1.77-.16-3.696-1.099-5.158-2.133-2.149-1.52-4.162-3.871-5.335-6.366-.829-1.763-1.015-3.931.218-5.538.456-.594.95-.911 1.69-.948 1.028-.05 1.172.538 1.525 1.454.263.685.614 1.384.81 2.094.367 1.325-.916 1.38-1.078 2.463-.1.683.727 1.599 1.101 2.086a10.105 10.105 0 002.608 2.403c.57.359 1.488 1.006 2.14.649 1.004-.55.91-2.243 2.313-1.67.727.296 1.431.723 2.125 1.097 1.073.577 1.023 1.175.614 2.417-.306.928.306-.928 0 0"
         transform="translate(-103 -7321) translate(56 160)"
-        fill="#000"
+        fill="currentColor"
         stroke="none"
         strokeWidth={1}
         fillRule="evenodd"
@@ -503,6 +508,22 @@ export function ConsultationIcon(props) {
       <path
         d="M28.358 2.83v1.368h-5.624V2.829h5.624zM21.268 4.206h-1.385v-1.37h1.385v1.37zM29.832 2.83h1.365V4.2h-1.365V2.83z"
         fill="#fff"
+      />
+    </svg>
+  )
+}
+
+export function EmailIcon(props) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <path
+        d="M17 3.5H7c-3 0-5 1.5-5 5v7c0 3.5 2 5 5 5h10c3 0 5-1.5 5-5v-7c0-3.5-2-5-5-5zm.47 6.09l-3.13 2.5c-.66.53-1.5.79-2.34.79-.84 0-1.69-.26-2.34-.79l-3.13-2.5a.77.77 0 01-.12-1.06c.26-.32.73-.38 1.05-.12l3.13 2.5c.76.61 2.05.61 2.81 0l3.13-2.5c.32-.26.8-.21 1.05.12.26.32.21.8-.11 1.06z"
+        fill="currentColor"
       />
     </svg>
   )

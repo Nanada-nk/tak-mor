@@ -26,7 +26,7 @@ function HeaderNavBar() {
 // }
 
   return (
-    <div className="navbar flex justify-between w-[1200px] h-14 mt-2 mb-5">
+    <div className="navbar flex justify-between w-[1350px] h-14 mt-2 mb-5">
       <a onClick={navigateHome} className="hover:cursor-pointer">
         <img
           src="../../public/takmor.svg"
@@ -34,7 +34,7 @@ function HeaderNavBar() {
           className="h-full w-auto object-contain"
         />
       </a>
-      <div className="flex gap-8">
+      <div className="flex gap-5">
         <DropdownNavBar />
       </div>
       <SearchBar />
@@ -64,7 +64,7 @@ function HeaderNavBar() {
            {user?.patientProfile?.firstName && user?.patientProfile?.lastName
     ? `${user.patientProfile.firstName} ${user.patientProfile.lastName}`
     : `Doctor ${user.doctorProfile.firstName} ${user.doctorProfile.lastName}`}
-            <DropdownIcon className="w-4 mt-1 text-white" />
+            <DropdownIcon className="w-4 mt-1" />
           </div>
           <ul
             tabIndex={0}
