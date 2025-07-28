@@ -57,6 +57,7 @@ import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDo
 import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/AdminAppointmentDashboardManagementPage.jsx";
 import AboutUsPage from "../pages/AboutUsPage.jsx";
 import FaqPage from "../pages/Faq/FaqPage.jsx";
+import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
 
 
 function AppRouter() {
@@ -94,6 +95,7 @@ function AppRouter() {
           <Route path="terms" element={<TermsConditionsPage />} />
           <Route path="contactus" element={<ContactUsPage />} />
           <Route path="aboutus" element={<AboutUsPage />} />
+          <Route path="categoryspecialties" element={<CategorySpecialtiesPage />} />
           {/* Doctor */}
           <Route path="doctorlist" element={<DoctorListPage />} />
           <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
