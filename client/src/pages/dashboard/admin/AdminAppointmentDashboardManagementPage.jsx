@@ -1,5 +1,4 @@
-import React from 'react'
-import AppointmentDashboard from '../../../components/dashboard/AppointmentDashboard'
+import AppointmentDashboard from '../../../components/dashboard/AppointmentDashboard.jsx'
 import { Search } from 'lucide-react'
 
 function AdminAppointmentDashboardManagementPage() {

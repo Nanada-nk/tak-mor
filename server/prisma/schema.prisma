@@ -8,203 +8,192 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum UserRole {
-  PATIENT
-  DOCTOR
-  ADMIN
-}
-
-enum AppointmentStatus {
-  PENDING
-  CONFIRMED
-  COMPLETED
-  CANCELLED
-}
-
-enum PaymentStatus {
-  PENDING
-  COMPLETED
-  FAILED
-}
-
-model Specialty {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
-  description String
-  doctors     Doctor[]
-}
-
 model Account {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  phone     String
-  role      UserRole @default(PATIENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  
-  // lastLogin DateTime?
-
-  RefreshToken   RefreshToken[]
-
-  facebookId String? @unique
-  isActive   Boolean @default(true)
-
+  id                   Int           @id @default(autoincrement())
+  email                String        @unique
+  password             String
+  phone                String
+  role                 Account_role  @default(PATIENT)
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+  facebookId           String?       @unique
+  googleId             String?       @unique
+  isActive             Boolean       @default(true)
   passwordResetToken   String?
   passwordResetExpires DateTime?
-
-  patientProfile Patient?
-  doctorProfile  Doctor?
-
-  
-}
-
-
-model RefreshToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  accountId Int
-  account   Account  @relation(fields: [accountId], references: [id])
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
-}
-
-
-
-model Patient {
-  id        Int       @id @default(autoincrement())
-  accountId Int       @unique
-  hn        String?   @unique
-  firstName String
-  lastName  String
-  address   String?
-  birthDate DateTime?
-
-  medicalFiles MedicalFile[]
-  appointments Appointment[]
-  account      Account       @relation(fields: [accountId], references: [id])
-  Payment      Payment[]
-
-  patientMedicalProfile PatientMedicalProfile?
-}
-
-model PatientMedicalProfile {
-  id         Int     @id @default(autoincrement())
-  patientId  Int     @unique
-  congenital String?
-
-  patient Patient @relation(fields: [patientId], references: [id])
-}
-
-model Doctor {
-  id          Int     @id @default(autoincrement())
-  accountId   Int     @unique
-  firstName   String
-  lastName    String
-  // phone       String
-  bio         String?
-  specialtyId Int?
-
-  appointments        Appointment[]
-  specialty           Specialty?            @relation(fields: [specialtyId], references: [id])
-  account             Account               @relation(fields: [accountId], references: [id])
-  DoctorAvailability  DoctorAvailability[]
-  DoctorAvailableSlot DoctorAvailableSlot[]
-}
-
-model DoctorAvailability {
-  id        Int     @id @default(autoincrement())
-  doctorId  Int
-  dayOfWeek Int
-  startTime String
-  endTime   String
-  isActive  Boolean @default(true)
-  isDone    Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model DoctorAvailableSlot {
-  id        Int      @id @default(autoincrement())
-  doctorId  Int
-  date      DateTime // วันที่ เช่น 2025-07-28
-  startTime String // เช่น "13:00"
-  endTime   String // เช่น "14:00"
-  source    String // "manual" | "generated"
-  isBooked  Boolean  @default(false)
-  isActive  Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  doctor Doctor @relation(fields: [doctorId], references: [id])
+  Doctor               Doctor?
+  Patient              Patient?
+  RefreshToken         RefreshToken?
 }
 
 model Appointment {
-  id                 Int               @id @default(autoincrement())
-  vn                 String            @unique
+  id                 Int                 @id @default(autoincrement())
+  vn                 String              @unique
   patientId          Int
   doctorId           Int
   date               DateTime
   startTime          String
   endTime            String
   duration           String?
-  status             AppointmentStatus @default(PENDING)
+  status             Appointment_status  @default(PENDING)
   price              Float
   paymentId          Int?
-  appointmentSummary String? // หมอสรุปเอง ไม่ผ่าน AI
-  createdAt          DateTime
-  updatedAt          DateTime
+  appointmentSummary String?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  Doctor             Doctor              @relation(fields: [doctorId], references: [id])
+  Patient            Patient             @relation(fields: [patientId], references: [id])
+  Payment            Payment?            @relation(fields: [paymentId], references: [id])
+  AppointmentSummary AppointmentSummary?
+  MedicalFile        MedicalFile[]
+  WebRTCSession      WebRTCSession?
 
-  webRTCSession      WebRTCSession?
-  patient            Patient              @relation(fields: [patientId], references: [id])
-  doctor             Doctor               @relation(fields: [doctorId], references: [id])
-  payment            Payment?             @relation(fields: [paymentId], references: [id])
-  medicalFile        MedicalFile[]
-  AppointmentSummary AppointmentSummary[]
+  @@index([doctorId], map: "Appointment_doctorId_fkey")
+  @@index([patientId], map: "Appointment_patientId_fkey")
+  @@index([paymentId], map: "Appointment_paymentId_fkey")
 }
 
 model AppointmentSummary {
-  id             Int      @id @default(autoincrement())
-  appointmentId  Int      @unique
+  id             Int         @id @default(autoincrement())
+  appointmentId  Int         @unique
   symptoms       String
   diagnosis      String
   treatment      String
   medication     String?
   recommendation String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  Appointment    Appointment @relation(fields: [appointmentId], references: [id])
 }
 
-model WebRTCSession {
-  id            Int       @id @default(autoincrement())
-  appointmentId Int       @unique
-  roomId        String    @unique
-  isActive      Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  endedAt       DateTime?
+model Doctor {
+  id                  Int                   @id @default(autoincrement())
+  accountId           Int                   @unique
+  firstName           String
+  lastName            String
+  bio                 String?
+  specialtyId         Int?
+  Appointment         Appointment[]
+  Account             Account               @relation(fields: [accountId], references: [id])
+  Specialty           Specialty?            @relation(fields: [specialtyId], references: [id])
+  DoctorAvailability  DoctorAvailability[]
+  DoctorAvailableSlot DoctorAvailableSlot[]
 
-  appointment Appointment? @relation(fields: [appointmentId], references: [id])
+  @@index([specialtyId], map: "Doctor_specialtyId_fkey")
+}
+
+model DoctorAvailability {
+  id        Int      @id @default(autoincrement())
+  doctorId  Int
+  dayOfWeek Int
+  startTime String
+  endTime   String
+  isActive  Boolean  @default(true)
+  isDone    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  Doctor    Doctor   @relation(fields: [doctorId], references: [id])
+
+  @@index([doctorId], map: "DoctorAvailability_doctorId_fkey")
+}
+
+model DoctorAvailableSlot {
+  id            Int      @id @default(autoincrement())
+  doctorId      Int
+  availableDate DateTime
+  startTime     String
+  endTime       String
+  source        String
+  isBooked      Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  Doctor        Doctor   @relation(fields: [doctorId], references: [id])
+
+  @@index([doctorId], map: "DoctorAvailableSlot_doctorId_fkey")
+}
+
+model MedicalFile {
+  id            Int         @id @default(autoincrement())
+  patientId     Int
+  appointmentId Int
+  fileUrl       String
+  fileName      String
+  description   String
+  uploadedAt    DateTime    @default(now())
+  Appointment   Appointment @relation(fields: [appointmentId], references: [id])
+  Patient       Patient     @relation(fields: [patientId], references: [id])
+
+  @@index([appointmentId], map: "MedicalFile_appointmentId_fkey")
+  @@index([patientId], map: "MedicalFile_patientId_fkey")
+}
+
+model Patient {
+  id                    Int                    @id @default(autoincrement())
+  accountId             Int                    @unique
+  hn                    String?                @unique
+  firstName             String
+  lastName              String
+  address               String?
+  birthDate             DateTime?
+  Appointment           Appointment[]
+  MedicalFile           MedicalFile[]
+  Account               Account                @relation(fields: [accountId], references: [id])
+  PatientMedicalProfile PatientMedicalProfile?
+  Payment               Payment[]
+}
+
+model PatientMedicalProfile {
+  id         Int     @id @default(autoincrement())
+  patientId  Int     @unique
+  congenital String?
+  Patient    Patient @relation(fields: [patientId], references: [id])
 }
 
 model Payment {
-  id            Int           @id @default(autoincrement())
-  appointment   Appointment[]
+  id            Int            @id @default(autoincrement())
   patientId     Int
   amount        Float
   transactionId String?
-  status        PaymentStatus @default(PENDING)
+  status        Payment_status @default(PENDING)
   method        String
-  createdAt     DateTime      @default(now())
-  updatedAt     DateTime      @updatedAt
-  webhookLogs   WebhookLog[]
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  Appointment   Appointment[]
+  Patient       Patient        @relation(fields: [patientId], references: [id])
+  WebhookLog    WebhookLog[]
 
-  patient Patient @relation(fields: [patientId], references: [id])
+  @@index([patientId], map: "Payment_patientId_fkey")
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  accountId Int      @unique
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+  ipAddress String?
+  userAgent String?
+  Account   Account  @relation(fields: [accountId], references: [id])
+
+  @@index([accountId], map: "RefreshToken_accountId_fkey")
+}
+
+model Specialty {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String
+  Doctor      Doctor[]
+}
+
+model WebRTCSession {
+  id            Int         @id @default(autoincrement())
+  appointmentId Int         @unique
+  roomId        String      @unique
+  isActive      Boolean     @default(true)
+  createdAt     DateTime    @default(now())
+  endedAt       DateTime?
+  Appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }
 
 model WebhookLog {
@@ -212,18 +201,26 @@ model WebhookLog {
   paymentId  Int
   rawData    Json
   receivedAt DateTime @default(now())
-  payment    Payment  @relation(fields: [paymentId], references: [id])
+  Payment    Payment  @relation(fields: [paymentId], references: [id])
+
+  @@index([paymentId], map: "WebhookLog_paymentId_fkey")
 }
 
-model MedicalFile {
-  id            Int      @id @default(autoincrement())
-  patientId     Int
-  appointmentId Int
-  fileUrl       String
-  fileName      String
-  description   String
-  uploadedAt    DateTime @default(now())
+enum Account_role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
 
-  appointment Appointment @relation(fields: [appointmentId], references: [id])
-  patient     Patient     @relation(fields: [patientId], references: [id])
+enum Payment_status {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+enum Appointment_status {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
 }

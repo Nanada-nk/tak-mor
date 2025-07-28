@@ -1,8 +1,7 @@
 import { Check } from "lucide-react";
 
-// import "cally";
 
-import SearchBar from "../../components/SearchBar";
+import SearchBar from "../../components/SearchBar.jsx";
 
 function HeroSection() {
   return (
@@ -30,9 +29,13 @@ function HeroSection() {
             />
           </div>
         </div>
-        <div className="flex justify-between items-center bg-white w-xl h-12 rounded-lg p-2">
+        <div className="flex justify-between items-center bg-white w-xl h-12 rounded-lg p-2 gap-2">
           <SearchBar placeholder="ค้นหา หมอ" />
-
+          <input
+            type="date"
+            className="flex-1 rounded-lg h-9 px-2 text-sm  "
+            style={{ minWidth: 130 }}
+          />
           <button className="btn bg-[#0E82FD] text-white rounded-full hover:text-black hover:bg-[#FCEFEA]">
             ค้นหา
           </button>

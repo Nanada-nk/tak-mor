@@ -1,4 +1,4 @@
-import DoctorCardList from "../../components/DoctorList/DoctorCardList";
+import DoctorCardList from "../../components/DoctorList/DoctorCardList.jsx";
 
 function DocList({title = "แพทย์", bgColor}) {
   const defaultBgColor = "bg-[#EEF7FB]";

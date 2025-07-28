@@ -1,4 +1,5 @@
-import PatientReview from "../../components/review/PatientReview";
+import PatientReview from "../../components/review/PatientReview.jsx";
+
 function ReviewSection({bgColor}) {
   const defaultBgColor = "bg-[#EEF7FB]";
   return (

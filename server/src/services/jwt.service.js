@@ -1,40 +1,29 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-const jwtService = {}
+const jwtService = {};
 
-jwtService.genAccessToken = async (payload) => {
-  try {
+
+jwtService.genAccessToken = (payload) => {
     return jwt.sign(payload, process.env.JWT_SECRET, {
-      algorithm: "HS256",
-      expiresIn: "15m"
-    })
-  } catch (error) {
-    throw new Error('Invalid token!')
-  }
-}
+        algorithm: "HS256",
+        expiresIn: "15m"
+    });
+};
 
-jwtService.genRefreshToken = async (userId) => {
-  try {
+
+jwtService.genRefreshToken = (userId) => {
     return jwt.sign(
-      { id: userId },
-      process.env.REFRESH_TOKEN_SECRET,
-      {expiresIn: '7d'}
-    )
-  } catch (error) {
-    throw new Error("Invalid token!!");
-  }
-}
-
-jwtService.verifyToken = async (token, secret) => {
-  try {
-    return jwt.verify(token,secret,{
-      algorithms: ['HS256']
-    })
-  } catch (error) {
-    throw new Error('Invalid token!!!')
-  }
-}
+        { id: userId },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: '7d' }
+    );
+};
 
 
+jwtService.verifyToken = (token, secret) => {
+    return jwt.verify(token, secret, {
+        algorithms: ['HS256']
+    });
+};
 
-export default jwtService
+export default jwtService;

@@ -1,23 +1,17 @@
 import prisma from "../config/prisma.config.js"
-import  emailService  from "../services/email.service.js"
+import emailService from "./email.service.js"
 import hashService from "./hash.service.js"
-import crypto from 'crypto'
 import createError from "../utils/create-error.js"
+import crypto from 'crypto'
 
 const authService = {}
 
-// authService.findAccountByEmail = (email) => {
-//   return prisma.account.findUnique({
-//     where: { email }
-//   })
-// }
-
-authService.findAccountByEmail = async (email) => {
-  return await prisma.account.findUnique({
+authService.findAccountByEmail = (email) => {
+  return prisma.account.findUnique({
     where: { email },
     include: {
-      patientProfile: true, 
-      doctorProfile: true
+      Patient: true,
+      Doctor: true
     },
   });
 }
@@ -25,9 +19,10 @@ authService.findAccountByEmail = async (email) => {
 authService.findAccountById = (id) => {
   return prisma.account.findUnique({
     where: { id },
-    include: { 
-      patientProfile: true,
-      doctorProfile: true }
+    include: {
+      Patient: true,
+      Doctor: true
+    }
   })
 }
 
@@ -44,14 +39,21 @@ authService.createDoctorProfile = (data) => {
 }
 
 
-// Find patient profile by accountId
+authService.storeRefreshToken = (userId, token) => {
+  const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 วัน
+  return prisma.refreshToken.upsert({
+    where: { accountId: userId },
+    update: { token, expiresAt },
+    create: { accountId: userId, token, expiresAt },
+  });
+};
+
 authService.findPatientProfileByAccountId = (accountId) => {
   return prisma.patient.findUnique({
     where: { accountId }
   });
 };
 
-// Find doctor profile by accountId
 authService.findDoctorProfileByAccountId = (accountId) => {
   return prisma.doctor.findUnique({
     where: { accountId }
@@ -65,21 +67,13 @@ authService.updateLastLogin = (userId) => {
   })
 }
 
-
 authService.requestPasswordReset = async (email) => {
   const account = await prisma.account.findUnique({ where: { email } });
   if (!account) throw createError(404, "Account with this email not found.");
 
-  // Generate a 4-digit OTP
   const otp = crypto.randomInt(1000, 9999).toString();
-  console.log('otp', otp)
-
   const hashedOtp = await hashService.hash(otp);
-  console.log('hashedOtp', hashedOtp)
-
-  // OTP is valid for 5 minutes
   const otpExpires = new Date(Date.now() + 5 * 60 * 1000);
-  console.log('otpExpires', otpExpires)
 
   await prisma.account.update({
     where: { email },
@@ -90,21 +84,17 @@ authService.requestPasswordReset = async (email) => {
   });
 
   try {
-    // Send the plain OTP to the user's email
     await emailService.sendOtpEmail(account.email, otp);
   } catch (error) {
-    console.log('error', error)
+    console.error('Email sending failed:', error);
     throw createError(500, "Could not send OTP email.");
   }
 };
 
-
-// NEW: Verifies OTP and generates a secure token for password reset
 authService.verifyOtp = async (email, otp) => {
   const account = await prisma.account.findUnique({
     where: { email }
   });
-  console.log('account', account)
 
   if (!account || !account.passwordResetToken || account.passwordResetExpires < new Date()) {
     throw createError(400, "OTP is invalid or has expired.");
@@ -115,14 +105,8 @@ authService.verifyOtp = async (email, otp) => {
     throw createError(400, "Invalid OTP provided.");
   }
 
-  // OTP is correct, now generate a secure, single-use token for the reset password step
   const resetToken = crypto.randomBytes(32).toString('hex');
-  console.log('resetToken', resetToken)
-
   const hashedResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  console.log('hashedResetToken', hashedResetToken)
-
-  // This token is valid for 5 minutes
   const resetTokenExpires = new Date(Date.now() + 5 * 60 * 1000);
 
   await prisma.account.update({
@@ -133,12 +117,9 @@ authService.verifyOtp = async (email, otp) => {
     }
   });
 
-  // Return the unhashed token to be used by the frontend for the final reset step
   return resetToken;
 };
 
-
-// MODIFIED: Uses the token from OTP verification to reset the password
 authService.resetPasswordWithToken = async (token, newPassword) => {
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
@@ -148,7 +129,6 @@ authService.resetPasswordWithToken = async (token, newPassword) => {
       passwordResetExpires: { gte: new Date() }
     }
   });
-  console.log('account', account)
 
   if (!account) {
     throw createError(400, "Password reset token is invalid or has expired.");
@@ -166,7 +146,21 @@ authService.resetPasswordWithToken = async (token, newPassword) => {
   });
 };
 
-//ByNada
+
+authService.linkGoogleToAccount = (id, googleId) => {
+  return prisma.account.update({
+    where: { id },
+    data: { googleId: googleId },
+  });
+};
+
+authService.linkFacebookToAccount = (id, facebookId) => {
+  return prisma.account.update({
+    where: { id },
+    data: { facebookId: facebookId },
+  });
+};
+
 authService.reactivateAndLinkFacebook = (id, facebookId) => {
   return prisma.account.update({
     where: { id },
@@ -177,15 +171,6 @@ authService.reactivateAndLinkFacebook = (id, facebookId) => {
   });
 };
 
-//ByNada
-authService.linkFacebookToAccount = (id, facebookId) => {
-    return prisma.account.update({
-        where: { id },
-        data: { facebookId: facebookId },
-    });
-};
-
-//ByNada
 authService.deactivateAccountByFacebookId = async (facebookId) => {
   const account = await prisma.account.findUnique({
     where: { facebookId },
@@ -202,6 +187,5 @@ authService.deactivateAccountByFacebookId = async (facebookId) => {
   });
 };
 
+export default authService;
 
-
-export default authService

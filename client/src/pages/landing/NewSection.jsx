@@ -1,4 +1,4 @@
-import NewBoxSection from "../../components/NewsBox/NewBoxSection";
+import NewBoxSection from "../../components/NewsBox/NewBoxSection.jsx";
 
 function NewSection() {
   return (

@@ -1,5 +1,5 @@
-import { AudioCallIcon, EmailIcon, PinIcon } from "../components/icons";
-import Brandner from "../components/Brandner";
+import { AudioCallIcon, EmailIcon, PinIcon } from "../components/icons/index.jsx";
+import Brandner from "../components/Brandner.jsx";
 
 function ContactUsPage() {
   return (

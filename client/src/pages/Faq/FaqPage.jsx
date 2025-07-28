@@ -1,6 +1,5 @@
-import React from 'react'
-import Brandner from '../../components/Brandner'
-import FAQCollapseComponent from '../../components/FAQ/FAQCollapseComponent'
+import Brandner from '../../components/Brandner.jsx'
+import FAQCollapseComponent from '../../components/FAQ/FAQCollapseComponent.jsx'
 
 function FaqPage() {
   return (

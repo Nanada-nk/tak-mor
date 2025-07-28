@@ -1,4 +1,4 @@
-import { Shapes, Shapes2, Shapes3 } from "../icons";
+import { Shapes2, Shapes3 } from "../icons/index.jsx";
 
 function HeroAboutUs() {
   return (

@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useState } from "react";
-import { PinIcon, StarIcon } from "../../components/icons";
-import useBookingStore from "../../stores/bookingStore";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
+import useBookingStore from "../../stores/bookingStore.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
@@ -12,7 +12,7 @@ function BookingDateTimePage() {
   
   const pad = n => String(n).padStart(2, '0');
   // Morning: 08:00-10:15 (10 slots)
-  const morningSlots = Array.from({ length: 10 }, (_, i) => {
+  const morningSlots = Array.from({ length: 5 }, (_, i) => {
     const startMinutes = 8 * 60 + i * 15;
     const endMinutes = startMinutes + 15;
     return {
@@ -56,7 +56,7 @@ function BookingDateTimePage() {
    
 
   // Store logic for date and time
-  const { specialty, appointmentType, clinic, service, setDateTime, dateTime } = useBookingStore();
+  const { specialty, appointmentType, hospital, service, setDateTime, dateTime } = useBookingStore();
   const [selectedDate, setSelectedDate] = useState(dateTime?.date || null);
   const [selectedTime, setSelectedTime] = useState(dateTime?.time || null);
 
@@ -160,8 +160,8 @@ function BookingDateTimePage() {
                   <span className="font-medium  mb-1">Appointment Type</span>
                   <span className="font-semibold text-gray-700">
                     {appointmentType
-                      ? appointmentType === 'Clinic'
-                        ? `Clinic${clinic ? ` (${clinic})` : ''}`
+                      ? appointmentType === 'Hospital'
+                        ? `Hospital${hospital ? ` (${hospital})` : ''}`
                         : appointmentType
                       : <span className="text-gray-400">Not selected</span>}
                   </span>
@@ -210,7 +210,7 @@ function BookingDateTimePage() {
           </div>
         </div>
         <div className=" h-1/10 flex justify-between items-center px-5">
-          <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
+          <button onClick={() => navigate("/booking")} className="btn btn-error">{"< "} Back</button>
           <button onClick={() => navigate("/patientinfo")} className="btn btn-primary">Add Basic Information {" >"}</button>
         </div>
       </div>

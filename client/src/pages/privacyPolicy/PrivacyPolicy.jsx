@@ -1,6 +1,6 @@
 import React from 'react'
-import PrivacyPolicyContent from '../../components/auth/content/PrivacyPolicyContent'
-import Brandner from '../../components/Brandner'
+import PrivacyPolicyContent from '../../components/auth/content/PrivacyPolicyContent.jsx'
+import Brandner from '../../components/Brandner.jsx'
 
 function PrivacyPolicy() {
     return (

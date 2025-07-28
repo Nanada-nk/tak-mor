@@ -1,4 +1,4 @@
-import FAQCollapseComponent from "../../components/FAQ/FAQCollapseComponent";
+import FAQCollapseComponent from "../../components/FAQ/FAQCollapseComponent.jsx";
 
 function FAQSection() {
   return (
