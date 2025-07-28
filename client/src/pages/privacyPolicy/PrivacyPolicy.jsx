@@ -7,7 +7,7 @@ function PrivacyPolicy() {
         <div>
             
             <div>
-                <Brandner title='นโยบายวามเป็นส่วนตัว' />
+                <Brandner title='นโยบายความเป็นส่วนตัว' />
             </div>
 
             <div className='px-30 py-10'>
