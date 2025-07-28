@@ -1,4 +1,4 @@
-import { DocFemaleIcon, HourIcon, ConsultationIcon, LabIcon } from "../icons";
+import { DocFemaleIcon, HourIcon, ConsultationIcon, LabIcon } from "../icons/index.jsx";
 
 function WhyChooseUs() {
   return (

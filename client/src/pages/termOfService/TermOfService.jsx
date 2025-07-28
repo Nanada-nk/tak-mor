@@ -1,6 +1,5 @@
-import React from 'react'
-import TermsOfServiceContent from '../../components/auth/content/TermsOfServiceContent'
-import Brandner from '../../components/Brandner'
+import TermsOfServiceContent from '../../components/auth/content/TermsOfServiceContent.jsx'
+import Brandner from '../../components/Brandner.jsx'
 
 function TermOfService() {
     return (

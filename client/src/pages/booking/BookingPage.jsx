@@ -1,7 +1,7 @@
-import { PinIcon, StarIcon } from "../../components/icons";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
 import { useState, useMemo, useEffect } from "react";
 import { useNavigate } from "react-router";
-import useBookingStore from "../../stores/bookingStore";
+import useBookingStore from "../../stores/bookingStore.js";
 
 
 

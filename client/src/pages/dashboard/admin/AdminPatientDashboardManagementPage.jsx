@@ -1,5 +1,5 @@
 import {Search} from "lucide-react"
-import PatientDashboard from "../../../components/dashboard/PatientDashboard"
+import PatientDashboard from "../../../components/dashboard/PatientDashboard.jsx"
 
 function AdminPatientDashboardManagementPage() {
   return (

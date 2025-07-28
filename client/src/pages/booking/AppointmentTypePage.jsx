@@ -1,8 +1,7 @@
 
-import { PinIcon, StarIcon } from "../../components/icons";
-import { ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon } from "../../components/icons";
+import { PinIcon, StarIcon, ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon  } from "../../components/icons/index.jsx";
 import { useNavigate } from "react-router";
-import useBookingStore from "../../stores/bookingStore";
+import useBookingStore from "../../stores/bookingStore.js";
 import { useState } from "react";
 
 

@@ -1,9 +1,8 @@
-import authStore from "../../stores/authStore";
-import { LoginIcon, SignUpIcon } from "../icons";
-import SearchBar from "../SearchBar";
-import DropdownNavBar from "./DropdownNavBar";
+import authStore from "../../stores/authStore.js";
+import { LoginIcon, SignUpIcon, DropdownIcon } from "../icons/index.jsx";
+import SearchBar from "../SearchBar.jsx";
+import DropdownNavBar from "./DropdownNavBar.jsx";
 import { useNavigate } from "react-router";
-import { DropdownIcon } from "../icons";
 import { toast } from "react-toastify";
 
 function HeaderNavBar() {

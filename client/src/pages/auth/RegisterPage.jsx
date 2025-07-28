@@ -11,13 +11,13 @@ import SocialLogins from "../../components/auth/SocialLogins.jsx";
 import PolicyModal from "../../components/auth/PolicyModal.jsx";
 import TermsOfServiceContent from "../../components/auth/content/TermsOfServiceContent.jsx";
 import PrivacyPolicyContent from "../../components/auth/content/PrivacyPolicyContent.jsx";
-// import authStore from "../../stores/authStore.js";
+
 
 
 function RegisterPage() {
 
   const navigate = useNavigate();
-  // const actionRegister = authStore((state)=>state.actionRegister)
+  
   const {
     register,
     handleSubmit,

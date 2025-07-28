@@ -1,4 +1,4 @@
-import { Shapes, Shapes2, Shapes3, Shapes4 } from "./icons";
+import { Shapes, Shapes2, Shapes3, Shapes4 } from "./icons/index.jsx";
 
 function Brandner({ title = "ข่าวใหม่" }) {
   return (

@@ -1,4 +1,4 @@
-import { SearchIcon } from "./icons";
+import { SearchIcon } from "./icons/index.jsx";
 
 function SearchBar({placeholder = "ค้นหา"}) {
   return (

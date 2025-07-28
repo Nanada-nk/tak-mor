@@ -1,4 +1,4 @@
-import Brandner from "../../components/Brandner";
+import Brandner from "../../components/Brandner.jsx";
 
 function NewsContentPage() {
   const post = {
