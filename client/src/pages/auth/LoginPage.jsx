@@ -190,60 +190,50 @@ function LoginPage() {
     },
   });
 
-  // ✅ onSubmit function ที่เรียก API โดยตรง และใช้ store เพื่อ set state
-  const onSubmit = async (data) => {
+ const onSubmit = async (data) => {
     try {
-      // 1. จัดการ "Remember Me" ให้ถูกต้อง
       if (data.remember) {
         localStorage.setItem("rememberEmail", data.email);
       } else {
         localStorage.removeItem("rememberEmail");
       }
 
-      // 2. เรียก API Login
+      // เรียก API Login (Backend จะใช้ Passport.js ตรวจสอบ)
       const response = await authApi.login(data);
       const { user, accessToken } = response.data;
 
-      // 3. เรียกใช้ Action เดียวใน store เพื่ออัปเดต State ทั้งหมด
+      // อัปเดต State ใน Zustand
       setAuth({ user, accessToken });
 
       toast.success("Login successful!");
-
-      // 4. รีเซ็ตฟอร์ม (คงค่า email ถ้าติ๊ก remember me)
-      reset({
-        email: data.remember ? data.email : "",
-        password: "",
-        remember: data.remember,
-      });
-
+      
     } catch (error) {
       console.error("Login failed:", error);
-      toast.error(error.response?.data?.message || "Login failed.");
+      toast.error(error.response?.data?.message || "Invalid email or password.");
     }
   };
 
-  // ✅ useEffect สำหรับ Redirect ผู้ใช้หลัง Login สำเร็จ (เหมือนเดิม)
+  // Redirect ผู้ใช้หลัง Login สำเร็จ
   useEffect(() => {
     if (!isLoading && isLoggedIn && user) {
       if (user.role === 'ADMIN') {
         navigate("/admin/patientdashboard", { replace: true });
       } else if (user.role === 'DOCTOR') {
         navigate("/doctorprofile", { replace: true });
-      } else { // Default to PATIENT
+      } else {
         navigate("/patientprofile", { replace: true });
       }
     }
   }, [isLoggedIn, user, isLoading, navigate]);
 
-  // ✅ useEffect สำหรับดึง Email ที่เคยบันทึกไว้ (ปรับปรุงเล็กน้อย)
+  // ดึง Email ที่เคยบันทึกไว้
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     if (savedEmail) {
-      // ใช้ setValue เพื่อกำหนดค่าในฟอร์ม
       setValue("email", savedEmail, { shouldValidate: true });
       setValue("remember", true);
     }
-  }, []);
+  }, [setValue]);
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
@@ -259,7 +249,7 @@ function LoginPage() {
         >
           <h1 className="text-2xl font-semibold">Sign in</h1>
           <p className="text-slate-400 text-xs">
-            We will send a confirmation code to your email.
+            Sign in to continue to your account.
           </p>
 
           <FormInput
