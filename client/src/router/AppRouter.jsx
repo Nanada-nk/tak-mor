@@ -58,6 +58,7 @@ import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/Ad
 import AboutUsPage from "../pages/AboutUsPage.jsx";
 import FaqPage from "../pages/Faq/FaqPage.jsx";
 import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
+import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
 
 
 function AppRouter() {
@@ -75,6 +76,7 @@ function AppRouter() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="internalmedicine" element={<InternalMedicinePage />} />
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
           <Route path="registerpatient" element={<RegisterPage />} />
