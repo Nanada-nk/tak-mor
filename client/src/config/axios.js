@@ -1,6 +1,6 @@
 import axios from 'axios';
 import authStore from '../stores/authStore.js';
-
+import { toast } from 'react-toastify';
 
 const axiosInstance = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -69,11 +69,32 @@ axiosInstance.interceptors.response.use(
             } catch (refreshError) {
 
                 console.error('Session expired. Could not refresh token. Logging out.', refreshError);
+                toast.error('Session expired. Please log in again.');
                 authStore.getState().logout();
+                window.location.href = '/login';
                 return Promise.reject(refreshError);
             }
         }
 
+        if (error.response?.status === 500) {
+            console.error('Server Internal Error detected. Redirecting to Server Error page.');
+            toast.error('An unexpected server error occurred. Please try again later.');
+            return Promise.reject(error);
+        }
+
+        if (error.response?.status === 503) {
+            console.warn('Application is under maintenance. Redirecting to Maintenance page.');
+            toast.info('Our website is currently under maintenance. Please check back soon.');
+            window.location.href = '/maintenance';
+            return Promise.reject(error);
+        }
+
+        if (error.response?.status === 403) {
+            console.warn('Access Forbidden. Redirecting to Home page.');
+            toast.error('You do not have permission to access this resource.');
+            window.location.href = '/';
+            return Promise.reject(error);
+        }
 
         return Promise.reject(error);
     }
