@@ -1,175 +1,121 @@
-// import { useEffect, useState } from 'react';
-// import { useNavigate } from "react-router";
-// import { toast } from "react-toastify";
-// import { BubblesIcon } from 'lucide-react';
-// import DataTable from 'react-data-table-component';
-// import userApi from '../../api/userApi.js';
-// import authStore from '../../stores/authStore.js';
-// import Modal from '../../components/Modal.jsx';
-// import SelectInput from '../../components/SelectInput.jsx';
-// import useConfirm from '../../hooks/useConfirm.js';
-// import useUserTableColumns from '../../components/useUserTableColumns.jsx';
-// import SearchInput from '../../components/SearchInput.jsx';
-// import { useForm } from 'react-hook-form';
-// import { yupResolver } from '@hookform/resolvers/yup';
-// import { editUserSchema } from '../../validator/schema.js';
+import { useEffect, useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import axiosInstance from "../../../config/axios.js";
 
-// const roleOptions = [
-//   { value: "CUSTOMER", label: "Customer" },
-//   { value: "ADMIN", label: "Admin" },
-//   { value: "SUPERADMIN", label: "Super Admin" }
-// ];
+// Generate 30-minute intervals from 09:00 to 19:30
+const generate30MinTimeOptions = () => {
+  const times = [];
+  for (let hour = 9; hour < 20; hour++) {
+    times.push(`${String(hour).padStart(2, "0")}:00`);
+    times.push(`${String(hour).padStart(2, "0")}:30`);
+  }
+  return times;
+};
 
-// function AdminUserManagementPage() {
-//   const navigate = useNavigate();
-//   const confirm = useConfirm();
+function DoctorManagementPage() {
+  const [doctors, setDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [startTime, setStartTime] = useState("09:00");
+  const [message, setMessage] = useState(null);
 
-//   const token = authStore((state) => state.token);
-//   const currentUser = authStore((state) => state.user);
-//   const userRole = currentUser?.role;
+  const timeOptions = generate30MinTimeOptions();
 
-//   const [users, setUsers] = useState([]);
-//   const [isLoading, setIsLoading] = useState(true);
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [selectedUser, setSelectedUser] = useState(null);
+  useEffect(() => {
+    axiosInstance.get("/api/doctor")
+      .then(res => setDoctors(res.data))
+      .catch(err => console.error("Failed to fetch doctors:", err));
+  }, []);
 
+  const getEndTime = (startTime) => {
+    const [sh, sm] = startTime.split(":").map(Number);
+    const end = new Date();
+    end.setHours(sh);
+    end.setMinutes(sm + 30);
+    return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
+  };
 
-//   const {
-//     register,
-//     handleSubmit,
-//     reset,
-//     formState: { errors, isSubmitting }
-//   } = useForm({
-//     resolver: yupResolver(editUserSchema)
-//   });
+  const handleSubmit = async () => {
+    if (!selectedDoctor || !startTime || !selectedDate) {
+      setMessage("Please fill all fields");
+      return;
+    }
 
-//   const fetchUsers = async () => {
-//     if (!userRole || (userRole !== 'ADMIN' && userRole !== 'SUPERADMIN')) {
-//       toast.error("Unauthorized access.");
-//       authStore.getState().actionLogout();
-//       navigate('/login', { replace: true });
-//       return;
-//     }
-//     try {
-//       setIsLoading(true);
-//       const resp = await userApi.getListAllUser(token);
-//       setUsers(resp.data.users || []);
-//     } catch (err) {
-//       setError(err.response?.data?.message || "Failed to load users.");
-//       toast.error(err.response?.data?.message || "Failed to load users.");
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
+    const data = {
+      availableDate: selectedDate.toISOString().split("T")[0],
+      startTime,
+      endTime: getEndTime(startTime),
+    };
 
-//   useEffect(() => {
-//     if (token) fetchUsers();
-//   }, [token]);
+    try {
+      const res = await axiosInstance.post(`/api/doctor/${selectedDoctor}/slots`, data);
+      setMessage("Slot added successfully ✅");
+    } catch (err) {
+      console.error(err);
+      setMessage(err?.response?.data?.error || "Failed to add slot ❌");
+    }
+  };
 
-//   const handleDisableUser = async (userToDisable) => {
-//     const result = await confirm({
-//       title: 'Confirm Action',
-//       text: `Are you sure you want to disable user: ${userToDisable.firstName}?`,
-//       confirmButtonText: 'Yes, Disable User',
-//       icon: 'warning'
-//     });
-//     if (result.isConfirmed) {
-//       try {
-//         await userApi.disableUser(userToDisable.id, token);
-//         toast.success(`User ${userToDisable.firstName} has been disabled.`);
-//         setUsers(prevUsers => prevUsers.filter(userFromPrev => userFromPrev.id !== userToDisable.id))
-//       } catch (err) {
-//         toast.error(err.response?.data?.message || "Failed to disable user.");
-//       }
-//     }
-//   };
+  return (
+    <div className="p-6 max-w-xl mx-auto">
+      <h1 className="text-2xl font-bold mb-4">Doctor Slot Manager</h1>
 
-//   const handleSearchChange = (event) => {
-//     setSearchTerm(event.target.value);
-//   };
+      <div className="mb-4">
+        <label className="block mb-1 font-semibold">Select Doctor</label>
+        <select
+          className="w-full border rounded px-3 py-2"
+          value={selectedDoctor || ""}
+          onChange={e => setSelectedDoctor(e.target.value)}
+        >
+          <option value="">-- Select a doctor --</option>
+          {doctors.map(doc => (
+            <option key={doc.id} value={doc.id}>
+              {doc.firstName} {doc.lastName} ({doc.specialty?.name})
+            </option>
+          ))}
+        </select>
+      </div>
 
-//   const handleOpenEditModal = (userToEdit) => {
-//     setSelectedUser(userToEdit);
-//     reset({ role: userToEdit.role });
-//     setIsModalOpen(true);
-//   }
+      <div className="mb-4">
+        <label className="block mb-1 font-semibold">Select Date</label>
+        <DatePicker
+          selected={selectedDate}
+          onChange={setSelectedDate}
+          minDate={new Date()}
+          dateFormat="yyyy-MM-dd"
+          className="w-full border rounded px-3 py-2"
+        />
+      </div>
 
-//   const handleCloseModal = () => {
-//     setIsModalOpen(false);
-//     setSelectedUser(null);
-//   }
+      <div className="mb-4">
+        <label className="block mb-1 font-semibold">Start Time (30 min slots)</label>
+        <select
+          className="w-full border rounded px-3 py-2"
+          value={startTime}
+          onChange={e => setStartTime(e.target.value)}
+        >
+          {timeOptions.map(t => (
+            <option key={t} value={t}>{t}</option>
+          ))}
+        </select>
+      </div>
 
+      <p className="mb-4">
+        <span className="font-semibold">End Time:</span>{" "}
+        {getEndTime(startTime)}
+      </p>
 
-//   const onSubmit = async (data) => {
-//     if (!selectedUser) return;
-//     try {
-//       await userApi.updateUserStatus(selectedUser.id, { role: data.role }, token);
-//       toast.success(`Role for ${selectedUser.firstName} updated.`);
-//       setUsers(prev => prev.map(u => u.id === selectedUser.id ? { ...u, role: data.role } : u));
-//       handleCloseModal();
-//     } catch (err) {
-//       toast.error(err.response?.data?.message || "Failed to update user.");
-//     }
-//   }
+      <button
+        onClick={handleSubmit}
+        className="btn btn-primary w-full"
+      >
+        Add Slot
+      </button>
 
-//   const columns = useUserTableColumns({
-//     currentUserRole: userRole,
-//     onEditUser: handleOpenEditModal,
-//     onDisableUser: handleDisableUser
-//   })
+      {message && <p className="mt-4 text-center text-sm">{message}</p>}
+    </div>
+  );
+}
 
-//   const filteredUsers = users.filter(userFromPrev =>
-//     userFromPrev.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//     userFromPrev.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//     userFromPrev.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-//     userFromPrev.mobile?.includes(searchTerm)
-//   )
-
-//   if (isLoading) {
-//     return <div className="flex items-center justify-center min-h-screen"><BubblesIcon className="w-10 h-10 animate-spin text-pri-gr1" /></div>;
-//   }
-
-
-//   return (
-//     <div className="flex-1 flex flex-col p-8 bg-white overflow-auto">
-//       <header className="flex justify-between items-center mb-6">
-//         <h1 className="text-3xl font-bold text-gray-800">Customer Management</h1>
-//       </header>
-
-//       <SearchInput
-//         value={searchTerm}
-//         onChange={handleSearchChange}
-//         placeholder="Search by name, email, or mobile..."
-//       />
-
-//       <DataTable
-//         columns={columns}
-//         data={filteredUsers}
-//         pagination
-//         responsive
-//         highlightOnHover
-//         pointerOnHover
-//       />
-
-//       <Modal
-//         isOpen={isModalOpen}
-//         onClose={handleCloseModal}
-//         onConfirm={handleSubmit(onSubmit)}
-//         title={`Edit Role for: ${selectedUser?.firstName}`}
-//         confirmText="Save Role"
-//         isConfirmDisabled={isSubmitting}
-//       >
-//         <SelectInput
-//           label="Role"
-//           name="role"
-//           register={register}
-//           error={errors.role}
-//           options={roleOptions}
-//         />
-//       </Modal>
-//     </div>
-//   );
-// }
-
-// export default AdminUserManagementPage;
+export default DoctorManagementPage;
