@@ -34,7 +34,7 @@ function InternalHeroSection() {
       </div>
 
       <div className="relative block lg:block w-70 sm:w-96 h-70 sm:h-96 flex-shrink-0">
-        <div className="bg-[#0E82FD] w-100 h-100 rounded-full border-8 border-gray-400 shadow-[#0E82FD] shadow-2xl flex items-center justify-center absolute top-40 sm:top-50 xl:top-50 -right-14 sm:right-10 xl:right-30 ">
+        <div className="bg-[#0E82FD] w-100 h-100 rounded-full border-4 border-gray-400 shadow-[#0E82FD] shadow-2xl flex items-center justify-center absolute top-40 sm:top-50 xl:top-50 -right-14 sm:right-10 xl:right-30">
           <img
             src="../../public/DocImageInternalPage1.svg"
             alt="DocImage"
