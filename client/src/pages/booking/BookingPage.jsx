@@ -9,7 +9,8 @@ import BookingNavButtons from "../../components/booking/BookingNavButtons.jsx";
 
 function BookingPage() {
   const navigate = useNavigate();
-  const location = useLocation();
+   const location = useLocation();
+  const doctorId = location.state?.doctorId;
   const {
     specialty: selectedSpecialty,
     setSpecialty,
@@ -54,7 +55,7 @@ function BookingPage() {
   }, [selectedSpecialty, setSpecialty, drJohnSpecialties]);
 
   // Sample hospital-service mapping
-  const hospitalServices = {
+  const hospitalServices = useMemo(() => ({
     "Springfield Hospital": [
       { name: "Echocardiogram", price: 1200 },
       { name: "Blood Test", price: 500 },
@@ -88,7 +89,7 @@ function BookingPage() {
       { name: "Physical Exam", price: 800 },
       { name: "Cholesterol Screening", price: 550 },
     ],
-  };
+  }), []);
 
   // Only show services for the selected hospital
   const services = useMemo(() => {
@@ -97,7 +98,7 @@ function BookingPage() {
     }
     // If no hospital selected, show empty or all
     return [];
-  }, [selectedHospital]);
+  }, [selectedHospital, hospitalServices]);
 
   // Handle specialty change (no longer resets service)
   // Specialty only updates localSpecialty and store
@@ -179,10 +180,10 @@ function BookingPage() {
             />
           </div>
         </div>
-        <BookingNavButtons
-          onBack={() => navigate("/appointment")}
-          onNext={() => navigate("/bookingdatetime", { state: { doctor } })}
-        />
+        <div className="h-1/10 flex justify-between items-center px-5">
+          <button onClick={() => navigate("/appointment") } className="btn btn-error">{"<"} Back</button>
+          <button onClick={() => navigate("/bookingdatetime", { state: { doctorId: doctorId } })} className="btn btn-primary">Select Date & Time {" >"}</button>
+        </div>
       </div>
     </div>
   );

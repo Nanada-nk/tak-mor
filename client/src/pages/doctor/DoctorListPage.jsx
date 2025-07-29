@@ -1,57 +1,24 @@
-
 import { useNavigate } from "react-router";
 import DoctorCardDynamic from "../../components/booking/DoctorCardDynamic.jsx";
-import { useCallback } from "react";
-
-// Mock data based on Prisma Doctor model, now with multiple specialties
-const doctorList = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Nontakaeng",
-    bio: "Experienced psychologist with 10+ years in mental health.",
-    specialties: ["Psychologist", "General Practitioner", "Therapist"],
-    rating: 5.0,
-    address: "742 Evergreen Terrace, Springfield",
-    img: "https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
-  },
-  {
-    id: 2,
-    firstName: "Lisa",
-    lastName: "Simpson",
-    bio: "Cardiologist passionate about preventive care.",
-    specialties: ["Cardiologist", "Pediatrician"],
-    rating: 4.8,
-    address: "123 Main St, Springfield",
-    img: "https://randomuser.me/api/portraits/women/44.jpg"
-  },
-  {
-    id: 3,
-    firstName: "Homer",
-    lastName: "Simpson",
-    bio: "General practitioner with a focus on family medicine.",
-    specialties: ["General Practitioner", "Family Medicine"],
-    rating: 4.5,
-    address: "456 Elm St, Springfield",
-    img: "https://randomuser.me/api/portraits/men/45.jpg"
-  },
-  {
-    id: 4,
-    firstName: "Marge",
-    lastName: "Bouvier",
-    bio: "Dermatologist with expertise in skin care.",
-    specialties: ["Dermatologist", "Cosmetic Surgeon"],
-    rating: 4.9,
-    address: "789 Oak St, Springfield",
-    img: "https://randomuser.me/api/portraits/women/46.jpg"
-  }
-];
+import { useCallback, useEffect, useState } from "react";
+import axiosInstance from "../../config/axios.js";
 
 function DoctorListPage() {
   const navigate = useNavigate();
+  const [doctorList, setDoctorList] = useState([]);
+
+  useEffect(() => {
+    axiosInstance.get("/api/doctor")
+      .then(res => {
+        setDoctorList(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch(err => {
+        console.error("Failed to fetch doctors:", err);
+        setDoctorList([]);
+      });
+  }, []);
 
   const handleBooking = useCallback((doctor) => {
-    // Pass doctor data via state
     navigate("/appointment", { state: { doctor } });
   }, [navigate]);
 
@@ -65,22 +32,19 @@ function DoctorListPage() {
               name={`Dr. ${doc.firstName} ${doc.lastName}`}
               title={
                 <div className="flex flex-wrap gap-1">
-                  {doc.specialties.map((spec) => (
+                  {Array.isArray(doc.specialties) && doc.specialties.map((spec) => (
                     <span key={spec} className="badge badge-primary badge-sm daisyui-badge">{spec}</span>
                   ))}
                 </div>
               }
               rating={doc.rating}
               address={doc.address}
-              img={doc.img}
+              img={doc.img && doc.img.trim() !== "" ? doc.img : "https://ui-avatars.com/api/?name=Doctor&background=random"}
             />
             <div className="flex justify-end">
               <button
                 className="btn btn-primary"
-                onClick={() => {
-                  // Pass doctor object with specialties to appointment page
-                  handleBooking(doc);
-                }}
+                onClick={() => handleBooking(doc)}
               >
                 Book Appointment
               </button>
