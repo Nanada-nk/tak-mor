@@ -44,6 +44,8 @@ import EditProfilePage from "../pages/dashboard/patient/EditProfilePage.jsx";
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
+import DoctorManagementPage from "../pages/dashboard/doctor/DoctorManagementPage.jsx";
+
 import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
 import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx";
 import MaintenancePage from "../pages/utils/MaintenancePage.jsx";
@@ -58,6 +60,7 @@ import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/Ad
 import AboutUsPage from "../pages/AboutUsPage.jsx";
 import FaqPage from "../pages/Faq/FaqPage.jsx";
 import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
+import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
 
 
 function AppRouter() {
@@ -75,6 +78,7 @@ function AppRouter() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<HomePage />} />
+          <Route path="internalmedicine" element={<InternalMedicinePage />} />
           {/* Auth */}
           <Route path="login" element={<LoginPage />} />
           <Route path="registerpatient" element={<RegisterPage />} />
@@ -116,7 +120,7 @@ function AppRouter() {
           {/* Booking */}
           <Route path="booking" element={<BookingPage />} />
           <Route path="appointment" element={<AppointmentTypePage />} />
-          <Route path="bookingdatetime" element={<BookingDateTimePage />} />
+          <Route path="bookingdatetime" element={<BookingDateTimePage  />} />
           <Route path="patientinfo" element={<PatientInfoPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation" element={<BookingComfirmationPage />} />
@@ -127,6 +131,8 @@ function AppRouter() {
           <Route path="editprofile" element={<EditProfilePage />} />
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
+          {/* Doctor Profile */}
+          <Route path="doctormanagement" element={<DoctorManagementPage />} />
           </Route>
         {/* </Route> */}
 
