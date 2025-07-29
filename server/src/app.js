@@ -13,11 +13,8 @@ import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
 import bookingRouter from './routes/booking.route.js'
-<<<<<<< HEAD
 import doctorRouter from './routes/doctor.route.js'
-=======
 import './config/passport.js';
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 
 
 const app = express()

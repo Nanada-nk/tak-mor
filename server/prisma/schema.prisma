@@ -9,113 +9,10 @@ datasource db {
 }
 
 model Account {
-<<<<<<< HEAD
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String
-  phone     String
-  role      UserRole @default(PATIENT)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // lastLogin DateTime?
-
-  RefreshToken RefreshToken[]
-
-  facebookId String? @unique
-  isActive   Boolean @default(true)
-
-  passwordResetToken   String?
-  passwordResetExpires DateTime?
-
-  patientProfile Patient?
-  doctorProfile  Doctor?
-}
-
-model RefreshToken {
-  id        Int      @id @default(autoincrement())
-  token     String   @unique
-  accountId Int
-  account   Account  @relation(fields: [accountId], references: [id])
-  createdAt DateTime @default(now())
-  expiresAt DateTime
-  ipAddress String?
-  userAgent String?
-}
-
-model Patient {
-  id        Int       @id @default(autoincrement())
-  accountId Int       @unique
-  hn        String?   @unique
-  firstName String
-  lastName  String
-  address   String?
-  birthDate DateTime?
-
-  medicalFiles MedicalFile[]
-  appointments Appointment[]
-  account      Account       @relation(fields: [accountId], references: [id])
-  Payment      Payment[]
-
-  patientMedicalProfile PatientMedicalProfile?
-}
-
-model PatientMedicalProfile {
-  id         Int     @id @default(autoincrement())
-  patientId  Int     @unique
-  congenital String?
-
-  patient Patient @relation(fields: [patientId], references: [id])
-}
-
-model Doctor {
-  id          Int     @id @default(autoincrement())
-  accountId   Int     @unique
-  firstName   String
-  lastName    String
-  // phone       String
-  bio         String?
-  specialtyId Int?
-
-  appointments        Appointment[]
-  specialty           Specialty?            @relation(fields: [specialtyId], references: [id])
-  account             Account               @relation(fields: [accountId], references: [id])
-  DoctorAvailability  DoctorAvailability[]
-  DoctorAvailableSlot DoctorAvailableSlot[]
-}
-
-model DoctorAvailability {
-  id        Int      @id @default(autoincrement())
-  doctorId  Int
-  dayOfWeek Int
-  startTime String
-  endTime   String
-  isActive  Boolean  @default(true)
-  isDone    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-}
-
-model DoctorAvailableSlot {
-  id            Int      @id @default(autoincrement())
-  doctorId      Int
-  availableDate DateTime // วันที่ เช่น 2025-07-28
-  startTime     String // เช่น "13:00"
-  endTime       String // เช่น "14:00"
-  source        String // "manual" | "generated"
-  isBooked      Boolean  @default(false)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  doctor Doctor @relation(fields: [doctorId], references: [id])
-=======
   id                   Int           @id @default(autoincrement())
   email                String        @unique
   password             String
-  phone                String
+  phone                String?
   role                 Account_role  @default(PATIENT)
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
@@ -127,7 +24,6 @@ model DoctorAvailableSlot {
   Doctor               Doctor?
   Patient              Patient?
   RefreshToken         RefreshToken?
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 }
 
 model Appointment {

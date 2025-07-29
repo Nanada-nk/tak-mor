@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import { PinIcon, StarIcon } from "../../components/icons";
-import { ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon } from "../../components/icons";
-import { useNavigate, useLocation } from "react-router";
-import useBookingStore from "../../stores/bookingStore";
-
-
-function AppointmentTypePage() {
-   const location = useLocation();
-  const doctorId = location.state?.doctorId;
-=======
 
 import { PinIcon, StarIcon, ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon  } from "../../components/icons/index.jsx";
 import { useNavigate } from "react-router";
@@ -18,7 +7,6 @@ import { useState } from "react";
 
 function AppointmentTypePage() {
   const [showHospitalWarning, setShowHospitalWarning] = useState(false);
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
   const appointmentTypes = [
     { label: "Hospital", icon: ClinicIcon },
     { label: "Video Call", icon: VideoCallIcon },
@@ -51,9 +39,10 @@ function AppointmentTypePage() {
     if (appointmentType === "Hospital" && !hospital) {
       setShowHospitalWarning(true);
       setTimeout(() => setShowHospitalWarning(false), 2000);
+
       return;
     }
-    navigate("/booking");
+    navigate("/booking", { state: { doctorId: doctorId } });
   };
 
   return (
@@ -200,11 +189,7 @@ function AppointmentTypePage() {
         </div>
         <div className="h-1/10 flex justify-end items-center px-5 relative">
           <button
-<<<<<<< HEAD
-            onClick={() => navigate("/bookingdatetime", { state: { doctorId: doctorId } })}
-=======
             onClick={handleNextClick}
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
             className="btn btn-primary"
             disabled={!appointmentType}
           >

@@ -14,7 +14,7 @@ function DoctorAvailabilityPage() {
 
   // Fetch all doctors on mount
   useEffect(() => {
-    axiosInstance.get("/doctor")
+    axiosInstance.get("/api/doctor")
       .then(res => setDoctors(res.data))
       .catch(err => console.error("Failed to fetch doctors:", err));
   }, []);
@@ -63,10 +63,10 @@ function DoctorAvailabilityPage() {
         const dateObj = selectedDates[doc.id] || new Date();
         const d = dateObj.toISOString().split('T')[0];
         const dayOfWeek = dateObj.getDay();
-        const slotsPromise = axiosInstance.get(`/doctor/${doc.id}/slots?date=${d}`)
+        const slotsPromise = axiosInstance.get(`/api/doctor/${doc.id}/slots?date=${d}`)
           .then(res => Array.isArray(res.data) ? res.data : [])
           .catch(() => []);
-        const fixedPromise = axiosInstance.get(`/doctor/${doc.id}/availability?dayOfWeek=${dayOfWeek}`)
+        const fixedPromise = axiosInstance.get(`/api/doctor/${doc.id}/availability?dayOfWeek=${dayOfWeek}`)
           .then(res => Array.isArray(res.data) ? res.data : [])
           .catch(() => []);
         return Promise.all([slotsPromise, fixedPromise]).then(([slots, fixed]) => ({

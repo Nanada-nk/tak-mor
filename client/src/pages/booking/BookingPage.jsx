@@ -1,15 +1,8 @@
-<<<<<<< HEAD
-import { PinIcon, StarIcon } from "../../components/icons";
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router";
-import useBookingStore from "../../stores/bookingStore";
-=======
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
 import { useState, useMemo, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import useBookingStore from "../../stores/bookingStore.js";
 
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 
 
 function BookingPage() {
@@ -251,13 +244,8 @@ function BookingPage() {
           </div>
         </div>
         <div className="h-1/10 flex justify-between items-center px-5">
-<<<<<<< HEAD
-          <button onClick={() => navigate(-1) } className="btn btn-error">{"<"} Back</button>
-          <button onClick={() => navigate("/appointment", { state: { doctorId: doctorId } })} className="btn btn-primary">Select Appointment Type {" >"}</button>
-=======
           <button onClick={() => navigate("/appointment") } className="btn btn-error">{"<"} Back</button>
-          <button onClick={() => navigate("/bookingdatetime")} className="btn btn-primary">Select Date & Time {" >"}</button>
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
+          <button onClick={() => navigate("/bookingdatetime", { state: { doctorId: doctorId } })} className="btn btn-primary">Select Date & Time {" >"}</button>
         </div>
       </div>
     </div>

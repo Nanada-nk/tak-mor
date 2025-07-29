@@ -23,20 +23,8 @@ const authStore = create(
 
      
       checkAuth: async () => {
-<<<<<<< HEAD
-        console.log("1. checkAuth action STARTING...")
-
-        const currentToken = get().token;
-
-        console.log("2. Token from store is:", currentToken);
-
-
-        
-        if (currentToken) {
-=======
         const token = get().token;
         if (token) {
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
           try {
            
             const resp = await authApi.getMe();

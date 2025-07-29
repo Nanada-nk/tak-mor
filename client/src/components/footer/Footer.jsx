@@ -1,10 +1,6 @@
-<<<<<<< HEAD
-import React from 'react'
-import {useNavigate} from 'react-router'
-
-=======
 import { Link } from "react-router";
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
+import { useNavigate } from "react-router";
+
 function Footer() {
     const navigate = useNavigate();
     return (
@@ -26,15 +22,9 @@ function Footer() {
       
                 <nav className="flex flex-col items-start gap-2">
                     <h6 className="font-bold text-base text-black py-3">ทักหมอ</h6>
-<<<<<<< HEAD
-                    <a onClick={()=>navigate('/')} className="py-1 text-black hover:text-blue-600 cursor-pointer">หน้าแรก</a>
-                    <a onClick={()=>navigate('/doctorlist')} className="py-1 text-black hover:text-blue-600 cursor-pointer">แพทย์</a>
-                    <a className="py-1 text-black hover:text-blue-600 cursor-pointer">การปรึกษาทางวิดีโอ</a>
-=======
                     <Link to="/" className="py-1 text-black hover:text-blue-600 cursor-pointer text-sm">หน้าแรก</Link>
                     <Link to="/doctorlist" className="py-1 text-black hover:text-blue-600 cursor-pointer text-sm">แพทย์</Link>
                     <Link to="/video" className="py-1 text-black hover:text-blue-600 cursor-pointer text-sm">การปรึกษาทางวิดีโอ</Link>
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
                 </nav>
 
                 <nav className="flex flex-col items-start gap-2">
@@ -108,21 +98,6 @@ function Footer() {
                     </fieldset>
                 </form>
             </footer>
-<<<<<<< HEAD
-            <footer className="flex justify-between   bg-[#D9E6F7] text-base-content px-20 py-1" >
-                <aside>
-                    <p>Copyright © {new Date().getFullYear()} - Tak-mor, All Right Reserved</p>
-                </aside>
-                <aside>
-                    <div className='flex gap-2 '>
-
-                    <p onClick={()=>navigate('/policy')} className='hover:text-blue-600 cursor-pointer'>นโยบายความเป็นส่วนตัว </p>
-                    <p> | </p>
-                    <p onClick={()=>navigate('/terms')} className='hover:text-blue-600 cursor-pointer'> ข้อกำหนกและเงื่อนไข</p>
-                    </div>
-
-                </aside>
-=======
          
             <footer className="bg-[#D9E6F7] px-4 sm:px-6 lg:px-8 py-3"> 
                 <div className='flex flex-col sm:flex-row justify-between items-center text-center sm:text-left gap-4'> 
@@ -146,7 +121,6 @@ function Footer() {
                         </div>
                     </aside>
                 </div>
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
             </footer>
         </div>
     )

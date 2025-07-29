@@ -1,3 +1,4 @@
+
 import axios from 'axios';
 import authStore from '../stores/authStore.js';
 import { toast } from 'react-toastify';
@@ -24,18 +25,11 @@ export const fetchCsrfToken = async () => {
 
 
 axiosInstance.interceptors.request.use(
-<<<<<<< HEAD
-  (config) => {
-    // const accessToken = localStorage.getItem('accessToken') || authStore.getState().token
-    const accessToken = authStore.getState().token;
-    // console.log('accessToken test====', accessToken)
-=======
     (config) => {
         const token = authStore.getState().token;
         if (token) {
             config.headers['Authorization'] = `Bearer ${token}`;
         }
->>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 
         const methodsToProtect = ['post', 'put', 'patch', 'delete'];
         if (csrfToken && methodsToProtect.includes(config.method.toLowerCase())) {

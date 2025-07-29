@@ -44,6 +44,8 @@ import EditProfilePage from "../pages/dashboard/patient/EditProfilePage.jsx";
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
+import DoctorManagementPage from "../pages/dashboard/doctor/DoctorManagementPage.jsx";
+
 import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
 import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx";
 import MaintenancePage from "../pages/utils/MaintenancePage.jsx";
@@ -127,6 +129,8 @@ function AppRouter() {
           <Route path="editprofile" element={<EditProfilePage />} />
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
+          {/* Doctor Profile */}
+          <Route path="doctormanagement" element={<DoctorManagementPage />} />
           </Route>
         {/* </Route> */}
 
