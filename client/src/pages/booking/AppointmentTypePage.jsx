@@ -1,8 +1,15 @@
+import DoctorCardDynamic from "../../components/booking/DoctorCardDynamic.jsx";
 
-import { PinIcon, StarIcon, ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon  } from "../../components/icons/index.jsx";
-import { useNavigate } from "react-router";
+
+import { ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon } from "../../components/icons/index.jsx";
+import { useNavigate, useLocation } from "react-router";
 import useBookingStore from "../../stores/bookingStore.js";
 import { useState } from "react";
+import StepProgressBar from "../../components/booking/StepProgressBar.jsx";
+
+import AppointmentTypeSelector from "../../components/booking/AppointmentTypeSelector.jsx";
+import HospitalSelector from "../../components/booking/HospitalSelector.jsx";
+import NextButton from "../../components/booking/NextButton.jsx";
 
 
 function AppointmentTypePage() {
@@ -11,16 +18,34 @@ function AppointmentTypePage() {
     { label: "Hospital", icon: ClinicIcon },
     { label: "Video Call", icon: VideoCallIcon },
     { label: "Audio Call", icon: AudioCallIcon },
-    { label: "Chat", icon: ChatIcon },
-    { label: "Home Visit", icon: HomeVisitIcon }
+    { label: "Chat", icon: ChatIcon }
   ];
   const navigate = useNavigate();
+  const location = useLocation();
   const {
     appointmentType,
     setAppointmentType,
     hospital,
     setHospital,
   } = useBookingStore();
+
+  // Get doctor from navigation state or fallback to default
+  const doctorFromState = location.state?.doctor;
+  const doctor = doctorFromState
+    ? {
+        name: doctorFromState.name || `Dr. ${doctorFromState.firstName ?? ''} ${doctorFromState.lastName ?? ''}`.trim(),
+        title: doctorFromState.title || doctorFromState.specialty || '',
+        rating: doctorFromState.rating,
+        address: doctorFromState.address,
+        img: doctorFromState.img,
+      }
+    : {
+        name: "Dr.Johny Nontakaeng",
+        title: "Psychologist",
+        rating: 5.0,
+        address: "742 Evergreen Terrace, Springfield",
+        img: "https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
+      };
 
   // Handle appointment type change
   const handleAppointmentTypeClick = (typeLabel) => {
@@ -41,165 +66,47 @@ function AppointmentTypePage() {
       setTimeout(() => setShowHospitalWarning(false), 2000);
       return;
     }
-    navigate("/booking");
+    navigate("/booking", { state: { doctor } });
   };
 
+  const steps = [
+    { label: "Appointment Type", dataContent: "1" },
+    { label: "Specialty", dataContent: "2" },
+    { label: "Date & Time", dataContent: "3" },
+    { label: "Patient Information", dataContent: "4" },
+    { label: "Payment", dataContent: "5" },
+    { label: "Confirmation", dataContent: "6" },
+  ];
   return (
     <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
-      <div className="h-1/7 w-full flex items-center justify-center">
-        <ul className="steps h-full">
-          <li data-content="1" className="step step-primary">
-            Appointment Type
-          </li>
-          <li data-content="2" className="step">
-            Specialty
-          </li>
-          <li data-content="3" className="step">
-            Date & Time
-          </li>
-          <li data-content="4" className="step">
-            Patient Information
-          </li>
-          <li data-content="5" className="step">
-            Payment
-          </li>
-          <li data-content="6" className="step">
-            Confirmation
-          </li>
-        </ul>
-      </div>
+      <StepProgressBar steps={steps} currentStep={0} />
       <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
         <div className="h-fit mt-4 flex flex-col items-center justify-center">
-          <div className="py-3 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex rounded-2xl">
-            <div className=" w-1/5 avatar flex items-center justify-center">
-              <div className="w-25 rounded-full">
-                <img
-                  src="https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
-                  alt="doctor"
-                />
-              </div>
-            </div>
-            <div className=" w-4/5 p-1 flex flex-col justify-between items-start">
-              <div className="flex items-start gap-2">
-                <div className="flex flex-col items-start ">
-                  <div className="font-bold">Dr.John Nontakaeng</div>
-                  <div className="text-blue-700 ">Psychologist</div>
-                </div>
-                <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">
-                  <StarIcon className="h-4" />
-                  <div className="text-white text-sm">5.0</div>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-start">
-                <PinIcon className="h-5" />
-                <div className="text-gray-500">
-                  742 Evergreen Terrace, Springfield
-                </div>
-              </div>
-            </div>
-          </div>
+          <DoctorCardDynamic
+            name={doctor.name}
+            title={doctor.title}
+            rating={doctor.rating}
+            address={doctor.address}
+            img={doctor.img}
+          />
         </div>
         <div className=" h-[360px] flex flex-col items-center pt-4 gap-3">
           <div className="flex flex-col p-3 bg-white border border-gray-200 h-full min-h-[275px] w-19/20 rounded-2xl">
-            <div className="flex flex-col gap-1 items-start border-b border-gray-200 pb-2 mb-2">
-              <h1>Select Appointment Type</h1>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 mt-2 mb-2 w-full">
-                {appointmentTypes.map((type) => {
-                  const isSelected = appointmentType === type.label;
-                  return (
-                    <button
-                      key={type.label}
-                      className={`flex items-center justify-center border rounded-xl px-3 py-2 h-12 w-full shadow-sm transition-all font-semibold text-base
-                        ${isSelected
-                          ? 'border-blue-700 bg-blue-100 text-blue-700 scale-105 drop-shadow-lg'
-                          : 'border-gray-200 bg-white text-gray-800'}`}
-                      onClick={() => handleAppointmentTypeClick(type.label)}
-                      type="button"
-                    >
-                      <span className="h-6 w-6 mr-2 flex items-center justify-center">
-                        <type.icon className={`h-6 w-6 ${isSelected ? 'text-white' : 'text-gray-800'}`} />
-                      </span>
-                      {type.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-
-              {appointmentType === "Hospital" && (
-                <>
-                  <div>Select Hospital</div>
-                  <div className="flex flex-col items-start w-full overflow-auto">
-                    <div className="grid grid-cols-1 pb-5 gap-4 mt-2 mb-2 w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
-                      {[{
-                        name: "Springfield Hospital",
-                        address: "742 Evergreen Terrace, Springfield",
-                        img: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80"
-                      }, {
-                        name: "Evergreen Medical Center",
-                        address: "123 Main St, Springfield",
-                        img: "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=400&q=80"
-                      }, {
-                        name: "Downtown Health Hub",
-                        address: "456 Elm St, Springfield",
-                        img: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd2b?auto=format&fit=crop&w=400&q=80"
-                      }, {
-                        name: "Northside Family Hospital",
-                        address: "789 Oak St, Springfield",
-                        img: "https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=400&q=80"
-                      }, {
-                        name: "Westside Wellness",
-                        address: "321 Pine St, Springfield",
-                        img: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80"
-                      }, {
-                        name: "Central Care Hospital",
-                        address: "654 Maple St, Springfield",
-                        img: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=400&q=80"
-                      }].map((hospitalObj) => (
-                        <button
-                          key={hospitalObj.name}
-                          className={`flex flex-row items-center border rounded-xl px-3 pt-2 h-20 w-full shadow-sm transition-all
-                            ${hospital === hospitalObj.name
-                              ? 'border-blue-700 bg-blue-500 text-white'
-                              : 'border-gray-200 bg-white text-gray-800'}`}
-                          onClick={() => handleHospitalClick(hospitalObj.name)}
-                          type="button"
-                        >
-                          <div className="w-16 h-16 rounded-full overflow-hidden mr-4 flex-shrink-0">
-                            <img src={hospitalObj.img} alt={hospitalObj.name} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="flex flex-col items-start flex-grow">
-                            <div className={`font-semibold text-base mb-1 ${hospital === hospitalObj.name ? 'text-white' : ''}`}>{hospitalObj.name}</div>
-                            <div className={`text-gray-200 text-sm mb-2 ${hospital === hospitalObj.name ? 'text-white opacity-80' : 'text-gray-500'}`}>{hospitalObj.address}</div>
-                          </div>
-                          <div className="flex items-center h-full">
-                            {hospital === hospitalObj.name && (
-                              <span className="text-white font-bold text-xl">&#10003;</span>
-                            )}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </>
-              )}
+            <AppointmentTypeSelector
+              appointmentTypes={appointmentTypes}
+              appointmentType={appointmentType}
+              onSelect={handleAppointmentTypeClick}
+            />
+            {appointmentType === "Hospital" && (
+              <HospitalSelector hospital={hospital} onSelect={handleHospitalClick} />
+            )}
           </div>
         </div>
-        <div className="h-1/10 flex justify-end items-center px-5 relative">
-          <button
-            onClick={handleNextClick}
-            className="btn btn-primary"
-            disabled={!appointmentType}
-          >
-            Select Specialty & Service {" >"}
-          </button>
-          {showHospitalWarning && (
-            <div className="absolute bottom-14 right-0 bg-red-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50">
-              Please select a hospital first if you choose Hospital appointment type!
-            </div>
-          )}
-        </div>
+        <NextButton
+          onClick={handleNextClick}
+          disabled={!appointmentType}
+          showWarning={showHospitalWarning}
+        />
       </div>
     </div>
   );

@@ -1,14 +1,22 @@
-import { useNavigate } from "react-router";
+
+import { useNavigate, useLocation } from "react-router";
 import { useState } from "react";
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
 import useBookingStore from "../../stores/bookingStore.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
+import StepProgressBar from "../../components/booking/StepProgressBar.jsx";
+import BookingInfoCard from "../../components/booking/BookingInfoCard.jsx";
+import BookingDatePicker from "../../components/booking/BookingDatePicker.jsx";
+import BookingTimeSlots from "../../components/booking/BookingTimeSlots.jsx";
+import BookingNavButtons from "../../components/booking/BookingNavButtons.jsx";
+
 
 
 
 function BookingDateTimePage() {
+  const location = useLocation();
   
   const pad = n => String(n).padStart(2, '0');
   // Morning: 08:00-10:15 (10 slots)
@@ -96,123 +104,57 @@ function BookingDateTimePage() {
     setDateTime({ date: selectedDate, time: `${slot.startTime} - ${slot.endTime}` });
   };
 
+  const steps = [
+    { label: "Appointment Type", dataContent: "✓" },
+    { label: "Specialty", dataContent: "✓" },
+    { label: "Date & Time", dataContent: "3" },
+    { label: "Patient Information", dataContent: "4" },
+    { label: "Payment", dataContent: "5" },
+    { label: "Confirmation", dataContent: "6" },
+  ];
+  // Prefer doctor from navigation state, fallback to default
+  const doctor = location.state?.doctor || {
+    name: "Dr.John Nontakaeng",
+    title: "Psychologist",
+    rating: 5.0,
+    img: "https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp",
+    ratingIcon: <StarIcon className="h-4" />,
+    address: "742 Evergreen Terrace, Springfield",
+    addressIcon: <PinIcon className="h-5" />,
+  };
   return (
     <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
-      <div className="h-1/7 w-full flex items-center justify-center">
-        <ul className="steps h-full">
-          <li data-content="✓" className="step step-primary step-success">Specialty</li>
-          <li data-content="✓" className="step step-primary step-success">Appointment Type</li>
-          <li data-content="3" className="step step-primary">Date & Time</li>
-          <li data-content="4" className="step">Patient Information</li>
-          <li data-content="5" className="step">Payment</li>
-          <li data-content="6" className="step">Confirmation</li>
-        </ul>
-      </div>
+      <StepProgressBar steps={steps} currentStep={2} />
       <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
         <div className="h-fit mt-4 flex flex-col items-center justify-center">
-          <div className="py-3 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex flex-col rounded-2xl">
-            <div className="flex w-full">
-              <div className="w-1/5 avatar flex items-center justify-center">
-                <div className="w-25 rounded-full">
-                  <img
-                    src="https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
-                    alt="doctor"
-                  />
-                </div>
-              </div>
-              <div className="w-4/5 p-1 flex flex-col justify-between items-start">
-                <div className="flex items-start gap-2">
-                  <div className="flex flex-col items-start ">
-                    <div className="font-bold">Dr.John Nontakaeng</div>
-                    <div className="text-blue-700 ">Psychologist</div>
-                  </div>
-                  <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">
-                    <StarIcon className="h-4" />
-                    <div className="text-white text-sm">5.0</div>
-                  </div>
-                </div>
-                <div className="flex items-center justify-start">
-                  <PinIcon className="h-5" />
-                  <div className="text-gray-500">742 Evergreen Terrace, Springfield</div>
-                </div>
-              </div>
-            </div>
-            {/* Main Booking Info Section - Specialty, Service, Date & Time, Appointment Type */}
-            <div className="mt-2 w-full border-gray-200 pt-2 px-4">
-              <div className="flex flex-row justify-between gap-4 text-sm">
-                <div className="flex flex-col items-start justify-center w-1/4">
-                  <span className="font-medium  mb-1">Specialty</span>
-                  <span className="font-semibold text-gray-700">{specialty || <span className="text-gray-400">Not selected</span>}</span>
-                </div>
-                <div className="flex flex-col items-start justify-center w-1/4">
-                  <span className="font-medium  mb-1">Service</span>
-                  <span className="font-semibold text-gray-700">{service || <span className="text-gray-400">Not selected</span>}</span>
-                </div>
-                <div className="flex flex-col items-start justify-center w-1/4">
-                  <span className="font-medium  mb-1">Date & Time</span>
-                  <span className="font-semibold text-gray-700">
-                    {selectedDate && selectedTime
-                      ? <span className="text-gray-600">{`${selectedDate.toLocaleDateString()} ${selectedTime}`}</span>
-                      : <span className="text-gray-400">Not selected</span>}
-                  </span>
-                </div>
-                <div className="flex flex-col items-start justify-center w-1/4">
-                  <span className="font-medium  mb-1">Appointment Type</span>
-                  <span className="font-semibold text-gray-700">
-                    {appointmentType
-                      ? appointmentType === 'Hospital'
-                        ? `Hospital${hospital ? ` (${hospital})` : ''}`
-                        : appointmentType
-                      : <span className="text-gray-400">Not selected</span>}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
+          <BookingInfoCard
+            doctor={doctor}
+            specialty={specialty}
+            service={service}
+            date={selectedDate ? selectedDate.toLocaleDateString() : null}
+            time={selectedTime}
+            appointmentType={appointmentType}
+            hospital={hospital}
+          />
         </div>
         <div className="h-[300px] flex flex-col items-center pt-4 gap-3">
           <div className="flex flex-row p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
-            {/* Calendar Section (left) */}
             <div className="border-r border-gray-300 pr-3">
-             <DatePicker
-                selected={selectedDate}
-                onChange={handleDateChange}
-                dateFormat="yyyy-MM-dd"
-                minDate={new Date()}
-                inline
-                calendarClassName="custom-calendar-header"
-              />
+              <BookingDatePicker selectedDate={selectedDate} onChange={handleDateChange} />
             </div>
-            {/* Time Slot Section (right) */}
-            <div className=" w-[550px] flex flex-col  items-center pl-4">
-              {slotsByPeriod.map(({ period, slots }) => (
-                <div className="w-full mb-2" key={period}>
-                  <div className="text-xs font-bold mb-1">{period}</div>
-                  <div className="flex flex-wrap gap-2">
-                    {slots.length > 0 ? (
-                      slots.map(slot => (
-                        <button
-                          key={slot.id}
-                          className={`btn btn-xs w-24${selectedTime === `${slot.startTime} - ${slot.endTime}` ? ' bg-blue-800 text-white' : ''}`}
-                          onClick={() => handleTimeClick(slot)}
-                          disabled={!selectedDate}
-                        >
-                          {slot.startTime} - {slot.endTime}
-                        </button>
-                      ))
-                    ) : (
-                      <div className="col-span-5 text-gray-400 text-center">No slots available for this period</div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
+            <BookingTimeSlots
+              slotsByPeriod={slotsByPeriod}
+              selectedTime={selectedTime}
+              onTimeClick={handleTimeClick}
+              disabled={!selectedDate}
+            />
           </div>
         </div>
-        <div className=" h-1/10 flex justify-between items-center px-5">
-          <button onClick={() => navigate("/booking")} className="btn btn-error">{"< "} Back</button>
-          <button onClick={() => navigate("/patientinfo")} className="btn btn-primary">Add Basic Information {" >"}</button>
-        </div>
+        <BookingNavButtons
+          onBack={() => navigate("/booking", { state: { doctor } })}
+          onNext={() => navigate("/patientinfo", { state: { doctor } })}
+          nextLabel="Add Basic Information >"
+        />
       </div>
     </div>
   );
