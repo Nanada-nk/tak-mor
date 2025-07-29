@@ -1,4 +1,8 @@
-import * as Prisma from '@prisma/client';
+import {
+  PrismaClientKnownRequestError,
+  PrismaClientValidationError,
+  PrismaClientUnknownRequestError
+} from '@prisma/client/runtime/library';
 import createError from "../utils/create-error.js"
 
 const errorMiddleware = (err, req, res, next) => {
@@ -31,7 +35,7 @@ const errorMiddleware = (err, req, res, next) => {
   }
 
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+  if (err instanceof PrismaClientKnownRequestError) {
     switch (err.code) {
       case 'P2002': 
         statusCode = 409; 
@@ -50,12 +54,12 @@ const errorMiddleware = (err, req, res, next) => {
   }
 
  
-  if (err instanceof Prisma.PrismaClientValidationError) {
+  if (err instanceof PrismaClientValidationError) {
     statusCode = 400; 
     message = 'Invalid input data for database operation.';
   }
 
-  if (err instanceof Prisma.PrismaClientUnknownRequestError) {
+  if (err instanceof PrismaClientUnknownRequestError) {
     statusCode = 500; 
     message = 'Unknown database error occurred.';
   }
