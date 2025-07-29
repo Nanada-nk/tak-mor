@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
 import useBookingStore from "../../stores/bookingStore.js";
@@ -200,6 +200,12 @@ useEffect(() => {
                 </p>
               )}
             </div>
+            {/* <BookingTimeSlots
+              slotsByPeriod={slotsByPeriod}
+              selectedTime={selectedTime}
+              onTimeClick={handleTimeClick}
+              disabled={!selectedDate}
+            /> */}
           </div>
         </div>
 
