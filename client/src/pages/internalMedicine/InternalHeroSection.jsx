@@ -1,16 +1,18 @@
 import SearchBar from "../../components/SearchBar";
 function InternalHeroSection() {
   return (
-    <div className="relative flex flex-col lg:flex-row items-center justify-evenly bg-gradient-to-l from-[#1968a4] to-[#dfebf4] w-full xl:h-100  py-10 lg:py-20 px-4 sm:px-6 lg:px-8 gap-8 lg:gap-20 overflow-hidden">
+    <div className="relative flex flex-col lg:flex-row items-center justify-evenly bg-gradient-to-l from-[#2189d8] to-[#dfebf4] w-full xl:h-100  py-10 lg:py-20 px-4 sm:px-6 lg:px-8 gap-8 lg:gap-20 overflow-hidden">
       <div className="flex flex-col gap-6 lg:gap-8 pt-10 lg:pt-0 text-center lg:text-left max-w-full lg:max-w-xl z-10">
         <div className="flex flex-col gap-3 lg:gap-5">
           <p className=" text-2xl sm:text-[28px] font-bold">
-            <span className="text-[#3B80F5] text-3xl">
+            <span className="text-[#3B80F5] text-5xl sm:text-3xl">
               <br /> ค้นหาหมอ,
               <br className="sm:hidden" />
             </span>
-            <span className="text-[#2960be] text-3xl">
-              <br /> ทำการนัดหมาย
+          </p>
+          <p className=" text-2xl sm:text-[28px] font-bold xl:mt-0">
+              <span className="text-[#2960be] text-3xl">
+               ทำการนัดหมาย
               <br className="sm:hidden" />
             </span>
           </p>
@@ -34,7 +36,7 @@ function InternalHeroSection() {
       </div>
 
       <div className="relative block lg:block w-70 sm:w-96 h-70 sm:h-96 flex-shrink-0">
-        <div className="bg-[#0E82FD] w-100 h-100 rounded-full border-4 border-gray-400 shadow-[#0E82FD] shadow-2xl flex items-center justify-center absolute top-40 sm:top-50 xl:top-50 -right-14 sm:right-10 xl:right-30">
+        <div className="bg-[#0c59ac] w-100 h-100 rounded-full border-2 border-white shadow-[#0E82FD] shadow-2xl flex items-center justify-center absolute top-40 sm:top-50 xl:top-50 -right-14 sm:right-10 xl:right-30">
           <img
             src="../../public/DocImageInternalPage1.svg"
             alt="DocImage"
