@@ -1,15 +1,76 @@
+<<<<<<< HEAD
 import { useNavigate, useParams, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import { PinIcon, StarIcon } from "../../components/icons";
 import useBookingStore from "../../stores/bookingStore";
+=======
+import { useNavigate } from "react-router";
+import { useState } from "react";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
+import useBookingStore from "../../stores/bookingStore.js";
+>>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../../config/axios.js";
 
 function BookingDateTimePage() {
+<<<<<<< HEAD
   // const { doctorId } = useParams();
    const location = useLocation();
   const doctorId = location.state?.doctorId;
+=======
+  
+  const pad = n => String(n).padStart(2, '0');
+  // Morning: 08:00-10:15 (10 slots)
+  const morningSlots = Array.from({ length: 5 }, (_, i) => {
+    const startMinutes = 8 * 60 + i * 15;
+    const endMinutes = startMinutes + 15;
+    return {
+      id: i + 1,
+      availableDate: "2025-07-25",
+      startTime: `${pad(Math.floor(startMinutes / 60))}:${pad(startMinutes % 60)}`,
+      endTime: `${pad(Math.floor(endMinutes / 60))}:${pad(endMinutes % 60)}`,
+      isActive: true,
+    };
+  });
+  // Afternoon: 12:00-14:15 (10 slots)
+  const afternoonSlots = Array.from({ length: 10 }, (_, i) => {
+    const startMinutes = 12 * 60 + i * 15;
+    const endMinutes = startMinutes + 15;
+    return {
+      id: 11 + i,
+      availableDate: "2025-07-25",
+      startTime: `${pad(Math.floor(startMinutes / 60))}:${pad(startMinutes % 60)}`,
+      endTime: `${pad(Math.floor(endMinutes / 60))}:${pad(endMinutes % 60)}`,
+      isActive: true,
+    };
+  });
+  // Evening: 17:00-19:15 (10 slots)
+  const eveningSlots = Array.from({ length: 10 }, (_, i) => {
+    const startMinutes = 17 * 60 + i * 15;
+    const endMinutes = startMinutes + 15;
+    return {
+      id: 21 + i,
+      availableDate: "2025-07-25",
+      startTime: `${pad(Math.floor(startMinutes / 60))}:${pad(startMinutes % 60)}`,
+      endTime: `${pad(Math.floor(endMinutes / 60))}:${pad(endMinutes % 60)}`,
+      isActive: true,
+    };
+  });
+  const mockTimeSlots = [
+    ...morningSlots,
+    ...afternoonSlots,
+    ...eveningSlots,
+  ];
+   
+   
+
+  // Store logic for date and time
+  const { specialty, appointmentType, hospital, service, setDateTime, dateTime } = useBookingStore();
+  const [selectedDate, setSelectedDate] = useState(dateTime?.date || null);
+  const [selectedTime, setSelectedTime] = useState(dateTime?.time || null);
+
+>>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
   const navigate = useNavigate();
   const {
     specialty,
@@ -118,8 +179,8 @@ function BookingDateTimePage() {
                   <span className="font-medium mb-1">Appointment Type</span>
                   <span className="font-semibold text-gray-700">
                     {appointmentType
-                      ? appointmentType === 'Clinic'
-                        ? `Clinic${clinic ? ` (${clinic})` : ''}`
+                      ? appointmentType === 'Hospital'
+                        ? `Hospital${hospital ? ` (${hospital})` : ''}`
                         : appointmentType
                       : <span className="text-gray-400">Not selected</span>}
                   </span>
@@ -168,9 +229,15 @@ function BookingDateTimePage() {
             </div>
           </div>
         </div>
+<<<<<<< HEAD
         <div className="h-1/10 flex justify-between items-center px-5">
           <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
           <button disabled={!selectedSlot} onClick={() => navigate("/patientinfo")} className="btn btn-primary">Add Basic Information {" >"}</button>
+=======
+        <div className=" h-1/10 flex justify-between items-center px-5">
+          <button onClick={() => navigate("/booking")} className="btn btn-error">{"< "} Back</button>
+          <button onClick={() => navigate("/patientinfo")} className="btn btn-primary">Add Basic Information {" >"}</button>
+>>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
         </div>
       </div>
     </div>

@@ -1,10 +1,10 @@
-import PromotionCard from "../../components/Promotion/PromotionCard"
+import PromotionCard from "../../components/Promotion/PromotionCard.jsx"
 
 function PromotionSection() {
   return (
-    <div className="flex flex-col items-center gap-3 w-full h-120 pt-8 pb-2">
-      <p className="font-bold text-2xl pb-4">โปรโมชั่น</p>
-      <div className="flex gap-10">
+    <div className="flex flex-col items-center w-full py-10 px-4 sm:px-6 lg:px-8">
+      <p className="font-bold text-2xl sm:text-3xl pb-6">โปรโมชั่น</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
           <PromotionCard />
           <PromotionCard />
           <PromotionCard />

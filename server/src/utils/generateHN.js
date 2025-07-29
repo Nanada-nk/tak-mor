@@ -1,5 +1,3 @@
-// Utility to generate a unique hospital number (hn) for Patient
-
 function generateHN() {
   // Example: 'HN' + YYYYMMDD + HHMMSS
   const now = new Date();

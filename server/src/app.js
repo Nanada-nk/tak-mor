@@ -3,20 +3,27 @@ import cors from 'cors'
 import compression from 'compression'
 import morgan from 'morgan'
 import rateLimit from 'express-rate-limit'
+import cookieParser from 'cookie-parser'
+import session from 'express-session';
+import passport from 'passport';
+import csurf from 'csurf';
 import authenticateUser from './middlewares/authenticate.middleware.js'
 import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
-import cookieParser from 'cookie-parser'
 import bookingRouter from './routes/booking.route.js'
+<<<<<<< HEAD
 import doctorRouter from './routes/doctor.route.js'
+=======
+import './config/passport.js';
+>>>>>>> 9621cad854d10b07302b227b7ad67c9a8e29a745
 
 
 const app = express()
 
 const limiter = rateLimit({
-  windowMs: 1 * 60 * 1000, // 60
+  windowMs: 1 * 60 * 1000,
   max: 200,
   message: 'Too many requests, please try again later.'
 })
@@ -32,6 +39,27 @@ app.use(cookieParser())
 app.use(express.json())
 app.use(morgan("dev"))
 app.use(compression())
+
+
+app.use(session({
+    secret: process.env.SESSION_SECRET, 
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production', 
+        httpOnly: true,
+    }
+}));
+
+
+app.use(passport.initialize());
+app.use(passport.session());
+
+const csrfProtection = csurf({ cookie: true });
+app.use(csrfProtection);
+app.get('/csrf-token', (req, res) => {
+    res.json({ csrfToken: req.csrfToken() });
+});
 
 app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);

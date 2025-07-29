@@ -9,13 +9,13 @@ import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 import SocialLogins from "../../components/auth/SocialLogins.jsx";
 import PolicyModal from "../../components/auth/PolicyModal.jsx";
 import { useState } from "react";
-// import authStore from "../../stores/authStore.js";
+
 
 
 function RegisterDoctorPage() {
 
   const navigate = useNavigate();
-  // const actionRegister = authStore((state)=>state.actionRegister)
+ 
   const {
     register,
     handleSubmit,
@@ -55,14 +55,6 @@ function RegisterDoctorPage() {
 
   const onSubmit = async (data) => {
     console.log("Attempting to submit registration with data:", data);
-
-    // const isAgreed = getValues("agreeToTerms");
-
-    // if (!isAgreed) {
-    //   return toast.error("Please accept the Terms of Service and Privacy Policy.");
-    // }
-
-    // console.log('isAgreed', isAgreed)
 
     if (!data.agreeToTerms) {
       return toast.error("Please accept the Terms of Service and Privacy Policy.");

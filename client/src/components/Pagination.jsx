@@ -1,6 +1,3 @@
-/** @format */
-
-
 function Pagination({ totalItems, itemsPerPage, currentPage, onPageChange }) {
 
   

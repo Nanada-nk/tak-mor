@@ -5,13 +5,18 @@ import HeaderNavBar from "../components/Navbar/HeaderNavBar";
 
 function MainLayout() {
   return (
-    <>
-      <div className="flex justify-center items-center">
-        <HeaderNavBar />
-      </div>
-      <Outlet />
+    <div className="flex flex-col min-h-screen">
+
+      <HeaderNavBar />
+
+
+      <main className="flex-grow">
+        <Outlet />
+      </main>
+
+
       <Footer />
-    </>
+    </div>
   );
 }
 export default MainLayout;
