@@ -46,7 +46,7 @@ function CategorySection() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mt-6 w-full max-w-5xl">
         <CategoryCardComponent
-          title="ระบบหัวใจและหลอดเลือด"
+          title="หัวใจและหลอดเลือด"
           iconSrc="../../public/cate1.svg"
           widthClass="w-full"
           heightClass="h-35"
@@ -85,7 +85,7 @@ function CategorySection() {
           lineHeight="leading-4"
         />
         <CategoryCardComponent
-          title="ระบบโครงสร้างกระดูกและข้อต่อ"
+          title="ระบบกระดูกและข้อต่อ"
           iconSrc="../../public/cate4.svg"
           widthClass="w-full"
           heightClass="h-35"
