@@ -4,7 +4,8 @@ function ReviewSection({bgColor}) {
   const defaultBgColor = "bg-[#EEF7FB]";
   return (
     <div
-      className="relative flex justify-center items-center gap-3 w-full h-95 pt-8 pb-2 overflow-hidden"
+    
+      className="relative flex flex-col items-center w-full py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
       style={{
         backgroundImage: "url('public/BgGraphics.svg')",
         backgroundColor: bgColor || defaultBgColor,
@@ -13,19 +14,23 @@ function ReviewSection({bgColor}) {
         backgroundPosition: "top left",
       }}
     >
+  
       <img
         src="/BgGraphics.svg"
         alt="decor mirror"
-        className="absolute bottom-0 right-0 w-[400px] transform scale-x-[-1] pointer-events-none z-0"
+        className="absolute bottom-0 right-0 w-[200px] sm:w-[300px] lg:w-[400px] transform scale-x-[-1] pointer-events-none z-0"
       />
-      <div className="flex gap-20 items-center w-[80%]">
-        <button className="btn rounded-full hover:bg-[#0E82FD] hover:text-white">
+      
+      
+      <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center w-full max-w-6xl">
+      
+        <button className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block">
           {"<"}
         </button>
 
         <PatientReview />
 
-        <button className="btn bg- rounded-full hover:bg-[#0E82FD] hover:text-white">
+        <button className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block">
           {">"}
         </button>
       </div>

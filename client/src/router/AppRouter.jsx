@@ -12,8 +12,8 @@ import ResetPasswordPage from "../pages/auth/ResetPasswordPage.jsx";
 import EmailOTPPage from "../pages/auth/EmailOTPPage.jsx";
 import SignupRolePick from "../pages/auth/SignupRolePick.jsx";
 import AuthCallbackPage from "../pages/auth/AuthCallbackPage.jsx";
-import TermOfService from "../pages/termOfService/termOfService.jsx";
-import PrivacyPolicy from "../pages/privacyPolicy/privacyPolicy.jsx";
+import TermOfService from "../pages/termOfService/TermOfService.jsx";
+import PrivacyPolicy from "../pages/privacyPolicy/PrivacyPolicy.jsx";
 
 import NewsPage from "../pages/news/NewsPage.jsx";
 import NewContentPage from "../pages/news/NewsContentPage.jsx";
