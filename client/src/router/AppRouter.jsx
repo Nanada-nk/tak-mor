@@ -58,6 +58,8 @@ import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/Ad
 import AboutUsPage from "../pages/AboutUsPage.jsx";
 import FaqPage from "../pages/Faq/FaqPage.jsx";
 import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
+import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
+
 
 
 function AppRouter() {
@@ -87,6 +89,9 @@ function AppRouter() {
           <Route path="faq" element={<FaqPage/>}/>
           <Route path="termsOfService" element={<TermOfService/>} />
           <Route path="privacyPolicy" element={<PrivacyPolicy/>} />
+          <Route path="alldoctor" element={<AllDoctorList/>}/>
+          
+          
 
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
