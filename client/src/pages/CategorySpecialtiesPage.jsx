@@ -34,8 +34,8 @@ function CategorySpecialtiesPage() {
             iconSrc={category.iconSrc}
             doctorCount={category.doctorCount}
             showSubtitle={true}
-            widthClass="w-[200px] sm:w-[250px]"
-            heightClass="h-[300px]" 
+            widthClass="w-[150px] sm:w-[250px]"
+            heightClass="h-[200px] sm:h-[300px]" 
             flexClass="flex-col"
             justifyClass="justify-center"
             itemsClass="items-center"

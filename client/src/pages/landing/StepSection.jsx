@@ -18,11 +18,11 @@ function StepSection() {
         className="absolute bottom-0 right-[-90px] w-[450px] transform scale-x-[-1] hidden lg:block"
       />
 
-      <div className="absolute top-55 left-40 2xl:left-100 bg-[#E2EDFF] rounded-full w-60 sm:w-[300px] h-60 sm:h-[300px] transform -translate-x-1/2 hidden md:block duration-1000">
+      <div className="absolute top-55 left-40 2xl:left-100 bg-[#E2EDFF] rounded-full w-60 sm:w-[300px] h-60 sm:h-[300px] transform -translate-x-1/2 hidden xl:block opacity-0 transition-opacity duration-1000 delay-100 xl:opacity-100">
         <img
           src="../../public/DocImageLandingPage3.svg"
           alt="DocImage"
-          className="w-80 h-80 object-contain absolute top-[-100px] left-3"
+          className="w-80 h-80 object-contain absolute top-[-100px] left-3 opacity-0 transition-opacity duration-1000 delay-100 xl:opacity-100"
         />
       </div>
 
