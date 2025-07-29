@@ -41,13 +41,13 @@ function HeaderNavBar() {
           <img
             src="../../public/takmor.svg"
             alt="web-logo"
-            className="h-full w-auto object-contain" 
+            className="h-full w-auto object-contain mr-5" 
           />
         </a>
       
 
      
-      <div className="navbar-center hidden lg:flex ">
+      <div className="navbar-center hidden lg:flex">
         <div className="flex gap-5">
           <DropdownNavBar />
         </div>
@@ -143,12 +143,12 @@ function HeaderNavBar() {
             ) : (
               <>
                 <li>
-                  <button onClick={handleProfileClick} className="btn btn-sm btn-block bg-[#0E82FD] text-white rounded-full">
+                  <button onClick={handleProfileClick} className="btn btn-sm btn-block bg-gradient-to-r from-[#0E82FD] to-[#06aed4] text-white rounded-full">
                     โปรไฟล์
                   </button>
                 </li>
                 <li>
-                  <button onClick={handleLogout} className="btn btn-sm btn-block btn-outline">
+                  <button onClick={handleLogout} className="btn btn-sm btn-block rounded-full bg-black text-white">
                     ออกจากระบบ
                   </button>
                 </li>

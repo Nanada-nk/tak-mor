@@ -10,7 +10,7 @@ function HeroSection() {
       
       <div className="flex flex-col gap-6 lg:gap-8 pt-10 lg:pt-0 text-center lg:text-left max-w-full lg:max-w-xl z-10">
         <span className="flex flex-col gap-3 lg:gap-5">
-          <p className=" text-2xl sm:text-3xl font-bold">
+          <p className=" text-2xl sm:text-[28px] font-bold">
             ปรึกษาปัญหาสุขภาพเป็นเรื่อง "ง่ายและเร็ว"{" "}
             <span className="text-[#3B80F5] text-3xl">
               <br /> ทักหมอ
@@ -45,7 +45,7 @@ function HeroSection() {
         </div>
       </div>
       
-      <div className="relative block lg:block w-96 h-96 flex-shrink-0">
+      <div className="relative block lg:block w-70 sm:w-96 h-70 sm:h-96 flex-shrink-0">
         <div className="bg-[#e1ebf7] w-full h-full rounded-full shadow-[#e1ebf7] shadow-sm flex items-center justify-center">
           <div className="bg-[#0E82FD] w-3/4 h-3/4 rounded-full border-8 border-white shadow-white shadow-2xl flex items-center justify-center">
             <img
@@ -56,7 +56,7 @@ function HeroSection() {
           </div>
         </div>
 
-        <div className="w-30 h-40 bg-white rounded-xl shadow-2xl shadow-gray absolute top-35 left-75 flex flex-col items-center">
+        <div className="w-30 h-40 bg-white rounded-xl shadow-2xl shadow-gray absolute top-35 left-75 hidden sm:flex flex-col items-center">
           <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mt-4 relative bg-gray-300">
             <img
               src="../../public/DocImageLandingPage2.svg"
@@ -70,19 +70,19 @@ function HeroSection() {
             จองเลย
           </button>
         </div>
-        <div className="w-40 h-10 bg-white rounded-lg absolute top-60 right-70 flex justify-center items-center gap-3 shadow-2xl">
+        <div className="w-40 h-10 bg-white rounded-lg absolute top-60 right-70 hidden sm:flex justify-center items-center gap-3 shadow-2xl">
           <div className="w-6 h-6 bg-[#0E82FD] rounded-lg flex justify-center items-center">
             <Check className="text-white w-5" />
           </div>
           <p className="text-xs font-medium">ตรวจสุขภาพประจำปี</p>
         </div>
-        <div className="w-60 h-25 bg-white rounded-lg absolute bottom-0 right-1/4 transform translate-y-1/2 flex flex-col p-4 shadow-2xl">
+        <div className="w-60 h-25 bg-white rounded-lg absolute bottom-5 sm:bottom-0 right-10 sm:right-1/4 transform translate-y-1/2 flex flex-col p-4 shadow-2xl">
           <p className="text-xs font-medium text-gray-700">พบกับแพทย์ของเรา</p>
           <div className="flex mt-2">
             <img
               src="../../public/patient1.svg"
               alt="Patient1"
-              className="w-10 h-10 object-contain rounded-full -ml-0 border-2 border-white"
+              className="w-10 h-10 object-contain rounded-full -ml-0 border-2  border-white"
             />
             <img
               src="../../public/patient2.svg"

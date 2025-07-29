@@ -6,7 +6,7 @@ function DoctorCardList() {
     <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-xs mx-auto overflow-hidden hover:cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
      
       <div className="relative">
-        <div className="w-full h-40 overflow-hidden"> 
+        <div className="w-full h-60 overflow-hidden"> 
           <img
             src="../../public/DocContainer1.svg"
             alt="DocContainer1"
@@ -20,7 +20,7 @@ function DoctorCardList() {
       </div>
 
      
-      <div className="flex flex-col items-start p-4 gap-2"> 
+      <div className="flex flex-col-2 justify-between p-4 gap-4"> 
         <div className="flex flex-col items-start">
           <p className="text-base sm:text-lg font-bold">พญ.ดาวเนอร์</p> 
           <p className="text-gray-400 text-xs">แพทย์กระดูกและข้อ</p> 

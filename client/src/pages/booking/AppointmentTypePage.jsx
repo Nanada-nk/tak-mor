@@ -39,9 +39,10 @@ function AppointmentTypePage() {
     if (appointmentType === "Hospital" && !hospital) {
       setShowHospitalWarning(true);
       setTimeout(() => setShowHospitalWarning(false), 2000);
+
       return;
     }
-    navigate("/booking");
+    navigate("/booking", { state: { doctorId: doctorId } });
   };
 
   return (
