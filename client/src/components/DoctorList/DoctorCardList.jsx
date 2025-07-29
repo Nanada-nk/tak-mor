@@ -46,10 +46,10 @@ function DoctorCardList({ showButton = false }) {
       <div className="mb-4">
         {showButton && (
           <div className="flex justify-center gap-2">
-            <button className="bg-black rounded-full w-1/2 text-white text-sm px-4 py-2 mx-2">
+            <button className="btn bg-black rounded-full  text-white text-sm px-4 py-2 mx-2">
               ตารางเวลา
             </button>
-            <button className="bg-gradient-to-r from-[#0E82FD] to-[#06aed4] rounded-full w-1/2 text-white text-sm px-4 py-2 mx-2">
+            <button className="btn bg-gradient-to-r from-[#0E82FD] to-[#06aed4] rounded-full text-white text-sm px-4 py-2 mx-2">
               จองเลย
             </button>
           </div>
