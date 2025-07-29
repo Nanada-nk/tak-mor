@@ -60,12 +60,9 @@ import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/Ad
 import AboutUsPage from "../pages/AboutUsPage.jsx";
 import FaqPage from "../pages/Faq/FaqPage.jsx";
 import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
-<<<<<<< HEAD
 import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
-=======
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
->>>>>>> origin
 
 
 function AppRouter() {
