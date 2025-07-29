@@ -108,7 +108,7 @@ function AppRouter() {
           {/* Booking */}
           <Route path="booking" element={<BookingPage />} />
           <Route path="appointment" element={<AppointmentTypePage />} />
-          <Route path="bookingdatetime" element={<BookingDateTimePage />} />
+          <Route path="bookingdatetime" element={<BookingDateTimePage  />} />
           <Route path="patientinfo" element={<PatientInfoPage />} />
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation" element={<BookingComfirmationPage />} />

@@ -8,15 +8,10 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   (config) => {
-<<<<<<< HEAD
-    let accessToken = localStorage.getItem('accessToken')
-console.log('Access token in axios', accessToken)
-=======
     // const accessToken = localStorage.getItem('accessToken') || authStore.getState().token
     const accessToken = authStore.getState().token;
-    console.log('accessToken test====', accessToken)
+    // console.log('accessToken test====', accessToken)
 
->>>>>>> 7d622adfa86b91ab0921cc043ea3e9dc7f8f2415
     if (accessToken) {
       config.headers['Authorization'] = `Bearer ${accessToken}`
     }

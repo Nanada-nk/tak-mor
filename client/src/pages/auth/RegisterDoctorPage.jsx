@@ -21,11 +21,7 @@ function RegisterDoctorPage() {
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-<<<<<<< HEAD
-    getValues
-=======
     watch
->>>>>>> 7d622adfa86b91ab0921cc043ea3e9dc7f8f2415
   } = useForm({
     resolver: yupResolver(schemaRegister),
     mode: 'onBlur',
@@ -65,11 +61,6 @@ function RegisterDoctorPage() {
     // if (!isAgreed) {
     //   return toast.error("Please accept the Terms of Service and Privacy Policy.");
     // }
-<<<<<<< HEAD
-
-    // console.log('isAgreed', isAgreed)
-
-=======
 
     // console.log('isAgreed', isAgreed)
 
@@ -77,7 +68,6 @@ function RegisterDoctorPage() {
       return toast.error("Please accept the Terms of Service and Privacy Policy.");
     }
 
->>>>>>> 7d622adfa86b91ab0921cc043ea3e9dc7f8f2415
     try {
       await new Promise(resolve => setTimeout(resolve, 1000))
       const resp = await authApi.registerDoctor(data);

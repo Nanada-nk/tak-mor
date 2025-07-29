@@ -1,11 +1,13 @@
 import { PinIcon, StarIcon } from "../../components/icons";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import useBookingStore from "../../stores/bookingStore";
 
 
 function BookingPage() {
   const navigate = useNavigate();
+   const location = useLocation();
+  const doctorId = location.state?.doctorId;
   const {
     specialty: selectedSpecialty,
     setSpecialty,
@@ -148,7 +150,7 @@ function BookingPage() {
         </div>
         <div className="h-1/10 flex justify-between items-center px-5">
           <button onClick={() => navigate(-1) } className="btn btn-error">{"<"} Back</button>
-          <button onClick={() => navigate("/appointment")} className="btn btn-primary">Select Appointment Type {" >"}</button>
+          <button onClick={() => navigate("/appointment", { state: { doctorId: doctorId } })} className="btn btn-primary">Select Appointment Type {" >"}</button>
         </div>
       </div>
     </div>

@@ -10,6 +10,7 @@ import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
 import cookieParser from 'cookie-parser'
 import bookingRouter from './routes/booking.route.js'
+import doctorRouter from './routes/doctor.route.js'
 
 
 const app = express()
@@ -35,7 +36,7 @@ app.use(compression())
 app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
 app.use('/api/dashboard', dashboardRouter);
-app.use('/api/doctor', bookingRouter);
+app.use('/api/doctor', bookingRouter, doctorRouter);
 // app.use('/api/patient', ()=>{});
 // app.use('/api/tele', ()=>{});
 // app.use('/api/prescription', ()=>{});

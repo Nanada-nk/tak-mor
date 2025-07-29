@@ -1,10 +1,12 @@
 import { PinIcon, StarIcon } from "../../components/icons";
 import { ClinicIcon, VideoCallIcon, AudioCallIcon, ChatIcon, HomeVisitIcon } from "../../components/icons";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import useBookingStore from "../../stores/bookingStore";
 
 
 function AppointmentTypePage() {
+   const location = useLocation();
+  const doctorId = location.state?.doctorId;
   const appointmentTypes = [
     { label: "Clinic", icon: ClinicIcon },
     { label: "Video Call", icon: VideoCallIcon },
@@ -178,7 +180,7 @@ function AppointmentTypePage() {
         <div className="h-1/10 flex justify-between items-center px-5">
           <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
           <button
-            onClick={() => navigate("/bookingdatetime")}
+            onClick={() => navigate("/bookingdatetime", { state: { doctorId: doctorId } })}
             className="btn btn-primary"
             disabled={
               !appointmentType || (appointmentType === "Clinic" && !clinic)
