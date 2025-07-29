@@ -12,7 +12,7 @@ model Account {
   id                   Int           @id @default(autoincrement())
   email                String        @unique
   password             String
-  phone                String
+  phone                String?
   role                 Account_role  @default(PATIENT)
   createdAt            DateTime      @default(now())
   updatedAt            DateTime      @updatedAt
