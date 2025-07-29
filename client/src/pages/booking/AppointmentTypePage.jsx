@@ -42,7 +42,7 @@ function AppointmentTypePage() {
 
       return;
     }
-    navigate("/booking", { state: { doctorId: doctorId } });
+    navigate("/booking");
   };
 
   return (
