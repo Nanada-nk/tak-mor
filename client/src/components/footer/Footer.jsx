@@ -1,5 +1,8 @@
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
+
 function Footer() {
+    const navigate = useNavigate();
     return (
         <div className=''>
         

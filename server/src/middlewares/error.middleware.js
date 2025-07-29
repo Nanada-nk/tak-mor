@@ -1,10 +1,8 @@
-// import * as Prisma from '@prisma/client';
 import {
   PrismaClientKnownRequestError,
   PrismaClientValidationError,
   PrismaClientUnknownRequestError
 } from '@prisma/client/runtime/library';
-
 import createError from "../utils/create-error.js"
 
 const errorMiddleware = (err, req, res, next) => {

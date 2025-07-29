@@ -13,6 +13,7 @@ import errorMiddleware from './middlewares/error.middleware.js'
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
 import bookingRouter from './routes/booking.route.js'
+import doctorRouter from './routes/doctor.route.js'
 import './config/passport.js';
 
 
@@ -60,7 +61,7 @@ app.get('/csrf-token', (req, res) => {
 app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
 app.use('/api/dashboard', dashboardRouter);
-app.use('/api/doctor', bookingRouter);
+app.use('/api/doctor', bookingRouter, doctorRouter);
 // app.use('/api/patient', ()=>{});
 // app.use('/api/tele', ()=>{});
 // app.use('/api/prescription', ()=>{});

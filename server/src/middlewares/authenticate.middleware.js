@@ -3,10 +3,11 @@ import createError from "../utils/create-error.js"
 import authService from "../services/auth.service.js"
 
 const authenticateUser = async (req, res, next) => {
+  console.log("Authorization header:", req.headers.authorization)
   const authHeader = req.headers.authorization
   console.log('req.headers.authorization=======', req.headers.authorization)
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return next(createError(401, 'Unauthorized'))
+    return next(createError(401, 'Middleware Unauthorized'))
   }
 
   const token = authHeader.split(" ")[1]
@@ -17,8 +18,8 @@ const authenticateUser = async (req, res, next) => {
   console.log('token==', token)
 
   try {
-    const payload = await jwtService.verifyToken(token,process.env.JWT_SECRET)
-    console.log("decoded JWT======", payload)
+    const payload = await jwtService.verifyToken(token, process.env.JWT_SECRET)
+    console.log("decoded JWT", payload)
     if (!payload.id) {
       return next(createError(401, 'Unauthorized'))
     }
