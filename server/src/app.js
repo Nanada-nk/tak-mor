@@ -19,6 +19,7 @@ import specialtyRouter from './routes/specialty.route.js';
 import './config/passport.js';
 import http from 'http'
 import teleRouter from './routes/tele.route.js'
+import appointmentRouter from './routes/appointment.route.js'
 
 
 const app = express()
@@ -68,6 +69,7 @@ app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);
 // app.use('/api/patient', ()=>{});
+app.use('/api/appointments', appointmentRouter);
 app.use('/api/tele', teleRouter);
 // app.use('/api/prescription', ()=>{});
 // app.use('/api/booking', ()=>{});
