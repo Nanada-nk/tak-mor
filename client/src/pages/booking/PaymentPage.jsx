@@ -4,6 +4,9 @@ import { useNavigate } from "react-router";
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx"; 
 import useBookingStore from "../../stores/bookingStore.js";
 import { BookingFormInput } from "../../components/FormInput.jsx";
+import axios from "axios";
+import usePatientFormStore from "../../stores/usePatientFormStore.js";
+import authStore from "../../stores/authStore.js";
 
 
 
@@ -17,9 +20,8 @@ function PaymentPage() {
   // Inline payment confirmation state
   const [confirmState, setConfirmState] = useState(false);
   const navigate = useNavigate();
-  const { specialty, appointmentType, hospital, service, dateTime, servicePrice } = useBookingStore();
-  const selectedDate = dateTime?.date || null;
-  const selectedTime = dateTime?.time || null;
+  const { specialty, appointmentType, hospital, service, } = useBookingStore();
+
 
   // Fallback mock data for doctor, specialty, location
   const fallback = {
@@ -39,16 +41,58 @@ function PaymentPage() {
   const [cardTouched, setCardTouched] = useState(false);
   const isCardValid = cardNumber && cardName && cardExpiry && cardCVV;
 
+  
+  // Dynamic doctor, specialty, location
+  const doctorName = fallback.doctor; // Not in store, static for now
+  const doctorSpecialty = specialty || fallback.specialty;
+  const doctorLocation = hospital || fallback.location;
+  
+  const { doctorId, selectedDate, selectedTime, servicePrice } = useBookingStore();
+  const user = authStore((state) => state.user);
+  const { patientForm } = usePatientFormStore();
+  
   // Mock values for demonstration
   const bookingFee = 50;
   const tax = 35;
   const discount = 20;
   const total = servicePrice + bookingFee + tax - discount;
+const handleCreateAppointment = async () => {
+  try {
+    // Compose start and end time (assume 30 min slot)
+    const startTime = selectedTime; // e.g. "09:00"
+    // Calculate endTime (add 30 min)
+    const [h, m] = startTime.split(":").map(Number);
+    const end = new Date(selectedDate);
+    end.setHours(h);
+    end.setMinutes(m + 30);
+    const endTime = `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
 
-  // Dynamic doctor, specialty, location
-  const doctorName = fallback.doctor; // Not in store, static for now
-  const doctorSpecialty = specialty || fallback.specialty;
-  const doctorLocation = hospital || fallback.location;
+  const tokenResponse = await axios.get("http://localhost:9090/csrf-token", {
+                      withCredentials: true,
+                    });
+                    const csrfToken = tokenResponse.data.csrfToken;
+
+
+    const response = await axios.post("http://localhost:9090/api/appointment", {
+      patientId: user.Patient.id,
+      doctorId,
+      date: selectedDate, // should be ISO string or Date
+      startTime,
+      endTime,
+      symptoms: patientForm.symptoms,
+      price: servicePrice,
+      status: "CONFIRMED", // or "PENDING" if you want to confirm later
+    },{
+          headers: { "CSRF-Token": csrfToken },
+          withCredentials: true,
+        });
+
+    return response.data;
+  } catch (err) {
+    console.error("Failed to create appointment:", err);
+    throw err;
+  }
+};
 
   return (
     <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)] font-prompt">
@@ -136,6 +180,15 @@ function PaymentPage() {
                            setIsProcessing(false);
                            setPaymentSuccess(true);
                            setConfirmState(false);
+                  
+                
+                          try {
+                            await handleCreateAppointment();
+                          } catch (err) {
+                            alert("Payment succeeded but failed to create appointment. Please contact support.");
+                            return;
+                          }
+
                            setTimeout(() => {
                              setFadeOut(true);
                              setTimeout(() => {
@@ -273,8 +326,8 @@ function PaymentPage() {
                     <div className="font-medium text-gray-600">Date & Time</div>
                     <div className="font-semibold text-gray-800 text-base">
                       {selectedDate && selectedTime
-                        ? `${selectedDate.toLocaleDateString()} ${selectedTime}`
-                        : <span className="text-gray-400">Not selected</span>}
+  ? `${(selectedDate instanceof Date ? selectedDate : new Date(selectedDate)).toLocaleDateString()} ${selectedTime}`
+  : <span className="text-gray-400">Not selected</span>}
                     </div>
                   </div>
                 </div>

@@ -59,7 +59,7 @@ function VideoCall() {
                        </div>
    
                        {/* Local User's Small Video Feed (Bottom Right) */}
-                       <div className="absolute bottom-4 right-4 w-24 h-24 rounded-lg overflow-hidden border-2 border-white shadow-md">
+                       <div className="absolute bottom-4 right-4 w-40 h-50 rounded-lg overflow-hidden border-2 border-white shadow-md">
                            <img
                                src={localUserAvatar}
                                alt="You"

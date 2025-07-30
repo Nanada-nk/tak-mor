@@ -17,6 +17,10 @@ import bookingRouter from './routes/booking.route.js'
 import doctorRouter from './routes/doctor.route.js'
 import specialtyRouter from './routes/specialty.route.js';
 import './config/passport.js';
+import patientRouter from './routes/patient.route.js'
+import appointmentRouter from './routes/appointment.route.js'
+import http from 'http'
+import teleRouter from './routes/tele.route.js'
 
 
 const app = express()
@@ -41,13 +45,13 @@ app.use(compression())
 
 
 app.use(session({
-    secret: process.env.SESSION_SECRET, 
-    resave: false,
-    saveUninitialized: false,
-    cookie: {
-        secure: process.env.NODE_ENV === 'production', 
-        httpOnly: true,
-    }
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production',
+    httpOnly: true,
+  }
 }));
 
 
@@ -57,7 +61,7 @@ app.use(passport.session());
 const csrfProtection = csurf({ cookie: true });
 app.use(csrfProtection);
 app.get('/csrf-token', (req, res) => {
-    res.json({ csrfToken: req.csrfToken() });
+  res.json({ csrfToken: req.csrfToken() });
 });
 
 app.use('/api/auth', authRouter);
@@ -65,8 +69,11 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);
-// app.use('/api/patient', ()=>{});
+app.use('/api/patient', patientRouter);
+app.use('/api/appointment', appointmentRouter);
 // app.use('/api/tele', ()=>{});
+// app.use('/api/patient', ()=>{});
+app.use('/api/tele', teleRouter);
 // app.use('/api/prescription', ()=>{});
 // app.use('/api/booking', ()=>{});
 // app.use('/api/news', ()=>{});
@@ -76,4 +83,7 @@ app.use('/api/specialty', specialtyRouter);
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
 
-export default app
+const httpServer = http.createServer(app);
+
+export { app, httpServer }
+// export default app
