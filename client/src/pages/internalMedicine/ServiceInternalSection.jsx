@@ -22,7 +22,7 @@ function ServiceInternalSection() {
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 mt-6 w-full max-w-5xl duration-700">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-4 xl:gap-1 mt-6 w-full max-w-5xl duration-700">
  
         <CategoryCardComponent
           title="ระบบประสาทและสมอง"
@@ -36,6 +36,7 @@ function ServiceInternalSection() {
           fontWeightClass="font-bold"
           fontSize="text-lg"
           lineHeight="leading-6"
+          bgImageUrl="/BgGraphics.svg"
         />
       
         <CategoryCardComponent
@@ -50,6 +51,7 @@ function ServiceInternalSection() {
           fontWeightClass="font-bold"
           fontSize="text-lg"
           lineHeight="leading-6"
+          bgImageUrl="/BgGraphics.svg"
         />
         <CategoryCardComponent
           title="ทันตกรรม"
@@ -63,6 +65,7 @@ function ServiceInternalSection() {
           fontWeightClass="font-bold"
           fontSize="text-lg"
           lineHeight="leading-6"
+          bgImageUrl="/BgGraphics.svg"
         />
         <CategoryCardComponent
           title="จักษุวิทยา"
@@ -76,6 +79,7 @@ function ServiceInternalSection() {
           fontWeightClass="font-bold"
           fontSize="text-lg"
           lineHeight="leading-6"
+          bgImageUrl="/BgGraphics.svg"
         />
       </div>
     </div>

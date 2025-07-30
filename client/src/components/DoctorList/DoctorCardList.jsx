@@ -49,7 +49,7 @@ function DoctorCardList({ showButton = false }) {
             <button className="btn bg-black rounded-full w-1/2 text-white text-sm px-4 py-2 mx-2">
               ตารางเวลา
             </button>
-            <button className="btn bg-gradient-to-r from-[#0E82FD] to-[#06aed4] rounded-full w-1/3 text-white text-sm px-4 py-2 mx-2">
+            <button className="btn bg-primary-gradient rounded-full w-1/3 text-white text-sm px-4 py-2 mx-2">
               จองเลย
             </button>
           </div>
