@@ -10,10 +10,12 @@ import csurf from 'csurf';
 import authenticateUser from './middlewares/authenticate.middleware.js'
 import notFoundMiddleware from './middlewares/not-found.middleware.js'
 import errorMiddleware from './middlewares/error.middleware.js'
+
 import dashboardRouter from './routes/dashboard.route.js'
 import authRouter from './routes/auth.route.js'
 import bookingRouter from './routes/booking.route.js'
 import doctorRouter from './routes/doctor.route.js'
+import specialtyRouter from './routes/specialty.route.js';
 import './config/passport.js';
 import http from 'http'
 import teleRouter from './routes/tele.route.js'
@@ -64,6 +66,7 @@ app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctor', bookingRouter, doctorRouter);
+app.use('/api/specialty', specialtyRouter);
 // app.use('/api/patient', ()=>{});
 app.use('/api/tele', teleRouter);
 // app.use('/api/prescription', ()=>{});
