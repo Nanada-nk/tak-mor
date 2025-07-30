@@ -42,6 +42,7 @@ model Appointment {
   startTime          String
   endTime            String
   duration           String?
+  symptoms           String?
   status             Appointment_status  @default(PENDING)
   price              Float
   paymentId          Int?

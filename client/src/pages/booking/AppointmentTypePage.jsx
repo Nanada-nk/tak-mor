@@ -67,8 +67,7 @@ function AppointmentTypePage() {
 
       return;
     }
-    navigate("/booking", { state: { doctor } });
-    // navigate("/booking", { state: { doctorId: doctorId } });
+    navigate("/booking");
   };
 
   const steps = [

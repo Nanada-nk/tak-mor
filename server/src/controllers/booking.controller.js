@@ -49,8 +49,11 @@ export const addManualSlot = async (req, res) => {
     return res.status(409).json({ error: "Time slot overlaps with an existing slot." });
   }
 
+const selectedDate = new Date('2025-07-30');
+selectedDate.setUTCHours(0, 0, 0, 0);
+
   const rec = await prisma.doctorAvailableSlot.create({
-    data: { doctorId: Number(doctorId), availableDate: new Date(availableDate), startTime, endTime, source: "manual", isActive: true }
+    data: { doctorId: Number(doctorId), availableDate: selectedDate, startTime, endTime, source: "manual", isActive: true }
   });
   res.status(201).json(rec);
 };
@@ -113,6 +116,7 @@ export const getAvailableSlots = async (req, res) => {
     const bookedStartTimes = appointments.map(a => a.startTime);
 
     // ✅ 1. Custom slots on that exact date
+    
     const custom = await prisma.doctorAvailableSlot.findMany({
       where: { doctorId, availableDate: new Date(date), isActive: true },
       orderBy: { startTime: "asc" }

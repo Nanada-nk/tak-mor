@@ -1,16 +1,14 @@
 import { useNavigate, useLocation } from "react-router";
 import { useState, useEffect } from "react";
-import { PinIcon, StarIcon } from "../../components/icons";
-import useBookingStore from "../../stores/bookingStore";
+import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
+import useBookingStore from "../../stores/bookingStore.js";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../../config/axios.js";
 
 function BookingDateTimePage() {
-  // const { doctorId } = useParams();
-   const location = useLocation();
-  const doctorId = location.state?.doctorId;
   const navigate = useNavigate();
+
   const {
     specialty,
     service,
@@ -19,27 +17,48 @@ function BookingDateTimePage() {
     appointmentType,
     hospital,
     setSelectedDate,
-    setSelectedTime
+    setSelectedTime,
+    setStartDateTime,
+  setEndDateTime
   } = useBookingStore();
+
+  const handleNext = () => {
+  if (!selectedDate || !selectedSlot) return alert("Select date and time");
+  
+  const startDateTime = new Date(`${selectedDate}T${selectedSlot.startTime}:00`);
+  const endDateTime = new Date(`${selectedDate}T${selectedSlot.endTime}:00`);
+
+  // Set to global state
+  setStartDateTime(startDateTime.toISOString());
+  setEndDateTime(endDateTime.toISOString());
+
+  navigate("/patientinfo");
+};
+
+  const doctorId = useBookingStore(state => state.doctorId);
 
   const [timeSlots, setTimeSlots] = useState([]);
   const [selectedSlot, setSelectedSlot] = useState(null);
 
-  useEffect(() => {
-    if (!selectedDate || !doctorId) return;
-    const d = selectedDate.toISOString().split('T')[0];
-    axiosInstance.get(`/api/doctor/${doctorId}/slots?date=${d}`)
+  // Convert stored string to Date object for usage
+  const dateObj = selectedDate ? new Date(selectedDate) : null;
+
+useEffect(() => {
+  if (!selectedDate || !doctorId) return;
+
+  const d = new Date(selectedDate).toISOString().split('T')[0]; // format date string
+  axiosInstance.get(`/api/doctor/${doctorId}/slots?date=${d}`)
     .then(res => {
       console.log("API slots response:", res.data);
       setTimeSlots(Array.isArray(res.data) ? res.data : []);
-      })
-      .catch(err => {
-        console.error("Failed to fetch slots:", err);
-        setTimeSlots([]);
-      });
-    }, [selectedDate, doctorId]);
-    
-   
+    })
+    .catch(err => {
+      console.error("Failed to fetch slots:", err);
+      setTimeSlots([]);
+    });
+}, [selectedDate, doctorId]); // ✅ use selectedDate (string) here
+
+
   const grouped = ["Morning", "Afternoon", "Evening"].map(period => ({
     period,
     slots: timeSlots.filter(s => {
@@ -47,14 +66,14 @@ function BookingDateTimePage() {
       if (period === "Morning") return h < 12;
       if (period === "Afternoon") return h >= 12 && h < 17;
       return h >= 17;
-    })
+    }),
   }));
 
   const handleSlotSelect = (slot) => {
     setSelectedSlot(slot);
     setSelectedTime(slot.startTime);
   };
- console.log("selectedDate:", selectedDate, "doctorId:", doctorId);
+
   return (
     <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)] font-prompt">
       <div className="h-1/7 w-full flex items-center justify-center">
@@ -65,8 +84,9 @@ function BookingDateTimePage() {
           <li data-content="4" className="step">Patient Information</li>
           <li data-content="5" className="step">Payment</li>
           <li data-content="6" className="step">Confirmation</li>
-        </ul> 
+        </ul>
       </div>
+
       <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
         <div className="h-fit mt-4 flex flex-col items-center justify-center">
           <div className="py-3 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex flex-col rounded-2xl">
@@ -100,17 +120,21 @@ function BookingDateTimePage() {
               <div className="flex flex-row justify-between gap-4 text-sm">
                 <div className="flex flex-col items-start justify-center w-1/4">
                   <span className="font-medium mb-1">Specialty</span>
-                  <span className="font-semibold text-gray-700">{specialty || <span className="text-gray-400">Not selected</span>}</span>
+                  <span className="font-semibold text-gray-700">
+                    {specialty || <span className="text-gray-400">Not selected</span>}
+                  </span>
                 </div>
                 <div className="flex flex-col items-start justify-center w-1/4">
                   <span className="font-medium mb-1">Service</span>
-                  <span className="font-semibold text-gray-700">{service || <span className="text-gray-400">Not selected</span>}</span>
+                  <span className="font-semibold text-gray-700">
+                    {service || <span className="text-gray-400">Not selected</span>}
+                  </span>
                 </div>
                 <div className="flex flex-col items-start justify-center w-1/4">
                   <span className="font-medium mb-1">Date & Time</span>
                   <span className="font-semibold text-gray-700">
-                    {selectedDate && selectedTime
-                      ? <span className="text-gray-600">{`${selectedDate.toLocaleDateString()} ${selectedTime}`}</span>
+                    {dateObj && selectedTime
+                      ? <span className="text-gray-600">{`${dateObj.toLocaleDateString()} ${selectedTime}`}</span>
                       : <span className="text-gray-400">Not selected</span>}
                   </span>
                 </div>
@@ -128,17 +152,19 @@ function BookingDateTimePage() {
             </div>
           </div>
         </div>
+
         <div className="h-[300px] flex flex-col items-center pt-4 gap-3">
           <div className="flex flex-row p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
             <div className="w-1/2">
               <DatePicker
                 inline
-                selected={selectedDate}
-                onChange={(date) => {
-                  setSelectedDate(date);
-                  setSelectedTime(null);
-                  setSelectedSlot(null);
-                }}
+                selected={dateObj}
+               onChange={(date) => {
+  const isoDate = date.toISOString().split("T")[0]; // Format to string
+  setSelectedDate(isoDate);
+  setSelectedTime(null);
+  setSelectedSlot(null);
+}}
                 dateFormat="yyyy-MM-dd"
                 minDate={new Date()}
               />
@@ -147,11 +173,19 @@ function BookingDateTimePage() {
               {grouped.map(({ period, slots }) => (
                 <div key={period} className="mb-4">
                   <h4 className="font-bold text-lg mb-2">{period}</h4>
-                  {slots.length === 0 ? <p className="text-gray-400">--</p> : (
+                  {slots.length === 0 ? (
+                    <p className="text-gray-400">--</p>
+                  ) : (
                     <div className="flex flex-wrap gap-2">
                       {slots.map(s => (
-                        <button key={s.startTime} onClick={() => handleSlotSelect(s)}
-                          className={`px-3 py-1 rounded-md border ${selectedSlot?.startTime === s.startTime ? 'bg-blue-500 text-white' : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-100'}`}
+                        <button
+                          key={s.startTime}
+                          onClick={() => handleSlotSelect(s)}
+                          className={`px-3 py-1 rounded-md border ${
+                            selectedSlot?.startTime === s.startTime
+                              ? 'bg-blue-500 text-white'
+                              : 'bg-white text-gray-800 border-gray-300 hover:bg-gray-100'
+                          }`}
                         >
                           {s.startTime}-{s.endTime}
                         </button>
@@ -162,7 +196,7 @@ function BookingDateTimePage() {
               ))}
               {selectedSlot && (
                 <p className="mt-4 text-sm text-green-700">
-                  Selected: {selectedSlot.startTime} - {selectedSlot.endTime} on {selectedDate.toISOString().split('T')[0]}
+                  Selected: {selectedSlot.startTime} - {selectedSlot.endTime} on {dateObj.toISOString().split('T')[0]}
                 </p>
               )}
             </div>
@@ -174,9 +208,10 @@ function BookingDateTimePage() {
             /> */}
           </div>
         </div>
-        <div className="h-1/10 flex justify-between items-center px-5">
-          <button onClick={() => navigate(-1)} className="btn btn-error">{"< "} Back</button>
-          <button disabled={!selectedSlot} onClick={() => navigate("/patientinfo")} className="btn btn-primary">Add Basic Information {" >"}</button>
+
+      <div className="h-1/10 flex justify-between items-center px-5">
+          <button onClick={() => navigate("/booking")} className="btn btn-error">{"< "} Back</button>
+          <button onClick={handleNext} className="btn btn-primary">Add Basic Information {" >"}</button>
         </div>
       </div>
     </div>
