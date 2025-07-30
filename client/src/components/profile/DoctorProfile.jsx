@@ -9,7 +9,6 @@ function DoctorProfile({
   editField,
   editValue,
   editLoading,
-  inputRef,
   startEdit,
   cancelEdit,
   saveEdit,
