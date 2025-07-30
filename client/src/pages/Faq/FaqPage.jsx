@@ -3,7 +3,7 @@ import FAQCollapseComponent from '../../components/FAQ/FAQCollapseComponent.jsx'
 
 function FaqPage() {
   return (
-    <div>
+    <div className='font-prompt'>
         <Brandner title='คำถามที่พบบ่อย'/> 
 
         <div className='grid grid-cols-1 md:grid-cols-2 gap-6 mx-6 my-10'>

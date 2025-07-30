@@ -1,7 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;600;700&display=swap');
 @import "tailwindcss";
 @plugin "daisyui" {
   themes: light --default;
 }
+@plugin "daisyui/theme" {
+  name: "mytheme";
+  default: true;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: oklch(100% 0 0); /* พื้นหลังหลัก */
+  --color-base-200: oklch(95% 0.03 240);
+  --color-base-300: oklch(92% 0.04 240);
+  --color-base-content: oklch(20% 0.05 240); /* ตัวอักษรสีเข้ม */
+
+  --color-primary: oklch(62.5% 0.277 248);         /* #3B80F5 */
+
+  --color-secondary: oklch(70.5% 0.211 226);       /* #4EABD0 */
+
+  --color-accent: oklch(72.5% 0.238 190);          /* #06AED4 */
+  
+  --color-neutral: oklch(48% 0.05 240);            /* #4C8AC3 */
+  --color-neutral-content: oklch(98% 0.01 240);    /* light content */
+
+  --color-info: oklch(68.9% 0.257 240);            /* #0E82FD */
+ 
+  --color-success: oklch(84% 0.1 140);             /* อิงเขียว (default) */
+  
+  --color-warning: oklch(85% 0.15 80);             /* เหลือง (default) */
+ 
+  --color-error: oklch(57.6% 0.278 27);            /* #EA3323 */
+
+  /* border radius */
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+
+  /* base sizes */
+  --size-selector: 0.25rem;
+  --size-field: 0.25rem;
+
+  /* border size */
+  --border: 1px;
+
+  /* effects */
+  --depth: 1;
+  --noise: 0;
+}
+
+@layer utilities {
+  .font-prompt {
+    font-family: 'Prompt', sans-serif;
+  }
+}
+@layer utilities {
+  .bg-primary-gradient {
+    background-image: linear-gradient(to right, #0E82FD, #06AED4);
+  }
+}
+
 
 /* Header background */
 .react-datepicker__header {

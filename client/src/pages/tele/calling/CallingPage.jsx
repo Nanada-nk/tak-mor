@@ -3,7 +3,7 @@ import CallAndVideo from "../../../components/callandvideo/CallAndVideo.jsx"
 
 function CallingPage() {
   return (
-    <div>
+    <div className="font-prompt">
       <div>
         <Brandner title="การโทรด้วยเสียง"/>
       </div>

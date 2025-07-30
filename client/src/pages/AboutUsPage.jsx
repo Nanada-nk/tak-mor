@@ -8,7 +8,7 @@ import FAQSection from "../pages/landing/FAQSection.jsx";
 
 function AboutUsPage() {
   return (
-    <div>
+    <div className="font-prompt">
       <Brandner title="เกี่ยวกับเรา" />
 
       <main>

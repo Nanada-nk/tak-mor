@@ -93,7 +93,7 @@ function EmailOTPPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 font-prompt">
       <div className="p-8 bg-white shadow-lg rounded-xl max-w-md w-full text-center">
 
         
