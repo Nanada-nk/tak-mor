@@ -142,15 +142,14 @@ function AppRouter() {
           </Route>
         {/* </Route> */}
 
-        {/* <Route element={<AdminRoute />}> */}
+        <Route element={<AdminRoute />}>
           <Route path="/admin" element={<AdminLayout />}>
-          <Route path="statictic"/>
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
           <Route path="doctordashboard/add" element={<AddDoctorDashboard/>}/>
           </Route>
-        {/* </Route> */}
+        </Route>
 
         
         <Route path="*" element={<NotFoundPage />} />
