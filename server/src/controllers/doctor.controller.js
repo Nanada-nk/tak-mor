@@ -5,7 +5,11 @@ export const getAllDoctors = async (req, res, next) => {
     const doctors = await prisma.doctor.findMany({
       include: {
         Account: true,      // include account info (email, phone, etc.)
-        Specialty: true     // include specialty info
+        specialties: {
+          include: {
+            Specialty: true
+          }
+        }    // include specialty info
       }
     });
     res.status(200).json(doctors);
