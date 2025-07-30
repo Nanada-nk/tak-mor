@@ -2,7 +2,7 @@ import { DocFemaleIcon, HourIcon, ConsultationIcon, LabIcon } from "../icons/ind
 
 function WhyChooseUs() {
   return (
-    <div className="flex flex-col justify-center items-center h-100">
+    <div className="flex flex-col justify-center items-center h-100 w-[200px] sm:w-full">
       <p className="font-bold text-3xl text-center">
         ทำไมต้องเลือกใช้บริการของเรา
       </p>
