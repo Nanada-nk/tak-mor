@@ -4,12 +4,10 @@ import { debounce } from "lodash";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../../config/axios.js";
-<<<<<<< HEAD
 import useBookingStore from "../../stores/bookingStore.js";
-=======
 import { Search, MapPin, Calendar } from "lucide-react";
 import Brandner from "../../components/Brandner.jsx";
->>>>>>> f61d514e005ff812725cbe5527280b1ddf35e85d
+
 
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
@@ -219,7 +217,7 @@ function DoctorAvailabilityPage() {
               จองเลย
             </button>
           </div>
-<<<<<<< HEAD
+
           <button
             onClick={() => {navigate("/appointment"), setDoctorId(doctor.id); }}
             className="btn btn-info text-white"
@@ -228,10 +226,7 @@ function DoctorAvailabilityPage() {
           </button>
         </div>
       ))}
-=======
-        ))}
       </div>
->>>>>>> f61d514e005ff812725cbe5527280b1ddf35e85d
     </div>
   );
 }
