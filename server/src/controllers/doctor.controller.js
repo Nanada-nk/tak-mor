@@ -163,37 +163,24 @@ export const updateDoctorProfile = async (req, res, next) => {
       if (updateData[key] === undefined) delete updateData[key];
     });
 
-    // Update doctor basic info first
-    const updatedDoctor = await prisma.doctor.update({
-      where: { id: doctor.id },
-      data: updateData,
-      include: { Account: true }
-    });
-
     // Handle specialties if provided and array
     if (Array.isArray(specialties)) {
-      // Remove all current specialties for this doctor
-      await prisma.doctorSpecialty.deleteMany({
-        where: { doctorId: doctor.id }
-      });
-      // Add new specialties
-      const createData = specialties
-        .map(sid => ({ doctorId: doctor.id, specialtyId: Number(sid) }))
-        .filter(ds => !isNaN(ds.specialtyId));
-      if (createData.length > 0) {
-        await prisma.doctorSpecialty.createMany({ data: createData });
-      }
+      updateData.specialties = {
+        set: specialties.map(id => ({ specialtyId: Number(id) }))
+      };
     }
 
-    // Return updated doctor with specialties
-    const result = await prisma.doctor.findUnique({
+    // Update doctor
+    const updated = await prisma.doctor.update({
       where: { id: doctor.id },
+      data: updateData,
       include: {
         specialties: { include: { Specialty: true } },
         Account: true
       }
     });
-    res.json({ success: true, doctor: result });
+
+    res.json({ success: true, doctor: updated });
   } catch (err) {
     next(err);
   }

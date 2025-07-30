@@ -31,7 +31,6 @@ model Account {
   Notifications     Notification[]
   CallLogsInitiated CallLog[]      @relation(name: "InitiatedCalls")
   CallLogsReceived  CallLog[]      @relation(name: "ReceivedCalls")
-
 }
 
 model Appointment {
@@ -140,40 +139,40 @@ model MedicalFile {
 }
 
 model Patient {
-  id                    Int                    @id @default(autoincrement())
-  accountId             Int                    @unique
-  hn                    String?                @unique
-  firstName             String
-  lastName              String
-  nationalId            String?                @unique
-  address               String?
-  emergencyContactName   String?
-  emergencyContactPhone  String?
+  id                       Int                    @id @default(autoincrement())
+  accountId                Int                    @unique
+  hn                       String?                @unique
+  firstName                String
+  lastName                 String
+  nationalId               String?                @unique
+  address                  String?
+  emergencyContactName     String?
+  emergencyContactPhone    String?
   emergencyContactRelation String?
-  birthDate             String?
-  gender               String?
-  Appointment           Appointment[]
-  MedicalFile           MedicalFile[]
-  Account               Account                @relation(fields: [accountId], references: [id])
-  PatientMedicalProfile PatientMedicalProfile?
-  Payment               Payment[]
+  birthDate                String?
+  gender                   String?
+  Appointment              Appointment[]
+  MedicalFile              MedicalFile[]
+  Account                  Account                @relation(fields: [accountId], references: [id])
+  PatientMedicalProfile    PatientMedicalProfile?
+  Payment                  Payment[]
 }
 
 model PatientMedicalProfile {
-  id         Int     @id @default(autoincrement())
-  patientId  Int     @unique
-  height    Float?
-  weight    Float?
-  bloodType String?
-  congenital String?
-  allergies  String?
-  surgeries  String?
-  medications String?
+  id             Int      @id @default(autoincrement())
+  patientId      Int      @unique
+  height         Float?
+  weight         Float?
+  bloodType      String?
+  congenital     String?
+  allergies      String?
+  surgeries      String?
+  medications    String?
   medicalHistory String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt 
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
   // Relationships
-  Patient    Patient @relation(fields: [patientId], references: [id])
+  Patient        Patient  @relation(fields: [patientId], references: [id])
 }
 
 model Payment {
@@ -206,8 +205,8 @@ model RefreshToken {
 }
 
 model Specialty {
-  id          Int      @id @default(autoincrement())
-  name        String   @unique
+  id          Int               @id @default(autoincrement())
+  name        String            @unique
   description String
   doctors     DoctorSpecialty[]
 }
@@ -215,7 +214,7 @@ model Specialty {
 model DoctorSpecialty {
   doctorId    Int
   specialtyId Int
-  Doctor      Doctor   @relation(fields: [doctorId], references: [id])
+  Doctor      Doctor    @relation(fields: [doctorId], references: [id])
   Specialty   Specialty @relation(fields: [specialtyId], references: [id])
 
   @@id([doctorId, specialtyId])
@@ -235,27 +234,27 @@ model WebRTCSession {
   isActive      Boolean     @default(true)
   createdAt     DateTime    @default(now())
   endedAt       DateTime?
-  sessionType   SessionType      @default(VIDEO)
+  sessionType   SessionType @default(VIDEO)
   callDuration  Int?
   CallLog       CallLog[]
   Appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }
 
 model ChatMessage {
-  id                Int      @id @default(autoincrement())
-  appointmentId     Int
-  senderId          Int
-  receiverId        Int?
-  messageContent    String
-  timestamp         DateTime @default(now())
-  isRead            Boolean @default(false)
-  messageType       MessageType @default(TEXT)
-  mediaUrl          String?
+  id             Int         @id @default(autoincrement())
+  appointmentId  Int
+  senderId       Int
+  receiverId     Int?
+  messageContent String
+  timestamp      DateTime    @default(now())
+  isRead         Boolean     @default(false)
+  messageType    MessageType @default(TEXT)
+  mediaUrl       String?
 
   // Relationships
-  Appointment       Appointment @relation(fields: [appointmentId], references: [id])
-  Sender            Account @relation(name: "SentMessages",fields: [senderId], references: [id])
-  Receiver          Account? @relation(name: "ReceivedMessages",fields: [receiverId], references: [id])
+  Appointment Appointment @relation(fields: [appointmentId], references: [id])
+  Sender      Account     @relation(name: "SentMessages", fields: [senderId], references: [id])
+  Receiver    Account?    @relation(name: "ReceivedMessages", fields: [receiverId], references: [id])
 
   @@index([appointmentId])
   @@index([senderId])
@@ -263,42 +262,41 @@ model ChatMessage {
 }
 
 model Notification {
-  id              Int      @id @default(autoincrement())
+  id              Int              @id @default(autoincrement())
   userId          Int
   type            NotificationType @default(GENERAL)
   message         String
-  isRead          Boolean @default(false)
-  createdAt       DateTime @default(now())
+  isRead          Boolean          @default(false)
+  createdAt       DateTime         @default(now())
   relatedEntityId Int?
 
   // Relationship
-  UserAccount     Account @relation(fields: [userId], references: [id])
+  UserAccount Account @relation(fields: [userId], references: [id])
 
   @@index([userId])
 }
 
 model CallLog {
-  id              Int                @id @default(autoincrement())
-  appointmentId   Int               
-  callerId        Int                
-  receiverId      Int                
-  callType        SessionType        
-  startTime       DateTime           @default(now())
+  id              Int         @id @default(autoincrement())
+  appointmentId   Int
+  callerId        Int
+  receiverId      Int
+  callType        SessionType
+  startTime       DateTime    @default(now())
   endTime         DateTime?
   durationMinutes Int?
-  status          CallStatus         @default(COMPLETED) 
-  webRTCSessionId Int?               
+  status          CallStatus  @default(COMPLETED)
+  webRTCSessionId Int?
 
   // Relationships
-  Appointment     Appointment        @relation(fields: [appointmentId], references: [id])
-  Caller          Account            @relation(name: "InitiatedCalls", fields: [callerId], references: [id])
-  Receiver        Account            @relation(name: "ReceivedCalls", fields: [receiverId], references: [id])
-  WebRTCSession   WebRTCSession?     @relation(fields: [webRTCSessionId], references: [id])
+  Appointment   Appointment    @relation(fields: [appointmentId], references: [id])
+  Caller        Account        @relation(name: "InitiatedCalls", fields: [callerId], references: [id])
+  Receiver      Account        @relation(name: "ReceivedCalls", fields: [receiverId], references: [id])
+  WebRTCSession WebRTCSession? @relation(fields: [webRTCSessionId], references: [id])
 
   @@index([appointmentId])
   @@index([callerId])
   @@index([receiverId])
-  
 }
 
 model WebhookLog {

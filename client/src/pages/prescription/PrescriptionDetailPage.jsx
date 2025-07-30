@@ -1,6 +1,6 @@
 function PrescriptionDetailPage() {
   return (
-    <div>PrescriptionDetailPage</div>
+    <div className="font-prompt">PrescriptionDetailPage</div>
   )
 }
 export default PrescriptionDetailPage

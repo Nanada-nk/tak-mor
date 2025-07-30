@@ -3,7 +3,7 @@ import Brandner from "../components/Brandner.jsx";
 
 function ContactUsPage() {
   return (
-    <div className="flex flex-col h-260">
+    <div className="flex flex-col h-260 font-prompt">
       <Brandner title="ติดต่อเรา" />
       <div className="flex justify-evenly items-center py-8">
         <div className="flex flex-col gap-4">

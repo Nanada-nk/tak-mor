@@ -4,7 +4,7 @@ import { useNavigate } from "react-router";
 function Footer() {
     const navigate = useNavigate();
     return (
-        <div className=''>
+        <div className='font-prompt'>
         
             <footer className="footer grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8 sm:gap-6 lg:gap-10 text-base-content px-4 sm:px-6 lg:px-8 bg-[#EEF7FB] pt-8 pb-10">
 

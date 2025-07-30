@@ -1,36 +1,37 @@
 import prisma from "../config/prisma.config.js";
-
-export const createAppointmentAfterPayment = async (req, res) => {
-  const {
-    vn,
-    patientId,
-    doctorId,
-    date,
-    startTime,
-    endTime,
-    price,
-    paymentId,
-  } = req.body
-
+import generateVN from "../utils/generateVN.js";
+export const createAppointment = async (req, res) => {
   try {
+    const {
+      patientId,
+      doctorId,
+      date,         // ISO string or Date
+      startTime,    // "HH:mm"
+      endTime,      // "HH:mm"
+      symptoms,
+      price,
+      status = "PENDING"
+    } = req.body;
+
+    // Optionally: validate required fields here
+
     const appointment = await prisma.appointment.create({
       data: {
-        vn,
+        vn: generateVN(),
         patientId,
         doctorId,
-        date: new Date(date), // assume ISO string
+        date: new Date(date),
         startTime,
         endTime,
+        symptoms,
         price,
-        paymentId,
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        status,
       },
-    })
+    });
 
-    return res.status(201).json(appointment)
-  } catch (error) {
-    console.error(error)
-    return res.status(500).json({ error: 'Failed to create appointment' })
+    res.status(201).json(appointment);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create appointment" });
   }
-}
+};

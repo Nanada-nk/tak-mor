@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { CheckCircle2, MessageCircle, Phone, Mail, FileText, Send } from 'lucide-react';
 import { PinIcon, StarIcon } from '../../components/icons/index.jsx';
 import useBookingStore from '../../stores/bookingStore.js';
-
+import usePatientFormStore from '../../stores/usePatientFormStore.js';
 
 
 function BookingComfirmationPage() {
@@ -69,7 +69,7 @@ function BookingComfirmationPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
+    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)] font-prompt">
       {/* ...existing code... */}
       <div className="h-1/7 w-full flex items-center justify-center">
         <ul className="steps h-full">

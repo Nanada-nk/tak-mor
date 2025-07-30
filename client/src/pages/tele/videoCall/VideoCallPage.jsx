@@ -3,7 +3,7 @@ import VideoCall from "../../../components/callandvideo/VideoCall.jsx"
 
 function VideoCallPage() {
   return (
-    <div>
+    <div className="font-prompt">
       <div>
         <Brandner title="การโทรด้วยวีดีโอ"/>
       </div>

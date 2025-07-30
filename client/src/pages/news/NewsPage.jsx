@@ -24,7 +24,7 @@ function NewsPage() {
   const tags = ["All", "Health Tips", "Awareness", "Health", "Wellness", "Treatment", "Checkup", "Prevention"];
 
   return (
-    <div>
+    <div className="font-prompt">
       <Brandner title="ข่าวสาร" /> 
 
    
