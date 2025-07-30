@@ -1,6 +1,6 @@
 function ChatPage() {
   return (
-    <div>ChatPage</div>
+    <div className="font-prompt">ChatPage</div>
   )
 }
 export default ChatPage

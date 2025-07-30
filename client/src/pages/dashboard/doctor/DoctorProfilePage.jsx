@@ -29,7 +29,7 @@ function DoctorProfilePage() {
   // }
 
   return (
-    <div>
+    <div className="font-prompt">
       <DoctorProfile/>
     </div>
     //   <ProfileLayout title={`Hello, ${user.firstName || "User"}!`}>

@@ -1,6 +1,6 @@
 function DoctorListPage() {
   return (
-    <div>DoctorListPage</div>
+    <div className="font-prompt">DoctorListPage</div>
   )
 }
 export default DoctorListPage

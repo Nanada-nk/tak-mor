@@ -7,7 +7,7 @@ export default function SignupRolePick() {
   const handlePatientSignup = () => navigate('/registerpatient');
 
   return (
-    <div className="h-120 bg-gray-100 flex items-center justify-center p-6">
+    <div className="h-120 bg-gray-100 flex items-center justify-center p-6 font-prompt">
       <div className="bg-white rounded-2xl shadow-md p-8 w-full max-w-3xl">
         <h2 className="text-2xl font-semibold text-center mb-6">Sign Up</h2>
         <div className="flex flex-col md:flex-row gap-6">

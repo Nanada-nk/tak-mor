@@ -2,7 +2,7 @@ import CategoryCardComponent from "../../components/CategorySection/CategoryCard
 import { Link } from "react-router";
 function ServiceInternalSection() {
   return (
-    <div className="relative -top-30 container mx-auto px-4 py-10 flex flex-col items-center">
+    <div className="font-prompt relative -top-30 container mx-auto px-4 py-10 flex flex-col items-center">
       <div className="flex flex-col sm:flex-row justify-between items-center w-full max-w-5xl mt-10 sm:mt-12 px-4 sm:px-0">
         <div className="mt-4">
           <p className="text-xl sm:text-4xl font-bold mb-4 sm:mb-0">

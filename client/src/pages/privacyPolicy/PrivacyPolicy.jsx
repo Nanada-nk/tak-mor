@@ -3,7 +3,7 @@ import Brandner from '../../components/Brandner.jsx'
 
 function PrivacyPolicy() {
     return (
-        <div>
+        <div className='font-prompt'>
             
             <div>
                 <Brandner title='นโยบายความเป็นส่วนตัว' />
