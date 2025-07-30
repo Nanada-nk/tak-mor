@@ -15,7 +15,7 @@ function DoctorAvailabilityPage() {
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
- const setDoctorId = useBookingStore(state => state.setDoctorId);
+  const setDoctorId = useBookingStore(state => state.setDoctorId);
   // Fetch all doctors on mount
   useEffect(() => {
     axiosInstance.get("/api/doctor")
@@ -210,35 +210,19 @@ function DoctorAvailabilityPage() {
                   <p className="text-gray-400">No slots available</p>
                 )}
             </div>
-<<<<<<< HEAD
-=======
+
             <button
-              onClick={() => navigate("/appointment", { state: { doctorId: doctor.id } })}
+              onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
               className="btn btn-info text-white"
             >
               จองเลย
             </button>
-          </div>
->>>>>>> 3a17e26d8804c9ab217ebd6181175b9e3d7456fd
-
-          <button
-            onClick={() => {navigate("/appointment"), setDoctorId(doctor.id); }}
-            className="btn btn-info text-white"
-          >
-            จองเลย
-          </button>
-<<<<<<< HEAD
           </div>
 
 
         ))}
       </div>
 
-=======
-        </div>
-      ))}
-      </div>
->>>>>>> 3a17e26d8804c9ab217ebd6181175b9e3d7456fd
     </div>
   );
 }
