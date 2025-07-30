@@ -3,7 +3,7 @@ import { Search } from 'lucide-react'
 
 function AdminDoctorDashboardMenagementPage() {
   return (
-    <div>
+    <div className='font-prompt'>
          <h3>AdminDoctorDashBoard</h3>
 
       <div className="join my-7">

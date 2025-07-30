@@ -3,7 +3,7 @@ import PatientDashboard from "../../../components/dashboard/PatientDashboard.jsx
 
 function AdminPatientDashboardManagementPage() {
   return (
-    <div>
+    <div className="font-prompt">
       <h3>AdminDashBoard</h3>
 
       <div className="join my-7">

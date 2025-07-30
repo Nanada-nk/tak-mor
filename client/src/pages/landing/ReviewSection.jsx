@@ -1,7 +1,7 @@
 import PatientReview from "../../components/review/PatientReview.jsx";
 
 function ReviewSection({bgColor}) {
-  const defaultBgColor = "bg-[#EEF7FB]";
+  const defaultBgColor = "#EEF7FB";
   return (
     <div
     
@@ -18,7 +18,7 @@ function ReviewSection({bgColor}) {
       <img
         src="/BgGraphics.svg"
         alt="decor mirror"
-        className="absolute bottom-0 right-0 w-[200px] sm:w-[300px] lg:w-[400px] transform scale-x-[-1] pointer-events-none z-0"
+        className="absolute bottom-28 -right-10 w-[200px] sm:w-[300px] lg:w-[400px] transform scale-x-[-1] pointer-events-none z-0"
       />
       
       

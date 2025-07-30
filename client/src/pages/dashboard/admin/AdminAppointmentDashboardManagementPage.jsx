@@ -4,7 +4,7 @@ import { Search } from 'lucide-react'
 function AdminAppointmentDashboardManagementPage() {
    
   return (
-     <div>
+     <div className='font-prompt'>
          <h3>AppointmentDashBoard</h3>
 
       <div className="join my-7">
