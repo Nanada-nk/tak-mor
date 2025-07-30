@@ -63,6 +63,7 @@ import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
 import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
+import AddDoctorDashboard from "../pages/dashboard/doctor/AddDoctorDashboard.jsx";
 
 
 function AppRouter() {
@@ -143,9 +144,11 @@ function AppRouter() {
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
+          <Route path="statictic"/>
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
+          <Route path="doctordashboard/add" element={<AddDoctorDashboard/>}/>
           </Route>
         {/* </Route> */}
 
