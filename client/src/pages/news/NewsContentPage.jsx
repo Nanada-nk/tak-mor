@@ -1,8 +1,9 @@
+import { Search } from "lucide-react";
 import Brandner from "../../components/Brandner.jsx";
 
 function NewsContentPage() {
   const post = {
-  
+
     author: 'Arthur Hetzel',
     authorAvatar: 'https://images.unsplash.com/photo-1507003211169-e69adba4c2d9?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // URL รูปโปรไฟล์ผู้เขียนเล็กๆ
     views: 90,
@@ -22,20 +23,20 @@ function NewsContentPage() {
   return (
     <div className="font-prompt">
 
-     <Brandner title="ข่าว"/>
+      <Brandner title="ข่าว" />
 
 
       <div className="flex flex-2/3 gap-x-8 justify-center mx-30 mt-5">
         <div>
-          
-          
+
+
           <div className="bg-gray-100 min-h-screen font-sans">
             {/* Header Section */}
             <header className="bg-white shadow-sm py-4">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-gray-800 mb-4 leading-tight">
-                    10 Tips for Maintaining a Healthy Lifestyle Year-Round
-                  </h1>
+                  10 Tips for Maintaining a Healthy Lifestyle Year-Round
+                </h1>
               </div>
             </header>
 
@@ -56,7 +57,7 @@ function NewsContentPage() {
                 {/* Post Content Wrapper */}
                 <div className="p-6 sm:p-8 lg:p-10">
                   {/* Title */}
-                  
+
 
                   {/* Post Meta Info (Health Tips, Date, Author, Views, Comments) */}
                   <div className="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-y-2">
@@ -193,7 +194,7 @@ function NewsContentPage() {
               </div>
             </main>
 
-  
+
           </div>
         </div>
 
@@ -213,21 +214,7 @@ function NewsContentPage() {
 
 
               <button className="btn btn-primary join-item bg-[#3B80F5]">
-
-                <svg
-                  class="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M21 21l-4.35-4.35m1.47-5.15a7 7 0 11-14 0 7 7 0 0114 0z"
-                  ></path>
-                </svg>
+                <Search/>
               </button>
             </div>
           </div>
