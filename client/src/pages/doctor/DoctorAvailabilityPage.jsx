@@ -210,6 +210,16 @@ function DoctorAvailabilityPage() {
                   <p className="text-gray-400">No slots available</p>
                 )}
             </div>
+<<<<<<< HEAD
+=======
+            <button
+              onClick={() => navigate("/appointment", { state: { doctorId: doctor.id } })}
+              className="btn btn-info text-white"
+            >
+              จองเลย
+            </button>
+          </div>
+>>>>>>> 3a17e26d8804c9ab217ebd6181175b9e3d7456fd
 
           <button
             onClick={() => {navigate("/appointment"), setDoctorId(doctor.id); }}
@@ -217,12 +227,18 @@ function DoctorAvailabilityPage() {
           >
             จองเลย
           </button>
+<<<<<<< HEAD
           </div>
 
 
         ))}
       </div>
 
+=======
+        </div>
+      ))}
+      </div>
+>>>>>>> 3a17e26d8804c9ab217ebd6181175b9e3d7456fd
     </div>
   );
 }
