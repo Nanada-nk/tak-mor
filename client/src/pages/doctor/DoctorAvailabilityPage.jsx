@@ -151,7 +151,7 @@ useEffect(() => {
             )}
           </div>
           <button
-            onClick={() => navigate("/booking", { state: { doctorId: doctor.id } })}
+            onClick={() => navigate("/appointment", { state: { doctorId: doctor.id } })}
             className="btn btn-info text-white"
           >
             จองเลย

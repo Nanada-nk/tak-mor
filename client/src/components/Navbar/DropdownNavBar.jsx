@@ -58,8 +58,8 @@ function DropdownNavBar() {
             <a onClick={() => navigate("/patientprofile")}>โปรไฟล์ผู้ป่วย</a> 
           </li>
           <li>
-         
-            <a onClick={() => navigate("/booking")}>การจองนัดหมาย</a> 
+
+            <a onClick={() => navigate("/appointment")}>การจองนัดหมาย</a>
           </li>
         </ul>
       </div>
