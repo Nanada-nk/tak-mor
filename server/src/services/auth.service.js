@@ -21,7 +21,15 @@ authService.findAccountById = (id) => {
     where: { id },
     include: {
       Patient: true,
-      Doctor: true
+      Doctor: {
+        include: {
+          specialties: { include: { Specialty: true } },
+          Appointment: true,
+          Account: true,
+          DoctorAvailability: true,
+          DoctorAvailableSlot: true,
+        }
+      }
     }
   })
 }

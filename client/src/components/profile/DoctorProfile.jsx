@@ -1,464 +1,423 @@
-import { useState, useEffect, useRef } from "react";
-import axiosInstance from "../../config/axios.js";
-import { User, X, Pencil } from "lucide-react";
 
 
-function DoctorProfile({ profile, doctorId }) {
-  const [editField, setEditField] = useState(null); // 'firstName', 'lastName', 'address', 'specialties', 'bio'
-  const [user, setUser] = useState(profile || {
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    address: '',
-    specialties: [],
-    bio: '',
-  });
-  const [specialties, setSpecialties] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [specialtyInput, setSpecialtyInput] = useState("");
-  const [showSpecialtyDropdown, setShowSpecialtyDropdown] = useState(false);
-  const specialtyRef = useRef(null);
-  // Fetch doctor profile if not provided
-  useEffect(() => {
-    async function fetchProfile() {
-      if (!profile && doctorId) {
-        try {
-          const res = await axiosInstance.get(`/api/doctor/${doctorId}`);
-          const doc = res.data;
-          console.log('Fetched doctor profile:', doc);
-          setUser({
-            firstName: doc.firstName || doc.Doctor?.firstName || doc.Account?.firstName || '',
-            lastName: doc.lastName || doc.Doctor?.lastName || doc.Account?.lastName || '',
-            email: doc.Account?.email || '',
-            phone: doc.Account?.phone || '',
-            address: doc.address || doc.Doctor?.address || '',
-            specialties: Array.isArray(doc.specialties)
-              ? doc.specialties.map(ds => ds.Specialty)
-              : [],
-            bio: doc.bio || doc.Doctor?.bio || '',
-          });
-        } catch (err) {
-          setError('Failed to fetch doctor profile.');
-        }
-      }
+import React from "react";
+import { useRef } from "react";
+import SpecialtySelector from "./SpecialtySelector";
+
+function DoctorProfile({
+  profile,
+  editField,
+  editValue,
+  editLoading,
+  inputRef,
+  startEdit,
+  cancelEdit,
+  saveEdit,
+  setEditValue,
+  handleInputKey,
+  onSpecialtiesSave
+}) {
+  // Use separate refs for each editable field to avoid focus issues on cancel
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+  const bioRef = useRef(null);
+
+  // Specialty editing state
+  const [editSpecialties, setEditSpecialties] = React.useState(false);
+  const [pendingSpecialties, setPendingSpecialties] = React.useState(Array.isArray(profile.Doctor?.specialties) ? profile.Doctor.specialties : []);
+  const [savingSpecialties, setSavingSpecialties] = React.useState(false);
+
+  // Focus the correct input/textarea when entering edit mode
+  React.useEffect(() => {
+    if (editField === "address" && addressRef.current) {
+      addressRef.current.focus();
+    } else if (editField === "bio" && bioRef.current) {
+      bioRef.current.focus();
+    } else if (editField === "firstName" && firstNameRef.current) {
+      firstNameRef.current.focus();
+    } else if (editField === "lastName" && lastNameRef.current) {
+      lastNameRef.current.focus();
+    } else if (editField === "phone" && phoneRef.current) {
+      phoneRef.current.focus();
     }
-    fetchProfile();
-  }, [profile, doctorId]);
+  }, [editField]);
+  if (!profile || !profile.Doctor) {
+    return (
+      <div className="flex items-center justify-center min-h-screen text-gray-500">
+        Doctor profile not found or incomplete.
+      </div>
+    );
+  }
 
-  // Set specialtyInput and specialties when editing specialties
-  useEffect(() => {
-    if (editField === 'specialties') {
-      if (profile && Array.isArray(profile.specialties)) {
-        setUser(u => ({ ...u, specialties: profile.specialties }));
-      }
-      setSpecialtyInput("");
-    }
-  }, [editField, profile]);
-
-  // Close dropdown on outside click
-  useEffect(() => {
-    function handleClick(e) {
-      if (specialtyRef.current && !specialtyRef.current.contains(e.target)) {
-        setShowSpecialtyDropdown(false);
-      }
-    }
-    if (showSpecialtyDropdown) {
-      document.addEventListener("mousedown", handleClick);
-    }
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [showSpecialtyDropdown]);
-  // Specialty input change
-  const handleSpecialtyInput = (e) => {
-    setSpecialtyInput(e.target.value);
-    setShowSpecialtyDropdown(true);
-  };
-
-
-
-  // Add specialty to user's specialties array and auto-save
-  const handleSpecialtySelect = async (specialty) => {
-    if (!user.specialties.some(s => String(s.id) === String(specialty.id))) {
-      const updatedSpecialties = [...user.specialties, specialty];
-      setUser({ ...user, specialties: updatedSpecialties });
-      await autoSaveSpecialties(updatedSpecialties);
-    }
-    setSpecialtyInput("");
-    setShowSpecialtyDropdown(false);
-  };
-
-  // Add specialty by name (create if not exists) and auto-save
-  const handleAddSpecialtyByName = async () => {
-    const input = specialtyInput.trim();
-    if (!input) return;
-    // Prevent adding duplicate
-    if (user.specialties.some(s => s.name.toLowerCase() === input.toLowerCase())) {
-      setSpecialtyInput("");
-      setShowSpecialtyDropdown(false);
-      return;
-    }
-    const match = specialties.find(s => s.name.toLowerCase() === input.toLowerCase());
-    let newSpecialty = null;
-    if (match) {
-      newSpecialty = match;
-    } else {
-      // Create new specialty
-      try {
-        const res = await axiosInstance.post('/api/specialty', { name: input });
-        if (res.data && res.data.id) {
-          newSpecialty = res.data;
-          setSpecialties([...specialties, res.data]);
-        }
-      } catch {
-        // ignore error
-      }
-    }
-    if (newSpecialty && !user.specialties.some(s => String(s.id) === String(newSpecialty.id))) {
-      const updatedSpecialties = [...user.specialties, newSpecialty];
-      setUser({ ...user, specialties: updatedSpecialties });
-      await autoSaveSpecialties(updatedSpecialties);
-    }
-    setSpecialtyInput("");
-    setShowSpecialtyDropdown(false);
-  };
-
-  // Remove specialty from user's specialties array and auto-save
-  const handleRemoveSpecialty = async (id) => {
-    const updatedSpecialties = user.specialties.filter(s => String(s.id) !== String(id));
-    setUser({ ...user, specialties: updatedSpecialties });
-    await autoSaveSpecialties(updatedSpecialties);
-  };
-  // Auto-save specialties to backend
-  const autoSaveSpecialties = async (specialtiesArr) => {
-    setLoading(true);
-    setError("");
-    setSuccess("");
-    try {
-      const res = await axiosInstance.put("/api/doctor/profile", { specialties: specialtiesArr.map(s => s.id) });
-      if (res.data && res.data.success) {
-        setSuccess("Specialties updated.");
-      } else {
-        setError(res.data && res.data.error ? res.data.error : "Failed to update specialties.");
-      }
-    } catch {
-      setError("Failed to update specialties.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    if (profile) {
-      setUser({
-        firstName: profile.firstName || '',
-        lastName: profile.lastName || '',
-        email: profile.email || '',
-        phone: profile.phone || '',
-        address: profile.address || '',
-        specialties: profile.specialties || [],
-        bio: profile.bio || '',
-      });
-    }
-  }, [profile]);
-
-  useEffect(() => {
-    async function fetchSpecialties() {
-      try {
-        const res = await axiosInstance.get('/api/specialty');
-        setSpecialties(res.data || []);
-      } catch {
-        setSpecialties([]);
-      }
-    }
-    fetchSpecialties();
-  }, []);
-
-
-  // For text fields
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  // Save a single field
-  const handleSaveField = async (field) => {
-    setLoading(true);
-    setError("");
-    setSuccess("");
-    try {
-      let updatedUser = { ...user };
-      if (field === 'specialties') {
-        updatedUser.specialties = user.specialties.map(s => s.id);
-      } else {
-        updatedUser = { [field]: user[field] };
-      }
-      const res = await axiosInstance.put("/api/doctor/profile", updatedUser);
-      if (res.data && res.data.success) {
-        setSuccess("Profile updated successfully.");
-        setEditField(null);
-      } else {
-        setError(res.data && res.data.error ? res.data.error : "Profile update failed.");
-      }
-    } catch {
-      setError("Failed to update profile.");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleCancelField = () => {
-    setEditField(null);
-    setError("");
-    setSuccess("");
-    if (profile && editField) {
-      setUser(u => ({ ...u, [editField]: profile[editField] }));
-    }
-  };
-
-  // Removed unused handleSave and handleCancel and all isEditing references
+  const doctor = profile.Doctor;
+  const fullName = `${doctor.firstName} ${doctor.lastName}`.trim();
+  const email = profile.email;
+  const phone = profile.phone;
+  const address = doctor.address || "No address";
+  const specialties = Array.isArray(doctor.specialties) ? doctor.specialties : [];
+  const bio = doctor.bio || "No bio";
 
   return (
-    <div className="flex justify-center items-start min-h-[85vh] bg-gradient-to-br from-blue-50 to-white">
-      <div className="w-full max-w-3xl mt-10 bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
-        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
-          <div className="flex flex-col items-center w-full md:w-1/3">
-            {user.profileImage && user.profileImage.trim() !== '' ? (
+    <div className="flex justify-center items-start min-h-[90vh] bg-gradient-to-br from-blue-100/60 to-white py-12 px-2">
+      <div className="w-full max-w-3xl bg-white/95 rounded-3xl shadow-2xl border border-blue-100 relative overflow-hidden">
+        {/* Card header with avatar overlay */}
+        <div className="relative flex flex-row items-center justify-start bg-gradient-to-r from-blue-200/60 to-blue-100/40 pt-10 pb-6 mb-4 px-8 gap-8">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-200/40 to-transparent pointer-events-none" />
+          {/* Profile Picture on the left */}
+          <div className="relative z-10 flex-shrink-0">
+            <div className="h-36 w-36 flex items-center justify-center rounded-full bg-blue-100 border-4 border-blue-300 shadow-lg overflow-hidden ring-4 ring-white">
               <img
-                className="h-40 w-40 rounded-full object-cover border-4 border-blue-200 shadow"
-                src={user.profileImage}
-                alt="User Avatar"
-                onError={e => { e.target.onerror = null; e.target.src = ''; }}
+                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=3b82f6&color=fff&size=160`}
+                alt="Doctor Avatar"
+                className="h-full w-full object-cover"
               />
-            ) : (
-              <div className="h-40 w-40 flex items-center justify-center rounded-full bg-blue-100 border-4 border-blue-200 shadow">
-                <User size={80} className="text-blue-400" />
-              </div>
-            )}
-            <div className="mt-4 text-center">
-              <div className="text-lg font-semibold text-gray-800">{user.firstName} {user.lastName}</div>
-              <div className="text-sm text-gray-500">{user.email}</div>
-              <div className="text-sm text-gray-500">{user.phone}</div>
             </div>
-            {/* No global edit button, edit per field */}
           </div>
-          <div className="flex-1 w-full">
-            <div className="flex flex-col gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">First Name</label>
-                {editField === 'firstName' ? (
-                  <div className="flex gap-2 items-center mt-1">
-                    <input
-                      type="text"
-                      name="firstName"
-                      value={user.firstName}
-                      onChange={handleChange}
-                      className="block w-full border rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs" onClick={() => handleSaveField('firstName')} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
-                    <button className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs" onClick={handleCancelField} disabled={loading}>Cancel</button>
-                  </div>
-                ) : (
-                  <div
-                className="mt-1 text-gray-900 group flex items-center gap-1 border border-gray-200 rounded transition bg-white min-h-[56px] px-4 py-3"
+          {/* Name, Email, Phone on the right */}
+          <div className="mt-0 text-left space-y-2 z-10 flex-1">
+            {/* Editable First Name & Last Name */}
+            <div className="text-2xl font-bold text-blue-800 flex items-center gap-2 flex-wrap min-h-[40px]">
+              {editField === "firstName" ? (
+                <div className="flex items-center gap-1">
+                  <input
+                    ref={firstNameRef}
+                    className="border-b-2 border-blue-400 bg-blue-50 px-1 py-0.5 rounded text-blue-900 font-bold w-40 min-w-[120px]"
+                    value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={handleInputKey}
+                    disabled={editLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={saveEdit}
+                    className="btn btn-success btn-sm btn-circle ml-1"
+                    aria-label="Save edit"
+                    title="Save"
+                    disabled={editLoading}
                   >
-                    <span className="flex-1">{user.firstName}</span>
-                    <button
-                      type="button"
-                      className="ml-1 p-1 rounded hover:bg-blue-50 transition flex-shrink-0"
-                      onClick={() => setEditField('firstName')}
-                      tabIndex={0}
-                      aria-label="Edit first name"
-                    >
-                      <Pencil size={15} className="text-blue-400 opacity-80 group-hover:opacity-100 transition" />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Last Name</label>
-                {editField === 'lastName' ? (
-                  <div className="flex gap-2 items-center mt-1">
-                    <input
-                      type="text"
-                      name="lastName"
-                      value={user.lastName}
-                      onChange={handleChange}
-                      className="block w-full border rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                    />
-                    <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs" onClick={() => handleSaveField('lastName')} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
-                    <button className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs" onClick={handleCancelField} disabled={loading}>Cancel</button>
-                  </div>
-                ) : (
-                  <div
-                className="mt-1 text-gray-900 group flex items-center gap-1 border border-gray-200 rounded transition bg-white min-h-[56px] px-4 py-3"
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                    className="btn btn-error btn-sm btn-circle ml-1"
+                    tabIndex={-1}
+                    aria-label="Cancel edit"
+                    title="Cancel"
+                    disabled={editLoading}
                   >
-                    <span className="flex-1">{user.lastName || <span className="text-transparent select-none">Placeholder</span>}</span>
-                    <button
-                      type="button"
-                      className="ml-1 p-1 rounded hover:bg-blue-50 transition flex-shrink-0"
-                      onClick={() => setEditField('lastName')}
-                      tabIndex={0}
-                      aria-label="Edit last name"
-                    >
-                      <Pencil size={15} className="text-blue-400 opacity-80 group-hover:opacity-100 transition" />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Address</label>
-                {editField === 'address' ? (
-                  <div className="flex gap-2 items-center mt-1">
-                    <textarea
-                      name="address"
-                      value={user.address}
-                      onChange={handleChange}
-                      className="block w-full border rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                      rows={2}
-                    />
-                    <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs" onClick={() => handleSaveField('address')} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
-                    <button className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs" onClick={handleCancelField} disabled={loading}>Cancel</button>
-                  </div>
-                ) : (
-                  <div
-                className="mt-1 text-gray-900 group flex items-center gap-1 border border-gray-200 rounded transition bg-white min-h-[56px] px-4 py-3"
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <span>{doctor.firstName}</span>
+                  <button
+                    type="button"
+                    onClick={() => startEdit("firstName", doctor.firstName)}
+                    className="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100"
+                    aria-label="Edit first name"
+                    title="Edit first name"
+                    style={{ padding: 0 }}
                   >
-                    <span className="flex-1">{user.address || <span className="text-transparent select-none">Placeholder</span>}</span>
-                    <button
-                      type="button"
-                      className="ml-1 p-1 rounded hover:bg-blue-50 transition flex-shrink-0"
-                      onClick={() => setEditField('address')}
-                      tabIndex={0}
-                      aria-label="Edit address"
-                    >
-                      <Pencil size={15} className="text-blue-400 opacity-80 group-hover:opacity-100 transition" />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Specialties</label>
-                {editField === 'specialties' ? (
-                  <div>
-                    <div className="relative" ref={specialtyRef}>
-                      {/* Chips for selected specialties */}
-                      <div className="flex flex-wrap gap-2 mb-2">
-                        {user.specialties.map(s => (
-                          <span key={s.id} className="flex items-center bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">
-                            {s.name}
-                            <button type="button" className="ml-1 text-blue-400 hover:text-blue-700" onClick={async () => await handleRemoveSpecialty(s.id)}>
-                              <X size={14} />
-                            </button>
-                          </span>
-                        ))}
-                      </div>
-                      <div className="flex gap-2 items-center">
-                        <input
-                          type="text"
-                          name="specialty"
-                          autoComplete="off"
-                          value={specialtyInput}
-                          onChange={handleSpecialtyInput}
-                          onFocus={() => setShowSpecialtyDropdown(true)}
-                          className="mt-1 block w-full border rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                          placeholder="Type or select specialty"
-                          onKeyDown={async (e) => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              await handleAddSpecialtyByName();
-                            }
-                          }}
-                        />
-                        <button
-                          type="button"
-                          className="mt-1 px-3 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 text-xs"
-                          onClick={handleAddSpecialtyByName}
-                          disabled={!specialtyInput.trim()}
-                        >
-                          Add
-                        </button>
-                      </div>
-                      {showSpecialtyDropdown && specialtyInput && (
-                        <ul className="absolute z-10 left-0 right-0 bg-white border border-gray-200 rounded shadow mt-1 max-h-40 overflow-y-auto">
-                          {specialties.filter(s => s.name.toLowerCase().includes(specialtyInput.toLowerCase()) && !user.specialties.some(sel => String(sel.id) === String(s.id))).length > 0 ? (
-                            specialties.filter(s => s.name.toLowerCase().includes(specialtyInput.toLowerCase()) && !user.specialties.some(sel => String(sel.id) === String(s.id))).map(s => (
-                              <li
-                                key={s.id}
-                                className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
-                                onClick={async () => await handleSpecialtySelect(s)}
-                              >
-                                {s.name}
-                              </li>
-                            ))
-                          ) : (
-                            <li className="px-4 py-2 text-gray-500">No match. Will create new specialty.</li>
-                          )}
-                        </ul>
-                      )}
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                className="mt-1 text-gray-900 group border border-gray-200 rounded transition bg-white min-h-[56px] flex items-center px-4 py-3"
-                    style={{ minHeight: 56 }}
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                </span>
+              )}
+              {editField === "lastName" ? (
+                <div className="flex items-center gap-1">
+                  <input
+                    ref={lastNameRef}
+                    className="border-b-2 border-blue-400 bg-blue-50 px-1 py-0.5 rounded text-blue-900 font-bold w-40 min-w-[120px]"
+                    value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={handleInputKey}
+                    disabled={editLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={saveEdit}
+                    className="btn btn-success btn-sm btn-circle ml-1"
+                    aria-label="Save edit"
+                    title="Save"
+                    disabled={editLoading}
                   >
-                    <div className="flex flex-wrap gap-2 flex-1 items-center min-h-[24px]">
-                      {user.specialties && user.specialties.length > 0 ? (
-                        user.specialties.map(s => (
-                          <span key={s.id} className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs">{s.name}</span>
-                        ))
-                      ) : (
-                        <span className="text-gray-400 select-none">No specialties</span>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      className="ml-1 p-1 rounded hover:bg-blue-50 transition flex-shrink-0"
-                      onClick={() => setEditField('specialties')}
-                      tabIndex={0}
-                      aria-label="Edit specialties"
-                    >
-                      <Pencil size={15} className="text-blue-400 opacity-80 group-hover:opacity-100 transition" />
-                    </button>
-                  </div>
-                )}
-              </div>
-              <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-gray-700">Bio</label>
-                {editField === 'bio' ? (
-                  <div className="flex gap-2 items-center mt-1">
-                    <textarea
-                      name="bio"
-                      value={user.bio}
-                      onChange={handleChange}
-                      className="block w-full border rounded px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500 resize-none"
-                      rows={3}
-                    />
-                    <button className="px-3 py-1 bg-blue-600 text-white rounded text-xs" onClick={() => handleSaveField('bio')} disabled={loading}>{loading ? 'Saving...' : 'Save'}</button>
-                    <button className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs" onClick={handleCancelField} disabled={loading}>Cancel</button>
-                  </div>
-                ) : (
-                  <div
-                className="mt-1 text-gray-900 group flex items-center gap-1 border border-gray-200 rounded transition bg-white min-h-[56px] px-4 py-3"
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                    className="btn btn-error btn-sm btn-circle ml-1"
+                    tabIndex={-1}
+                    aria-label="Cancel edit"
+                    title="Cancel"
+                    disabled={editLoading}
                   >
-                    <span className="flex-1">{user.bio || <span className="text-transparent select-none">Placeholder</span>}</span>
-                    <button
-                      type="button"
-                      className="ml-1 p-1 rounded hover:bg-blue-50 transition flex-shrink-0"
-                      onClick={() => setEditField('bio')}
-                      tabIndex={0}
-                      aria-label="Edit bio"
-                    >
-                      <Pencil size={15} className="text-blue-400 opacity-80 group-hover:opacity-100 transition" />
-                    </button>
-                  </div>
-                )}
-              </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <span>{doctor.lastName}</span>
+                  <button
+                    type="button"
+                    onClick={() => startEdit("lastName", doctor.lastName)}
+                    className="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100"
+                    aria-label="Edit last name"
+                    title="Edit last name"
+                    style={{ padding: 0 }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                </span>
+              )}
             </div>
-            {/* No global Save/Cancel, handled per-field */}
-            {error && <div className="text-red-500 mt-4">{error}</div>}
-            {success && <div className="text-green-600 mt-4">{success}</div>}
+            {/* Email (not editable) */}
+            <div className="text-base text-gray-500 break-all min-h-[40px] flex items-center">{email}</div>
+            {/* Editable Phone */}
+            <div className="text-base text-gray-500 min-h-[40px] flex items-center">
+              {editField === "phone" ? (
+                <div className="flex items-center gap-1">
+                  <input
+                    ref={phoneRef}
+                    className="border-b-2 border-blue-400 bg-blue-50 px-1 py-0.5 rounded text-blue-900 w-32"
+                    value={editValue}
+                    onChange={e => setEditValue(e.target.value)}
+                    onKeyDown={handleInputKey}
+                    disabled={editLoading}
+                  />
+                  <button
+                    type="button"
+                    onClick={saveEdit}
+                    className="btn btn-success btn-sm btn-circle ml-1"
+                    aria-label="Save edit"
+                    title="Save"
+                    disabled={editLoading}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={cancelEdit}
+                    className="btn btn-error btn-sm btn-circle ml-1"
+                    tabIndex={-1}
+                    aria-label="Cancel edit"
+                    title="Cancel"
+                    disabled={editLoading}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                  </button>
+                </div>
+              ) : (
+                <span className="flex items-center gap-1">
+                  <span>{phone}</span>
+                  <button
+                    type="button"
+                    onClick={() => startEdit("phone", phone)}
+                    className="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100"
+                    aria-label="Edit phone"
+                    title="Edit phone"
+                    style={{ padding: 0 }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+        {/* Divider */}
+        <div className="border-t border-blue-100 mx-6 mb-2" />
+        {/* Profile details */}
+        <div className="flex flex-col md:flex-row gap-10 items-start px-6 pb-10">
+          <div className="flex-1 w-full space-y-7">
+            {/* Editable Address */}
+            <div>
+              <div className="flex gap-1 mb-1 min-h-[24px] items-center justify-between">
+                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">Address</span>
+                {editField === "address" ? (
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={saveEdit}
+                    className="btn btn-success btn-xs btn-circle btn-ghost"
+                      aria-label="Save edit"
+                      title="Save"
+                      disabled={editLoading}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEdit}
+                    className="btn btn-error btn-xs btn-circle btn-ghost"
+                      tabIndex={-1}
+                      aria-label="Cancel edit"
+                      title="Cancel"
+                      disabled={editLoading}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => startEdit("address", address)}
+                    className="btn btn-ghost btn-circle btn-xs ml-1"
+                    aria-label="Edit address"
+                    title="Edit address"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                )}
+              </div>
+              {editField === "address" ? (
+                <input
+                  type="text"
+                  ref={addressRef}
+                  className="border border-blue-100 bg-blue-50 p-3 rounded-lg text-blue-900 w-full text-base shadow-sm align-middle"
+                  value={editValue}
+                  onChange={e => setEditValue(e.target.value)}
+                  // onBlur removed to prevent auto-save on outside click
+                  onKeyDown={handleInputKey}
+                  disabled={editLoading}
+                  style={{height: 'auto', minHeight: 'unset', lineHeight: '1.5'}}
+                />
+              ) : (
+                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[40px]">{address}</div>
+              )}
+            </div>
+            {/* Specialties (editable) */}
+            <div>
+              <div className="flex items-center mb-1 gap-1 justify-between">
+                <div className="text-sm font-semibold text-blue-700">Specialties</div>
+                {editSpecialties ? (
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                    className="btn btn-success btn-xs btn-circle btn-ghost"
+                      disabled={savingSpecialties}
+                      onClick={async () => {
+                        setSavingSpecialties(true);
+                        if (onSpecialtiesSave) {
+                          await onSpecialtiesSave(pendingSpecialties.map(s => s.id));
+                        }
+                        setSavingSpecialties(false);
+                        setEditSpecialties(false);
+                      }}
+                      aria-label="Save specialties"
+                      title="Save"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    </button>
+                    <button
+                      type="button"
+                    className="btn btn-error btn-xs btn-circle btn-ghost"
+                      disabled={savingSpecialties}
+                      onClick={() => setEditSpecialties(false)}
+                      aria-label="Cancel specialties"
+                      title="Cancel"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-xs btn-circle ml-1"
+                    aria-label="Edit specialties"
+                    title="Edit specialties"
+                    onClick={() => {
+                      setEditSpecialties(true);
+                      setPendingSpecialties(
+                        specialties.map(s =>
+                          s.Specialty
+                            ? { id: s.Specialty.id, name: s.Specialty.name }
+                            : { id: s.id, name: s.name }
+                        )
+                      );
+                    }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                )}
+              </div>
+              {editSpecialties ? (
+                <div className="p-3 rounded-lg bg-blue-50 border border-blue-100 shadow-sm relative">
+                  <SpecialtySelector
+                    selected={pendingSpecialties}
+                    onChange={setPendingSpecialties}
+                    disabled={savingSpecialties}
+                  />
+                </div>
+              ) : (
+                <div className="flex flex-wrap gap-2">
+                  {specialties.length > 0
+                    ? specialties.map((s, i) => (
+                        <span key={s.specialtyId || s.Specialty?.id || i} className="bg-blue-200/80 text-blue-900 px-3 py-1 rounded-full text-xs font-medium shadow">
+                          {s.Specialty?.name || s.Specialty?.id || "Unknown"}
+                        </span>
+                      ))
+                    : <span className="text-gray-400">No specialties</span>}
+                </div>
+              )}
+            </div>
+            {/* Editable Bio */}
+            <div>
+              <div className="flex gap-1 mb-1 min-h-[24px] items-center justify-between">
+                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">Bio</span>
+                {editField === "bio" ? (
+                  <div className="flex gap-1">
+                    <button
+                      type="button"
+                      onClick={saveEdit}
+                    className="btn btn-success btn-xs btn-circle btn-ghost"
+                      aria-label="Save edit"
+                      title="Save"
+                      disabled={editLoading}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={cancelEdit}
+                    className="btn btn-error btn-xs btn-circle btn-ghost"
+                      tabIndex={-1}
+                      aria-label="Cancel edit"
+                      title="Cancel"
+                      disabled={editLoading}
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                    </button>
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => startEdit("bio", bio)}
+                    className="btn btn-ghost btn-circle btn-xs ml-1"
+                    aria-label="Edit bio"
+                    title="Edit bio"
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
+                  </button>
+                )}
+              </div>
+              {editField === "bio" ? (
+                <textarea
+                  ref={bioRef}
+                  className="border border-blue-100 bg-blue-50 p-3 rounded-lg text-blue-900 w-full text-base shadow-sm min-h-[56px] h-[56px] resize-none"
+                  value={editValue}
+                  onChange={e => setEditValue(e.target.value)}
+                  // onBlur removed to prevent auto-save on outside click
+                  onKeyDown={handleInputKey}
+                  disabled={editLoading}
+                />
+              ) : (
+                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[56px] whitespace-pre-line">{bio}</div>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -466,4 +425,4 @@ function DoctorProfile({ profile, doctorId }) {
   );
 }
 
-export default DoctorProfile
+export default DoctorProfile;
