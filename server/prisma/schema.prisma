@@ -284,8 +284,8 @@ model CallLog {
   startTime       DateTime    @default(now())
   endTime         DateTime?
   durationMinutes Int?
-  status          CallStatus         @default(COMPLETED) 
-  webRTCSessionId Int?               
+  status          CallStatus  @default(COMPLETED)
+  webRTCSessionId Int?
 
   // Relationships
   Appointment   Appointment    @relation(fields: [appointmentId], references: [id])
