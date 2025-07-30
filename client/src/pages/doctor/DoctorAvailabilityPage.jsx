@@ -210,13 +210,6 @@ function DoctorAvailabilityPage() {
                   <p className="text-gray-400">No slots available</p>
                 )}
             </div>
-            <button
-              onClick={() => navigate("/appointment", { state: { doctorId: doctor.id } })}
-              className="btn btn-info text-white"
-            >
-              จองเลย
-            </button>
-          </div>
 
           <button
             onClick={() => {navigate("/appointment"), setDoctorId(doctor.id); }}
