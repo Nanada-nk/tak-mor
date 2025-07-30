@@ -2,8 +2,18 @@ import React, { useState } from 'react'
 import Brandner from '../../components/Brandner'
 import { Search, MapPin, Calendar, ChevronDown } from 'lucide-react'
 import PricingFilter from '../../components/DoctorList/PricingFilter';
+import DoctorCardList from '../../components/DoctorList/DoctorCardList';
+import Pagination from '../../components/Pagination';
 
 function DoctorList() {
+
+    const totalNewsItems = 50;
+    const itemsPerPage = 8;
+    const currentPage = 1;
+    const handlePageChange = (page) => {
+        console.log("Changing to page:", page);
+
+    };
     const initialSpecialties = [
         { id: 1, name: 'Urology', count: 21, checked: true },
         { id: 2, name: 'Psychiatry', count: 21, checked: false },
@@ -184,9 +194,9 @@ function DoctorList() {
                 </div>
             </div>
 
-            <div>
-                <div>
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+            <div className='flex justify-between px-15 '>
+                <div className='w-1/4'>
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         <h2 class="text-2xl font-bold text-gray-800 mb-4">ค้นหา</h2>
 
                         <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden join-mb3">
@@ -205,7 +215,7 @@ function DoctorList() {
                         </div>
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionSpecialities}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">Specialities</h3>
@@ -251,7 +261,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionGender}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">เพศ</h3>
@@ -284,7 +294,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionAvailability}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">ว่างช่วง</h3>
@@ -317,13 +327,9 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div className="max-w-xl mx-auto bg-white rounded-lg shadow border border-gray-300 w-[400px]">
-                        <div className=""> {/* กำหนดความกว้างของ component */}
-                            <PricingFilter />
-                        </div>
-                    </div>
+                    
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionExperience}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">ความเชี่ยวชาญ</h3>
@@ -356,7 +362,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionClinics}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">Clinics</h3>
@@ -388,7 +394,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionConsultationType}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">ติดต่อ</h3>
@@ -418,7 +424,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionLanguages}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">ภาษา</h3>
@@ -448,7 +454,7 @@ function DoctorList() {
                         )}
                     </div>
 
-                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
+                    <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         {/* Header "Specialities" with dropdown arrow */}
                         <div className="flex justify-between items-center mb-4 cursor-pointer" onClick={toggleExpansionRatings}> {/* <-- NEW: เพิ่ม onClick ตรงนี้ */}
                             <h3 className="text-xl font-bold text-gray-800">คะแนน</h3>
@@ -480,20 +486,32 @@ function DoctorList() {
 
                 </div>
 
-                <div>
+                <div className='w-3/4'>
+                    <div className='flex'>
                         <div>
-                            <div>
-                                <h2>Showing 450 Doctor For Yor</h2>
-                            </div>
-                            <div>
-                                <h1>Availability</h1>
-                                <input type="checkbox" defaultChecked className="toggle" />
-                                
-                            </div>
+                            <h2>Showing 450 Doctor For Yor</h2>
                         </div>
-                        <div>
+                        <div className='flex'>
+                            <h1>Availability</h1>
+                            <input type="checkbox" defaultChecked className="toggle" />
 
                         </div>
+                    </div>
+                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 '>
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+                        <DoctorCardList showButton="true" />
+
+                    </div>
+                    <div className="flex justify-center my-8">
+                        <Pagination totalItems={totalNewsItems} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={handlePageChange} />
+                    </div>
                 </div>
 
 
