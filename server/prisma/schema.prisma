@@ -24,6 +24,14 @@ model Account {
   Doctor               Doctor?
   Patient              Patient?
   RefreshToken         RefreshToken?
+
+  // Telemedicine
+  SentMessages      ChatMessage[]  @relation(name: "SentMessages")
+  ReceivedMessages  ChatMessage[]  @relation(name: "ReceivedMessages")
+  Notifications     Notification[]
+  CallLogsInitiated CallLog[]      @relation(name: "InitiatedCalls")
+  CallLogsReceived  CallLog[]      @relation(name: "ReceivedCalls")
+
 }
 
 model Appointment {
@@ -47,6 +55,10 @@ model Appointment {
   AppointmentSummary AppointmentSummary?
   MedicalFile        MedicalFile[]
   WebRTCSession      WebRTCSession?
+
+  // Telemedicine
+  ChatMessages ChatMessage[]
+  CallLogs     CallLog[]
 
   @@index([doctorId], map: "Appointment_doctorId_fkey")
   @@index([patientId], map: "Appointment_patientId_fkey")
@@ -193,7 +205,70 @@ model WebRTCSession {
   isActive      Boolean     @default(true)
   createdAt     DateTime    @default(now())
   endedAt       DateTime?
+  sessionType   SessionType      @default(VIDEO)
+  callDuration  Int?
+  CallLog       CallLog[]
   Appointment   Appointment @relation(fields: [appointmentId], references: [id])
+}
+
+model ChatMessage {
+  id                Int      @id @default(autoincrement())
+  appointmentId     Int
+  senderId          Int
+  receiverId        Int?
+  messageContent    String
+  timestamp         DateTime @default(now())
+  isRead            Boolean @default(false)
+  messageType       MessageType @default(TEXT)
+  mediaUrl          String?
+
+  // Relationships
+  Appointment       Appointment @relation(fields: [appointmentId], references: [id])
+  Sender            Account @relation(name: "SentMessages",fields: [senderId], references: [id])
+  Receiver          Account? @relation(name: "ReceivedMessages",fields: [receiverId], references: [id])
+
+  @@index([appointmentId])
+  @@index([senderId])
+  @@index([receiverId])
+}
+
+model Notification {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  type            NotificationType @default(GENERAL)
+  message         String
+  isRead          Boolean @default(false)
+  createdAt       DateTime @default(now())
+  relatedEntityId Int?
+
+  // Relationship
+  UserAccount     Account @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model CallLog {
+  id              Int                @id @default(autoincrement())
+  appointmentId   Int               
+  callerId        Int                
+  receiverId      Int                
+  callType        SessionType        
+  startTime       DateTime           @default(now())
+  endTime         DateTime?
+  durationMinutes Int?
+  status          CallStatus         @default(COMPLETED) 
+  webRTCSessionId Int?               @unique
+
+  // Relationships
+  Appointment     Appointment        @relation(fields: [appointmentId], references: [id])
+  Caller          Account            @relation(name: "InitiatedCalls", fields: [callerId], references: [id])
+  Receiver        Account            @relation(name: "ReceivedCalls", fields: [receiverId], references: [id])
+  WebRTCSession   WebRTCSession?     @relation(fields: [webRTCSessionId], references: [id])
+
+  @@index([appointmentId])
+  @@index([callerId])
+  @@index([receiverId])
+  
 }
 
 model WebhookLog {
@@ -223,4 +298,34 @@ enum Appointment_status {
   CONFIRMED
   COMPLETED
   CANCELLED
+}
+
+enum SessionType {
+  VIDEO
+  AUDIO
+  CHAT
+}
+
+enum MessageType {
+  TEXT
+  IMAGE
+  FILE
+  SYSTEM
+}
+
+enum CallStatus {
+  COMPLETED
+  MISSED
+  FAILED
+  ONGOING
+  SCHEDULED
+}
+
+enum NotificationType {
+  GENERAL
+  CALL_STARTED
+  NEW_MESSAGE
+  APPOINTMENT_REMINDER
+  APPOINTMENT_CONFIRMED
+  APPOINTMENT_CANCELLED
 }
