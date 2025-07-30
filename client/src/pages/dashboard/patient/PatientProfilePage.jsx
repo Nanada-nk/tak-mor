@@ -1,7 +1,7 @@
 // /** @format */
 
 // import { useEffect, useState } from "react";
-import PatientProfile from "../../../components/profile/patientProfile";
+import PatientProfile from "../../../components/profile/PatientProfile";
 // import { Link } from "react-router";
 // import { BubblesIcon } from "lucide-react";
 // import authStore from "../../../stores/authStore.js";

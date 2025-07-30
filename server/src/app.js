@@ -20,7 +20,7 @@ import './config/passport.js';
 import patientRouter from './routes/patient.route.js'
 import appointmentRouter from './routes/appointment.route.js'
 import http from 'http'
-import teleRouter from './routes/tele.route.js'
+// import teleRouter from './routes/tele.route.js'
 
 
 const app = express()
@@ -73,7 +73,7 @@ app.use('/api/patient', patientRouter);
 app.use('/api/appointment', appointmentRouter);
 // app.use('/api/tele', ()=>{});
 // app.use('/api/patient', ()=>{});
-app.use('/api/tele', teleRouter);
+// app.use('/api/tele', teleRouter);
 // app.use('/api/prescription', ()=>{});
 // app.use('/api/booking', ()=>{});
 // app.use('/api/news', ()=>{});
