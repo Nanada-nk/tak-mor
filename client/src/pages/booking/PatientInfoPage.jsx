@@ -130,11 +130,7 @@ const handleSubmit = async () => {
   const selectedDate = dateTime?.date || null;
   const selectedTime = dateTime?.time || null;
   return (
-<<<<<<< HEAD
-   <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)] font-prompt">
-=======
    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full font-prompt">
->>>>>>> 4fd5c2ff6c62651d2d12ff122f9a5889ccd7664b
          <div className="h-1/7 w-full flex items-center justify-center">
            <ul className="steps h-full">
              <li data-content="✓" className="step step-primary step-success">Specialty</li>
