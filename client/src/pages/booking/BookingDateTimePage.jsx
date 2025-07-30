@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import { useState, useEffect } from "react";
 import { PinIcon, StarIcon } from "../../components/icons";
 import useBookingStore from "../../stores/bookingStore";
@@ -17,7 +17,7 @@ function BookingDateTimePage() {
     selectedDate,
     selectedTime,
     appointmentType,
-    clinic,
+    hospital,
     setSelectedDate,
     setSelectedTime
   } = useBookingStore();
@@ -166,6 +166,12 @@ function BookingDateTimePage() {
                 </p>
               )}
             </div>
+            {/* <BookingTimeSlots
+              slotsByPeriod={slotsByPeriod}
+              selectedTime={selectedTime}
+              onTimeClick={handleTimeClick}
+              disabled={!selectedDate}
+            /> */}
           </div>
         </div>
         <div className="h-1/10 flex justify-between items-center px-5">
