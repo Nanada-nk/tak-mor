@@ -2,11 +2,11 @@ import { DocFemaleIcon, HourIcon, ConsultationIcon, LabIcon } from "../icons/ind
 
 function WhyChooseUs() {
   return (
-    <div className="flex flex-col justify-center items-center h-100 w-[200px] sm:w-full">
-      <p className="font-bold text-3xl text-center">
+    <div className="flex flex-col justify-center items-center md:h-100 w-full">
+      <p className="font-bold text-lg md:text-xl lg:text-3xl text-center">
         ทำไมต้องเลือกใช้บริการของเรา
       </p>
-      <div className="flex gap-12">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 sm:gap-4 md:gap-6 justify-items-center">
         <div className="w-60 h-60 rounded-xl shadow-xl flex flex-col gap-4 justify-center items-center mt-15 px-1.5">
           <div className="w-12 h-12 rounded-full flex justify-center items-center bg-[#0E82FD]">
             <DocFemaleIcon className="w-7" />
