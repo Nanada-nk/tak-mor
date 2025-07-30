@@ -21,7 +21,7 @@ function NewsContentPage() {
     tags: ['Health Tips', 'Awareness', 'Health', 'Wellness'],
   };
   return (
-    <div>
+    <div className="font-prompt">
 
       <Brandner title="ข่าว" />
 

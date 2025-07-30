@@ -11,7 +11,7 @@ import StepSection from "./landing/StepSection.jsx";
 
 function HomePage() {
   return (
-    <div className="bg-pri-wh">
+    <div className="bg-pri-wh font-prompt">
       <main className="space-y-16 sm:space-y-20 lg:space-y-24">
         <HeroSection />
         <CategorySection />

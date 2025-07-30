@@ -58,7 +58,7 @@ function DoctorManagementPage() {
   };
 
   return (
-    <div className="p-6 max-w-xl mx-auto">
+    <div className="p-6 max-w-xl mx-auto font-prompt">
       <h1 className="text-2xl font-bold mb-4">Doctor Slot Manager</h1>
 
       <div className="mb-4">

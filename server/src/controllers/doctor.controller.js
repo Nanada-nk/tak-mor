@@ -185,3 +185,4 @@ export const updateDoctorProfile = async (req, res, next) => {
     next(err);
   }
 };
+

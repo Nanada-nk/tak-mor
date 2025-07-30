@@ -96,6 +96,7 @@ useEffect(() => {
 }, [doctors, selectedDates]);
 
   return (
+
     <div>
       <div>
         <div>
@@ -150,6 +151,8 @@ useEffect(() => {
                     </div>
                 </div>
       </div>
+
+    <div className="font-prompt">
       {doctors.map(doctor => (
         <div key={doctor.id} className="mb-8 border rounded-xl p-4">
           <h2 className="text-xl font-semibold mb-2">
