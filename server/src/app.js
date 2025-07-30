@@ -17,6 +17,8 @@ import bookingRouter from './routes/booking.route.js'
 import doctorRouter from './routes/doctor.route.js'
 import specialtyRouter from './routes/specialty.route.js';
 import './config/passport.js';
+import patientRouter from './routes/patient.route.js'
+import appointmentRouter from './routes/appointment.route.js'
 
 
 const app = express()
@@ -65,7 +67,8 @@ app.use('/api/auth', authRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);
-// app.use('/api/patient', ()=>{});
+app.use('/api/patient', patientRouter);
+app.use('/api/appointment', appointmentRouter);
 // app.use('/api/tele', ()=>{});
 // app.use('/api/prescription', ()=>{});
 // app.use('/api/booking', ()=>{});

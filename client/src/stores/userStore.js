@@ -43,7 +43,11 @@ const userStore = create(
               firstName: currentUser.Doctor.firstName ?? '',
               lastName: currentUser.Doctor.lastName ?? '',
               bio: currentUser.Doctor.bio ?? '',
-              specialtyId: currentUser.Doctor.specialtyId ?? null,
+              specialties: currentUser.Doctor.specialties?.map(ds => ({
+                doctorId: ds.doctorId,
+                specialtyId: ds.specialtyId,
+                specialty: ds.Specialty ?? null,
+              })) ?? [],
               appointment: currentUser.Doctor.Appointment ?? [],
               account: currentUser.Doctor.Account ?? null,
               specialty: currentUser.Doctor.Specialty ?? null,
