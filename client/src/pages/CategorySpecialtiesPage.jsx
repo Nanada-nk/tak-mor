@@ -47,7 +47,7 @@ function CategorySpecialtiesPage() {
   ];
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col font-prompt">
       <Brandner title="แผนก" />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         {categories.map((category, index) => (

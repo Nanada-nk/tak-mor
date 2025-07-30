@@ -1,6 +1,8 @@
-import DoclistInternal from "./internalMedicine/DoclistInternal"
-import InternalHeroSection from "./internalMedicine/InternalHeroSection"
-import ServiceInternalSection from "./internalMedicine/ServiceInternalSection"
+import DocListInternal from "./internalMedicine/DocListInternal";
+import InternalHeroSection from "./internalMedicine/InternalHeroSection";
+import NewBlogInternal from "./internalMedicine/NewBlogInternal";
+import ServiceInternalSection from "./internalMedicine/ServiceInternalSection";
+import ReviewSection from "./landing/ReviewSection"
 
 function InternalMedicinePage() {
   return (
@@ -8,9 +10,11 @@ function InternalMedicinePage() {
       <main className="space-y-16 sm:space-y-20 lg:space-y-24">
         <InternalHeroSection />
         <ServiceInternalSection />
-        <DoclistInternal />
+        <DocListInternal />
+        <NewBlogInternal />
+        <ReviewSection/>
       </main>
     </div>
-  )
+  );
 }
-export default InternalMedicinePage
+export default InternalMedicinePage;

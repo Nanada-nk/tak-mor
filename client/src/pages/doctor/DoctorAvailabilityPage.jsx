@@ -4,6 +4,8 @@ import { debounce } from "lodash";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../../config/axios.js";
+import { Search , MapPin, Calendar} from "lucide-react";
+import Brandner from "../../components/Brandner.jsx";
 
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
@@ -94,8 +96,63 @@ useEffect(() => {
 }, [doctors, selectedDates]);
 
   return (
+
     <div>
-      <h1 className="text-2xl font-bold mb-4">Doctor Calendars</h1>
+      <div>
+        <div>
+                    <Brandner title='Doctor Calendars' />
+                </div>
+
+                <div className="relative bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10"> {/* -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                        {/* Search for Doctors, Hospitals, Clinics */}
+                        <div className="flex items-center flex-grow w-full sm:w-auto">
+                            <Search />
+                            <input
+                                type="text"
+                                placeholder="Search for Doctors"
+                                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            />
+                        </div>
+
+                        {/* Vertical Divider for larger screens */}
+                        <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
+
+                        {/* Location */}
+                        <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
+                            <MapPin />
+                            <input
+                                type="text"
+                                placeholder="Location"
+                                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            />
+                        </div>
+
+                        {/* Vertical Divider for larger screens */}
+                        <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
+
+                        {/* Date */}
+                        <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
+                            <Calendar />
+                            <input
+                                type="text"
+                                placeholder="Date"
+                                onFocus={(e) => (e.target.type = "date")} // เปลี่ยนเป็น type date เมื่อ focus
+                                onBlur={(e) => (e.target.type = "text")} // เปลี่ยนกลับเป็น type text เมื่อ blur
+                                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
+                            />
+                        </div>
+
+                        {/* Search Button */}
+                        <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">
+
+                            Search
+                        </button>
+                    </div>
+                </div>
+      </div>
+
+    <div className="font-prompt">
       {doctors.map(doctor => (
         <div key={doctor.id} className="mb-8 border rounded-xl p-4">
           <h2 className="text-xl font-semibold mb-2">
