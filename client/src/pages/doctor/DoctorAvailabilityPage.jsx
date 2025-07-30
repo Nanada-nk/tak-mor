@@ -4,8 +4,12 @@ import { debounce } from "lodash";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../../config/axios.js";
+<<<<<<< HEAD
+import useBookingStore from "../../stores/bookingStore.js";
+=======
 import { Search, MapPin, Calendar } from "lucide-react";
 import Brandner from "../../components/Brandner.jsx";
+>>>>>>> f61d514e005ff812725cbe5527280b1ddf35e85d
 
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
@@ -13,7 +17,7 @@ function DoctorAvailabilityPage() {
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
-
+ const setDoctorId = useBookingStore(state => state.setDoctorId);
   // Fetch all doctors on mount
   useEffect(() => {
     axiosInstance.get("/api/doctor")
@@ -94,6 +98,7 @@ function DoctorAvailabilityPage() {
     if (doctors.length === 0) return;
     fetchSlotsAndAvailability(doctors, selectedDates, setSlotsByDoctor, setFixedByDoctor);
   }, [doctors, selectedDates]);
+
 
   return (
 
@@ -214,8 +219,19 @@ function DoctorAvailabilityPage() {
               จองเลย
             </button>
           </div>
+<<<<<<< HEAD
+          <button
+            onClick={() => {navigate("/appointment"), setDoctorId(doctor.id); }}
+            className="btn btn-info text-white"
+          >
+            จองเลย
+          </button>
+        </div>
+      ))}
+=======
         ))}
       </div>
+>>>>>>> f61d514e005ff812725cbe5527280b1ddf35e85d
     </div>
   );
 }
