@@ -4,7 +4,7 @@ function StatisticalData({ boxOneUp = "0", boxOneDown = "0", boxTwoUp = "0", box
     return (
         <div>
             
-            <div className="stats shadow mx-2">
+            <div className="stats shadow w-210 h-30 bg-white mb-6">
                 <div className="stat">
                     <div className="stat-figure text-primary">
                         <svg

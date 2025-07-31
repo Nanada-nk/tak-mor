@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Chart as ChartJS, ArcElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend } from "chart.js";
 import { Pie, Line } from "react-chartjs-2";
+import StatisticalData from "./StatisticalData";
 
 ChartJS.register(ArcElement, LineElement, PointElement, CategoryScale, LinearScale, Tooltip, Legend);
 
@@ -86,6 +87,11 @@ function StatisticBigData() {
                     <div className="bg-white p-2 rounded-xl shadow w-80">
                         <h3 className="text-xl font-semibold mb-4">📊 Booking Types</h3>
                         <Pie data={pieData} />
+                    </div>
+                    <div className=''>
+                        <StatisticalData boxOneUp="Online Users" boxOneDown="450" boxTwoUp="Total Users" boxTwoDown="1200" boxTreeUp="Users with Bookings" boxTreeDown="300" />
+                        <StatisticalData boxOneUp="Online Doctor" boxOneDown="450" boxTwoUp="Total Doctor" boxTwoDown="1200" boxTreeUp="Doctor with Bookings" boxTreeDown="300" />
+                        <StatisticalData boxOneUp="Bookings Today" boxOneDown="450" boxTwoUp="Total Bookings" boxTwoDown="1200" boxTreeUp=" Bookings This Week" boxTreeDown="300" />
                     </div>
                 </div>
 
