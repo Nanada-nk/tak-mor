@@ -1,4 +1,55 @@
 import DoctorCardList from "../../components/DoctorList/DoctorCardList";
+
+const doctors = [
+  {
+    id: 1,
+    name: "พญ.ดาวเนอร์",
+    specialty: "แพทย์กระดูกและข้อ",
+    rating: 4.5,
+    reviews: 35,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer1.svg",
+  },
+  {
+    id: 2,
+    name: "นพ.เจมส์",
+    specialty: "แพทย์ระบบประสาทและสมอง",
+    rating: 3.8,
+    reviews: 29,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer2.svg",
+  },
+  {
+    id: 3,
+    name: "พญ.โรส",
+    specialty: "แพทย์กุมารเวช",
+    rating: 4,
+    reviews: 15,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer3.svg",
+  },
+  {
+    id: 4,
+    name: "พญ.เจมม่า",
+    specialty: "แพทย์อายุรกรรม",
+    rating: 5,
+    reviews: 30,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer1.svg",
+  },
+];
+
+
+
+
 function DocListInternal() {
   return (
     <div className="relative w-full font-prompt -top-50">
@@ -31,10 +82,21 @@ function DocListInternal() {
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full h-full max-w-6xl mt-5 mb-8">
-          <DoctorCardList showButton="true" />
-          <DoctorCardList showButton="true" />
-          <DoctorCardList showButton="true" />
-          <DoctorCardList showButton="true" />
+          {doctors.map((doctor) => (
+            <DoctorCardList
+              key={doctor.id}
+              showButton={true}
+              name={doctor.name}
+              specialty={doctor.specialty}
+              rating={doctor.rating}
+              reviews={doctor.reviews}
+              hospital={doctor.hospital}
+              status={doctor.status}
+              price={doctor.price}
+              imgSrc={doctor.imgSrc}
+              linkPath={`/doctor/${doctor.id}`}
+            />
+          ))}
         </div>
       </div>
     </div>

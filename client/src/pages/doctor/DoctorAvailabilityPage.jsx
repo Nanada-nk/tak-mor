@@ -9,7 +9,6 @@ import { Search, MapPin, Calendar, ChevronDown, BetweenHorizonalStart, LayoutTem
 import Brandner from "../../components/Brandner.jsx";
 import DoctorCardList from "../../components/DoctorList/DoctorCardList.jsx";
 
-
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState([]);
@@ -19,9 +18,10 @@ function DoctorAvailabilityPage() {
   const setDoctorId = useBookingStore(state => state.setDoctorId);
   // Fetch all doctors on mount
   useEffect(() => {
-    axiosInstance.get("/api/doctor")
-      .then(res => setDoctors(res.data))
-      .catch(err => console.error("Failed to fetch doctors:", err));
+    axiosInstance
+      .get("/api/doctor")
+      .then((res) => setDoctors(res.data))
+      .catch((err) => console.error("Failed to fetch doctors:", err));
   }, []);
 
   // Fetch slots and fixed availability for each doctor when their date changes
@@ -64,23 +64,27 @@ function DoctorAvailabilityPage() {
   const fetchSlotsAndAvailability = useRef(
     debounce((doctors, selectedDates, setSlotsByDoctor, setFixedByDoctor) => {
       Promise.all(
-        doctors.map(doc => {
+        doctors.map((doc) => {
           const dateObj = selectedDates[doc.id] || new Date();
-          const d = dateObj.toISOString().split('T')[0];
+          const d = dateObj.toISOString().split("T")[0];
           const dayOfWeek = dateObj.getDay();
-          const slotsPromise = axiosInstance.get(`/api/doctor/${doc.id}/slots?date=${d}`)
-            .then(res => Array.isArray(res.data) ? res.data : [])
+          const slotsPromise = axiosInstance
+            .get(`/api/doctor/${doc.id}/slots?date=${d}`)
+            .then((res) => (Array.isArray(res.data) ? res.data : []))
             .catch(() => []);
-          const fixedPromise = axiosInstance.get(`/api/doctor/${doc.id}/availability?dayOfWeek=${dayOfWeek}`)
-            .then(res => Array.isArray(res.data) ? res.data : [])
+          const fixedPromise = axiosInstance
+            .get(`/api/doctor/${doc.id}/availability?dayOfWeek=${dayOfWeek}`)
+            .then((res) => (Array.isArray(res.data) ? res.data : []))
             .catch(() => []);
-          return Promise.all([slotsPromise, fixedPromise]).then(([slots, fixed]) => ({
-            doctorId: doc.id,
-            slots,
-            fixed
-          }));
+          return Promise.all([slotsPromise, fixedPromise]).then(
+            ([slots, fixed]) => ({
+              doctorId: doc.id,
+              slots,
+              fixed,
+            })
+          );
         })
-      ).then(results => {
+      ).then((results) => {
         const slotsObj = {};
         const fixedObj = {};
         results.forEach(({ doctorId, slots, fixed }) => {
@@ -95,19 +99,24 @@ function DoctorAvailabilityPage() {
 
   useEffect(() => {
     if (doctors.length === 0) return;
-    fetchSlotsAndAvailability(doctors, selectedDates, setSlotsByDoctor, setFixedByDoctor);
+    fetchSlotsAndAvailability(
+      doctors,
+      selectedDates,
+      setSlotsByDoctor,
+      setFixedByDoctor
+    );
   }, [doctors, selectedDates]);
 
-
   return (
-
     <div>
       <div>
         <div>
-          <Brandner title='Doctor Calendars' />
+          <Brandner title="Doctor Calendars" />
         </div>
 
-        <div className="relative bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10"> {/* -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
+        <div className="relative bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10">
+          {" "}
+          {/* -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
           <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
             {/* Search for Doctors, Hospitals, Clinics */}
             <div className="flex items-center flex-grow w-full sm:w-auto">
@@ -149,7 +158,6 @@ function DoctorAvailabilityPage() {
 
             {/* Search Button */}
             <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">
-
               Search
             </button>
           </div>
