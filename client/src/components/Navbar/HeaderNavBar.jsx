@@ -34,7 +34,7 @@ function HeaderNavBar() {
 
   return (
   
-    <div className="font-prompt navbar bg-base-100 shadow-sm px-4 sm:px-6 lg:px-8 py-2 md:py-4">
+    <div className="navbar bg-base-100 shadow-sm px-4 sm:px-6 lg:px-8 py-2 md:py-4">
      
       
         <a onClick={navigateHome} className="hover:cursor-pointer">
