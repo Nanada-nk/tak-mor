@@ -18,11 +18,14 @@ function SpecialtySelector({ selected, onChange, disabled }) {
   // Defensive: Remove duplicates from selected
   const uniqueSelected = selected.filter((s, idx, arr) => arr.findIndex(x => x.id === s.id) === idx);
 
-  // Only show specialties not already selected
-  const filtered = allSpecialties.filter(s =>
-    s.name.toLowerCase().includes(search.toLowerCase()) &&
-    !uniqueSelected.some(sel => sel.id === s.id)
-  );
+  // Only show specialties not already selected, order by name, and limit to 5
+  const filtered = allSpecialties
+    .filter(s =>
+      s.name.toLowerCase().includes(search.toLowerCase()) &&
+      !uniqueSelected.some(sel => sel.id === s.id)
+    )
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .slice(0, 5);
 
   const addSpecialty = (spec) => {
     if (!selected.some(sel => sel.id === spec.id)) {
@@ -64,10 +67,11 @@ function SpecialtySelector({ selected, onChange, disabled }) {
           className="bg-blue-200/40 text-blue-900 px-2 py-1 rounded-full text-xs font-medium shadow border border-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-300 w-full transition-all duration-100"
           type="text"
           placeholder="Search specialties..."
-          value={search}
+          value={search || ""}
           onChange={e => setSearch(e.target.value)}
           disabled={disabled}
           style={{ minWidth: 0, height: '28px' }}
+          autoComplete="off"
         />
       </div>
       {loading ? (

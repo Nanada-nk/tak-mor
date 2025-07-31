@@ -66,9 +66,9 @@ function LoginPage() {
       if (user.role === 'ADMIN') {
         navigate("/admin/patientdashboard", { replace: true });
       } else if (user.role === 'DOCTOR') {
-        navigate("/doctorprofile", { replace: true });
+        navigate("/dashboard/doctor", { replace: true });
       } else {
-        navigate("/patientprofile", { replace: true });
+        navigate("/dashboard/patient/profile", { replace: true });
       }
     }
   }, [isLoggedIn, user, isLoading, navigate]);
