@@ -1,49 +1,62 @@
-import { useState } from "react";
 
-function PatientProfile() {
-  // Mock data for all Patient and PatientMedicalProfile fields
-  const profile = {
-    // Personal Info
-    hn: "45",
-    firstName: "James",
-    lastName: "Smith",
-    nationalId: "1234567890123",
-    birthDate: "2001-01-01",
-    gender: "Male",
-    address: "123 Main St, Springfield, USA",
-    // Emergency Contact
-    emergencyContactName: "Mary Smith",
-    emergencyContactPhone: "987-654-3210",
-    emergencyContactRelation: "Mother",
-    // Medical Info
-    height: "180",
-    weight: "75",
-    bloodType: "O+",
-    congenital: "None",
-    allergies: "Penicillin",
-    surgeries: "Appendectomy",
-    medications: "Ibuprofen",
-    medicalHistory: "Asthma"
-  };
+import { useState, useRef, useEffect } from "react";
 
+function PatientProfile({
+  profile,
+  editField,
+  editValue,
+  editLoading,
+  startEdit,
+  cancelEdit,
+  saveEdit,
+  setEditValue,
+  handleInputKey
+}) {
   const [tab, setTab] = useState("personal");
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const phoneRef = useRef(null);
+  const addressRef = useRef(null);
+  const heightRef = useRef(null);
+  const weightRef = useRef(null);
+  const bloodTypeRef = useRef(null);
+  const congenitalRef = useRef(null);
+  const allergiesRef = useRef(null);
+  const surgeriesRef = useRef(null);
+  const medicationsRef = useRef(null);
+  const medicalHistoryRef = useRef(null);
+
+  // Focus input when editing
+  useEffect(() => {
+    if (editField === "firstName_lastName" && firstNameRef.current) firstNameRef.current.focus();
+    if (editField === "phone" && phoneRef.current) phoneRef.current.focus();
+    if (editField === "address" && addressRef.current) addressRef.current.focus();
+    if (editField === "height" && heightRef.current) heightRef.current.focus();
+    if (editField === "weight" && weightRef.current) weightRef.current.focus();
+    if (editField === "bloodType" && bloodTypeRef.current) bloodTypeRef.current.focus();
+    if (editField === "congenital" && congenitalRef.current) congenitalRef.current.focus();
+    if (editField === "allergies" && allergiesRef.current) allergiesRef.current.focus();
+    if (editField === "surgeries" && surgeriesRef.current) surgeriesRef.current.focus();
+    if (editField === "medications" && medicationsRef.current) medicationsRef.current.focus();
+    if (editField === "medicalHistory" && medicalHistoryRef.current) medicalHistoryRef.current.focus();
+  }, [editField]);
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-8">
+        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
           {/* Profile Picture */}
-          <div className="flex flex-col items-center md:items-start md:w-1/3">
-            <div className="relative">
-              <div className="h-40 w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none">
+          <div className="flex flex-col items-center md:items-center md:w-1/4 pt-2">
+            <div className="relative flex flex-col items-center">
+              <div className="h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none">
                 <span className="text-6xl font-bold text-white">
-                  {profile.firstName?.[0]?.toUpperCase() || ''}{profile.lastName?.[0]?.toUpperCase() || ''}
+                  {profile?.firstName?.[0]?.toUpperCase() || ''}{profile?.lastName?.[0]?.toUpperCase() || ''}
                 </span>
               </div>
-            </div>
-            <div className="mt-4 text-center md:text-left">
-              <h1 className="text-2xl font-bold text-gray-800">{profile.firstName} {profile.lastName}</h1>
-              <p className="text-sm text-gray-500">Patient Profile</p>
+              <div className="mt-3 text-center">
+                <h1 className="text-2xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
+                <p className="text-sm text-gray-500">Patient Profile</p>
+              </div>
             </div>
           </div>
 
@@ -97,33 +110,132 @@ function PatientProfile() {
                   Personal Information
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="flex gap-4 md:col-span-2">
+                    <div className="flex-1">
+                      <label className="block text-xs font-medium text-gray-500">First Name</label>
+                      {editField === "firstName_lastName" ? (
+                        <input
+                          ref={firstNameRef}
+                          className="input input-sm w-full"
+                          value={editValue.firstName}
+                          onChange={e => setEditValue({ ...editValue, firstName: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="First Name"
+                        />
+                      ) : (
+                        <span className="text-gray-900 mt-1 font-medium">
+                          {profile?.firstName || '-'}
+                          {startEdit && (
+                            <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("firstName_lastName", { firstName: profile?.firstName, lastName: profile?.lastName })} title="Edit Name">
+                              ✎
+                            </button>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-xs font-medium text-gray-500">Last Name</label>
+                      {editField === "firstName_lastName" ? (
+                        <input
+                          ref={lastNameRef}
+                          className="input input-sm w-full"
+                          value={editValue.lastName}
+                          onChange={e => setEditValue({ ...editValue, lastName: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="Last Name"
+                        />
+                      ) : (
+                        <span className="text-gray-900 mt-1 font-medium">
+                          {profile?.lastName || '-'}
+                        </span>
+                      )}
+                    </div>
+                    {editField === "firstName_lastName" && (
+                      <div className="flex items-center gap-2 ml-2">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
+                  </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">HN</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.hn}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.hn || '-'}</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">First Name</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.firstName}</p>
+                    <label className="block text-xs font-medium text-gray-500">Email</label>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.email || '-'}</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Last Name</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.lastName}</p>
+                    <label className="block text-xs font-medium text-gray-500">Phone</label>
+                    {editField === "phone" ? (
+                      <input
+                        ref={phoneRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Phone"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.phone || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("phone", profile?.phone)} title="Edit Phone">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "phone" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">National ID</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.nationalId}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.nationalId || '-'}</span>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Birth Date</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.birthDate}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.birthDate || '-'}</span>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Gender</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.gender}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.gender || '-'}</span>
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-xs font-medium text-gray-500">Address</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.address}</p>
+                    {editField === "address" ? (
+                      <input
+                        ref={addressRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Address"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.address || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("address", profile?.address)} title="Edit Address">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "address" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -137,15 +249,15 @@ function PatientProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Name</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.emergencyContactName}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactName || '-'}</span>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Phone</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.emergencyContactPhone}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactPhone || '-'}</span>
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-xs font-medium text-gray-500">Relation</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.emergencyContactRelation}</p>
+                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactRelation || '-'}</span>
                   </div>
                 </div>
               </div>
@@ -160,35 +272,235 @@ function PatientProfile() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Height (cm)</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.height}</p>
+                    {editField === "height" ? (
+                      <input
+                        ref={heightRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Height"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.height || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("height", profile?.height)} title="Edit Height">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "height" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Weight (kg)</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.weight}</p>
+                    {editField === "weight" ? (
+                      <input
+                        ref={weightRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Weight"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.weight || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("weight", profile?.weight)} title="Edit Weight">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "weight" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Blood Type</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.bloodType}</p>
+                    {editField === "bloodType" ? (
+                      <input
+                        ref={bloodTypeRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Blood Type"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.bloodType || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("bloodType", profile?.bloodType)} title="Edit Blood Type">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "bloodType" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Congenital Diseases</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.congenital}</p>
+                    {editField === "congenital" ? (
+                      <input
+                        ref={congenitalRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Congenital Diseases"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.congenital || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("congenital", profile?.congenital)} title="Edit Congenital Diseases">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "congenital" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Allergies</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.allergies}</p>
+                    {editField === "allergies" ? (
+                      <input
+                        ref={allergiesRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Allergies"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.allergies || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("allergies", profile?.allergies)} title="Edit Allergies">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "allergies" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Surgeries</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.surgeries}</p>
+                    {editField === "surgeries" ? (
+                      <input
+                        ref={surgeriesRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Surgeries"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.surgeries || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("surgeries", profile?.surgeries)} title="Edit Surgeries">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "surgeries" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Medications</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.medications}</p>
+                    {editField === "medications" ? (
+                      <input
+                        ref={medicationsRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Medications"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.medications || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("medications", profile?.medications)} title="Edit Medications">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "medications" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-xs font-medium text-gray-500">Medical History</label>
-                    <p className="text-gray-900 mt-1 font-medium">{profile.medicalHistory}</p>
+                    {editField === "medicalHistory" ? (
+                      <input
+                        ref={medicalHistoryRef}
+                        className="input input-sm w-full"
+                        value={editValue}
+                        onChange={e => setEditValue(e.target.value)}
+                        onKeyDown={handleInputKey}
+                        disabled={editLoading}
+                        placeholder="Medical History"
+                      />
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.medicalHistory || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("medicalHistory", profile?.medicalHistory)} title="Edit Medical History">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
+                    {editField === "medicalHistory" && (
+                      <div className="flex items-center gap-2 mt-1">
+                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
