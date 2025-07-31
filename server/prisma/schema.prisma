@@ -32,6 +32,7 @@ model Account {
   Notifications     Notification[]
   CallLogsInitiated CallLog[]      @relation(name: "InitiatedCalls")
   CallLogsReceived  CallLog[]      @relation(name: "ReceivedCalls")
+  WebRTCSessionsCreatedBy WebRTCSession[] @relation("WebRTCRoomCreator")
 }
 
 model Appointment {
@@ -233,6 +234,8 @@ model WebRTCSession {
   appointmentId Int         @unique
   roomId        String      @unique
   isActive      Boolean     @default(true)
+  createdBy     Int
+  Admin         Account     @relation("WebRTCRoomCreator", fields: [createdBy], references: [id])
   createdAt     DateTime    @default(now())
   endedAt       DateTime?
   sessionType   SessionType @default(VIDEO)
@@ -240,6 +243,7 @@ model WebRTCSession {
   CallLog       CallLog[]
   Appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }
+
 
 model ChatMessage {
   id             Int         @id @default(autoincrement())
