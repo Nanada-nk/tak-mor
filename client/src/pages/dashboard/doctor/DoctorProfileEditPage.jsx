@@ -3,7 +3,7 @@ import ImageCropper from "../../../components/ImageCropper";
 import { BubblesIcon } from "lucide-react";
 import authStore from '../../../stores/authStore.js';
 import doctorApi from "../../../api/doctorApi.js";
-import DoctorProfile from "../../../components/profile/doctorProfile.jsx";
+import DoctorProfile from "../../../components/profile/DoctorProfile.jsx";
 import Modal from "../../../components/Modal.jsx";
 import accountApi from "../../../api/accountApi.js";
 import { fetchCsrfToken } from "../../../config/axios.js";
