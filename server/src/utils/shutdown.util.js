@@ -1,4 +1,4 @@
-import prisma from "../config/prisma.config.js"
+import prisma from '../config/prisma.config.js';
 import { httpServer, io } from '../server.js'
 
 export default async function (signal, error = null) {

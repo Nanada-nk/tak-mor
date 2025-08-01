@@ -1,4 +1,4 @@
-import prisma from "../config/prisma.config.js"
+import prisma from "../config/prisma.config.js";
 import teleService from "../services/tele.service.js"
 import createError from "../utils/create-error.js"
 
