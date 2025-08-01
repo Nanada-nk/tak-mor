@@ -124,7 +124,6 @@ app.get('/csrf-token', csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
 
-
 // // ******** เริ่มการแก้ไขตรงนี้เลยค่ะ ********
 // // สร้าง instance ของ csrfProtection (ยังคงอยู่)
 // const csrfProtection = csurf({ cookie: true });
