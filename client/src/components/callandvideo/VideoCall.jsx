@@ -36,38 +36,223 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
   const [secondsElapsed, setSecondsElapsed] = useState(0); // <--- เพิ่ม STATE นี้สำหรับนับวินาที
   const timerRef = useRef(null);
 
+  // useEffect(() => {
+  //   if (callStatus === CALL_STATUS.INCALL) {
+  //     if (timerRef.current) clearInterval(timerRef.current);
+
+  //     timerRef.current = setInterval(() => {
+  //       setSecondsElapsed((prevSeconds) => { // <--- อัปเดต secondsElapsed STATE
+  //         const newSeconds = prevSeconds + 1;
+  //         const minutes = Math.floor(newSeconds / 60).toString().padStart(2, '0');
+  //         const remainingSeconds = (newSeconds % 60).toString().padStart(2, '0');
+  //         setCallTime(`${minutes}:${remainingSeconds}`); // อัปเดต display string
+  //         return newSeconds;
+  //       });
+  //     }, 1000);
+  //   } else {
+  //     if (timerRef.current) clearInterval(timerRef.current);
+  //     setCallTime('00:00');
+  //     setSecondsElapsed(0); // <--- รีเซ็ต secondsElapsed ด้วย
+  //   }
+  //   return () => {
+  //     if (timerRef.current) clearInterval(timerRef.current);
+  //   };
+  // }, [callStatus]);
+
+  // // --- useEffect: WebRTC + Socket.IO setup (แก้ไขส่วนนี้สำคัญที่สุด) ---
+  // useEffect(() => {
+  //   // ใช้ตัวแปรภายใน Effect สำหรับการ Cleanup ที่แม่นยำขึ้น
+  //   let currentSocket = null;
+  //   let currentLocalStream = null;
+  //   let currentPeer = null;
+
+  //   const setupCall = async () => {
+  //     // ตรวจสอบข้อมูลจำเป็น
+  //     if (!currentUser || !urlRoomId || !appointmentData) {
+  //       setError("Missing user information, room ID, or appointment data.");
+  //       setCallStatus(CALL_STATUS.ERROR);
+  //       return;
+  //     }
+
+  //     setCurrentRoomId(urlRoomId);
+  //     setCallStatus(CALL_STATUS.CONNECTING); // ตั้งสถานะเริ่มต้นเป็น 'กำลังเชื่อมต่อ'
+  //     setError(null); // เคลียร์ error เก่า
+  //     setParticipants([]); // เคลียร์ผู้เข้าร่วม
+
+  //     try {
+  //       // 1. Get Local Media Stream (Camera & Mic)
+  //       if (!navigator.mediaDevices?.getUserMedia) {
+  //         setError('เบราว์เซอร์ไม่รองรับการใช้กล้อง/ไมค์ กรุณาเปลี่ยนเบราว์เซอร์');
+  //         setCallStatus(CALL_STATUS.ERROR);
+  //         throw new Error('MediaDevices not supported');
+  //       }
+  //       const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); // ขอทั้ง Video และ Audio Stream
+  //       localStreamRef.current = stream; // Store ใน ref
+  //       currentLocalStream = stream; // Store ในตัวแปรภายใน Effect เพื่อ Cleanup
+  //       if (localVideoRef.current) {
+  //         localVideoRef.current.srcObject = stream; // แสดงภาพตัวเอง (muted)
+  //       }
+
+  //       // 2. Initialize Socket.IO
+  //       const socket = io(import.meta.env.VITE_API_BASE_URL, {
+  //         withCredentials: true,
+  //         transports: ['websocket'],
+  //         query: { roomId: urlRoomId, userId: currentUser.id, userName: currentUser.firstName || currentUser.email },
+  //       });
+  //       socketRef.current = socket; // Store ใน ref
+  //       currentSocket = socket; // Store ในตัวแปรภายใน Effect เพื่อ Cleanup
+
+  //       // 3. Socket.IO Event Listeners
+  //       socket.on('connect', async () => {
+  //         console.log('Socket.IO Connected for Video Call:', socket.id);
+  //         socket.emit('joinRoom', {
+  //           roomId: urlRoomId,
+  //           userId: currentUser.id,
+  //           userName: currentUser.firstName || currentUser.email,
+  //           callType: 'video' // ระบุว่าเป็น Video Call
+  //         });
+  //         // ******** แก้ไขตำแหน่ง: setCallStatus(CALL_STATUS.INCALL) ย้ายมาไว้ตรงนี้ **********
+  //         // เพื่อให้มั่นใจว่า Stream พร้อมและเข้าร่วมห้องแล้ว ก่อนเปลี่ยนสถานะเป็น INCALL
+  //         setCallStatus(CALL_STATUS.INCALL); 
+  //         console.log('Call status set to INCALL after joining room.');
+  //       });
+
+  //       socket.on('user-joined', (payload) => {
+  //         if (payload.userId !== currentUser.id) {
+  //           setParticipants((prev) => [...prev, { id: payload.userId, name: payload.userName }]);
+  //           // 4. Create Peer (initiator: คนที่เข้าห้องไปก่อน/เป็นคนโทรออก)
+  //           const peer = new SimplePeer({
+  //             initiator: true,
+  //             trickle: true, // <--- **แก้ไข: เปลี่ยนเป็น true**
+  //             stream: currentLocalStream, // ใช้ currentLocalStream (ที่ได้จาก getLocalStream)
+  //             config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
+  //           });
+  //           peerRef.current = peer; currentPeer = peer; // Store ใน ref และในตัวแปรภายใน Effect
+  //           peer.on('signal', (data) => socket.emit('sending signal', { userToSignal: payload.userId, callerID: currentUser.id, signal: data }));
+  //           peer.on('stream', (stream) => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = stream; });
+  //           peer.on('error', (err) => { console.error('Peer error (initiator):', err); setError(`Peer connection error: ${err.message}`); setCallStatus(CALL_STATUS.ERROR); });
+  //         }
+  //       });
+
+  //       socket.on('receiving signal', (payload) => {
+  //         // Event เมื่อได้รับ Signaling Data จากอีกฝ่าย (จาก Backend)
+  //         let peer = peerRef.current;
+  //         if (!peer) { // ถ้า Peer ยังไม่ถูกสร้าง (คือเราเป็นคนรับสาย/เข้าห้องทีหลัง)
+  //           peer = new SimplePeer({
+  //             initiator: false,
+  //             trickle: true, // <--- **แก้ไข: เปลี่ยนเป็น true**
+  //             stream: currentLocalStream, // ใช้ currentLocalStream
+  //             config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
+  //           });
+  //           peerRef.current = peer; currentPeer = peer;
+  //           peer.on('signal', (data) => socket.emit('sending signal', { userToSignal: payload.callerID, callerID: currentUser.id, signal: data }));
+  //           peer.on('stream', (stream) => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = stream; });
+  //           peer.on('error', (err) => { console.error('Peer error (non-initiator):', err); setError(`Peer connection error: ${err.message}`); setCallStatus(CALL_STATUS.ERROR); });
+  //         }
+  //         peer.signal(payload.signal);
+  //       });
+
+  //       socket.on('user-left', (userId) => {
+  //         setParticipants((prev) => prev.filter(p => p.id !== userId));
+  //         if (peerRef.current) { peerRef.current.destroy(); peerRef.current = null; }
+  //         if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { 
+  //             remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop()); // หยุด Tracks
+  //             remoteVideoRef.current.srcObject = null; 
+  //         }
+  //       });
+
+  //       socket.on('toggleMicStatus', (payload) => setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isMicMuted: payload.isMuted } : p)));
+  //       socket.on('toggleCameraStatus', (payload) => setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isCameraOff: payload.isCameraOff } : p)));
+
+  //       socket.on('disconnect', () => {
+  //         console.log('Socket.IO Disconnected for Video Call (on event).');
+  //         setCallStatus(CALL_STATUS.DISCONNECTED); setError('Connection lost. Please try again.');
+  //         // Cleanup refs and streams
+  //         if (currentPeer) { currentPeer.destroy(); currentPeer = null; }
+  //         if (currentLocalStream) { currentLocalStream.getTracks().forEach((track) => track.stop()); currentLocalStream = null; }
+  //         if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop()); remoteVideoRef.current.srcObject = null; }
+  //       });
+
+  //       socket.on('connect_error', (err) => {
+  //         console.error('Socket connection error:', err);
+  //         setCallStatus(CALL_STATUS.ERROR); setError(err.message || 'Socket connection failed.');
+  //       });
+
+  //     } catch (err) {
+  //       console.error("Error in setupCall:", err);
+  //       setCallStatus(CALL_STATUS.ERROR); setError(err.message || 'Failed to initialize call resources.');
+  //     }
+  //   };
+
+  //   setupCall(); // เรียกใช้ฟังก์ชัน setupCall เมื่อ Effect ถูก Mount
+
+  //   // --- Cleanup Function (ส่วนที่แก้ไข: จัดการ Cleanup ใน return ของ useEffect) ---
+  //   // **นี่คือส่วนสำคัญที่สุดในการแก้ปัญหา Loop การเชื่อมต่อ**
+  //   return () => {
+  //     console.log("Cleaning up VideoCall (useEffect return function)...");
+  //     // ใช้ตัวแปรที่ถูกเก็บไว้ใน closure ของ effect นี้ (currentSocket, currentLocalStream, currentPeer)
+  //     // เพื่อให้แน่ใจว่าเรา cleanup instance ที่ถูกต้อง
+  //     if (currentSocket) {
+  //       currentSocket.emit('leaveRoom', { roomId: urlRoomId, userId: currentUser.id }); // บอก Backend ว่าออกจากห้อง
+  //       currentSocket.disconnect();
+  //     }
+  //     if (currentLocalStream) {
+  //       currentLocalStream.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานกล้อง/ไมค์
+  //     }
+  //     if (currentPeer) {
+  //       currentPeer.destroy(); // ทำลาย Peer Connection
+  //     }
+  //     // เคลียร์ remote stream ด้วย
+  //     if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+  //         remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+  //         remoteVideoRef.current.srcObject = null;
+  //     }
+  //     // เคลียร์ refs ใน component's scope ให้เป็น null เพื่อความสมบูรณ์
+  //     socketRef.current = null;
+  //     localStreamRef.current = null;
+  //     peerRef.current = null;
+
+  //     clearTeleState(); // เคลียร์ Zustand store state
+  //     console.log("Cleanup complete (useEffect return).");
+  //   };
+  //   // eslint-disable-next-line
+  // }, []); // <--- **ลด Dependencies เหลือแค่นี้เท่านั้น! (สำคัญมาก!)**
+
+
+
+
+  // --- Handlers (ส่วนที่แก้ไข: เพิ่มการเคลียร์ ref ใน handleEndCall) ---
+
   useEffect(() => {
     if (callStatus === CALL_STATUS.INCALL) {
       if (timerRef.current) clearInterval(timerRef.current);
 
       timerRef.current = setInterval(() => {
-        setSecondsElapsed((prevSeconds) => { // <--- อัปเดต secondsElapsed STATE
+        setSecondsElapsed((prevSeconds) => {
           const newSeconds = prevSeconds + 1;
           const minutes = Math.floor(newSeconds / 60).toString().padStart(2, '0');
           const remainingSeconds = (newSeconds % 60).toString().padStart(2, '0');
-          setCallTime(`${minutes}:${remainingSeconds}`); // อัปเดต display string
+          setCallTime(`${minutes}:${remainingSeconds}`);
           return newSeconds;
         });
       }, 1000);
     } else {
       if (timerRef.current) clearInterval(timerRef.current);
       setCallTime('00:00');
-      setSecondsElapsed(0); // <--- รีเซ็ต secondsElapsed ด้วย
+      setSecondsElapsed(0);
     }
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
   }, [callStatus]);
 
-  // --- useEffect: WebRTC + Socket.IO setup (แก้ไขส่วนนี้สำคัญที่สุด) ---
+  // --- useEffect: WebRTC + Socket.IO setup ---
   useEffect(() => {
-    // ใช้ตัวแปรภายใน Effect สำหรับการ Cleanup ที่แม่นยำขึ้น
     let currentSocket = null;
     let currentLocalStream = null;
     let currentPeer = null;
 
     const setupCall = async () => {
-      // ตรวจสอบข้อมูลจำเป็น
       if (!currentUser || !urlRoomId || !appointmentData) {
         setError("Missing user information, room ID, or appointment data.");
         setCallStatus(CALL_STATUS.ERROR);
@@ -75,9 +260,9 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
       }
 
       setCurrentRoomId(urlRoomId);
-      setCallStatus(CALL_STATUS.CONNECTING); // ตั้งสถานะเริ่มต้นเป็น 'กำลังเชื่อมต่อ'
-      setError(null); // เคลียร์ error เก่า
-      setParticipants([]); // เคลียร์ผู้เข้าร่วม
+      setCallStatus(CALL_STATUS.CONNECTING);
+      setError(null);
+      setParticipants([]);
 
       try {
         // 1. Get Local Media Stream (Camera & Mic)
@@ -86,11 +271,13 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
           setCallStatus(CALL_STATUS.ERROR);
           throw new Error('MediaDevices not supported');
         }
-        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true }); // ขอทั้ง Video และ Audio Stream
-        localStreamRef.current = stream; // Store ใน ref
-        currentLocalStream = stream; // Store ในตัวแปรภายใน Effect เพื่อ Cleanup
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        console.log('✅ getUserMedia success', stream);
+        localStreamRef.current = stream;
+        currentLocalStream = stream;
         if (localVideoRef.current) {
-          localVideoRef.current.srcObject = stream; // แสดงภาพตัวเอง (muted)
+          localVideoRef.current.srcObject = stream;
+          console.log('✅ Set srcObject for localVideoRef', localVideoRef.current);
         }
 
         // 2. Initialize Socket.IO
@@ -99,126 +286,160 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
           transports: ['websocket'],
           query: { roomId: urlRoomId, userId: currentUser.id, userName: currentUser.firstName || currentUser.email },
         });
-        socketRef.current = socket; // Store ใน ref
-        currentSocket = socket; // Store ในตัวแปรภายใน Effect เพื่อ Cleanup
+        socketRef.current = socket;
+        currentSocket = socket;
 
         // 3. Socket.IO Event Listeners
         socket.on('connect', async () => {
-          console.log('Socket.IO Connected for Video Call:', socket.id);
+          console.log('🟢 Socket.IO Connected for Video Call:', socket.id);
           socket.emit('joinRoom', {
             roomId: urlRoomId,
             userId: currentUser.id,
             userName: currentUser.firstName || currentUser.email,
-            callType: 'video' // ระบุว่าเป็น Video Call
+            callType: 'video'
           });
-          // ******** แก้ไขตำแหน่ง: setCallStatus(CALL_STATUS.INCALL) ย้ายมาไว้ตรงนี้ **********
-          // เพื่อให้มั่นใจว่า Stream พร้อมและเข้าร่วมห้องแล้ว ก่อนเปลี่ยนสถานะเป็น INCALL
-          setCallStatus(CALL_STATUS.INCALL); 
-          console.log('Call status set to INCALL after joining room.');
+          setCallStatus(CALL_STATUS.INCALL);
+          console.log('🟢 Call status set to INCALL after joining room.');
         });
 
         socket.on('user-joined', (payload) => {
+          console.log('👥 user-joined', payload);
           if (payload.userId !== currentUser.id) {
             setParticipants((prev) => [...prev, { id: payload.userId, name: payload.userName }]);
-            // 4. Create Peer (initiator: คนที่เข้าห้องไปก่อน/เป็นคนโทรออก)
             const peer = new SimplePeer({
               initiator: true,
-              trickle: true, // <--- **แก้ไข: เปลี่ยนเป็น true**
-              stream: currentLocalStream, // ใช้ currentLocalStream (ที่ได้จาก getLocalStream)
+              trickle: true,
+              stream: currentLocalStream,
               config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
             });
-            peerRef.current = peer; currentPeer = peer; // Store ใน ref และในตัวแปรภายใน Effect
-            peer.on('signal', (data) => socket.emit('sending signal', { userToSignal: payload.userId, callerID: currentUser.id, signal: data }));
-            peer.on('stream', (stream) => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = stream; });
-            peer.on('error', (err) => { console.error('Peer error (initiator):', err); setError(`Peer connection error: ${err.message}`); setCallStatus(CALL_STATUS.ERROR); });
+            peerRef.current = peer; currentPeer = peer;
+
+            peer.on('signal', (data) => {
+              console.log('📡 [initiator] peer.signal', data);
+              socket.emit('sending signal', { userToSignal: payload.userId, callerID: currentUser.id, signal: data });
+            });
+            peer.on('stream', (stream) => {
+              console.log('🎥 [initiator] peer.stream (remote video)', stream);
+              if (remoteVideoRef.current) {
+                remoteVideoRef.current.srcObject = stream;
+                console.log('✅ Set srcObject for remoteVideoRef', remoteVideoRef.current);
+              }
+            });
+            peer.on('error', (err) => {
+              console.error('❌ Peer error (initiator):', err);
+              setError(`Peer connection error: ${err.message}`);
+              setCallStatus(CALL_STATUS.ERROR);
+            });
           }
         });
 
         socket.on('receiving signal', (payload) => {
-          // Event เมื่อได้รับ Signaling Data จากอีกฝ่าย (จาก Backend)
+          console.log('🔄 receiving signal', payload);
           let peer = peerRef.current;
-          if (!peer) { // ถ้า Peer ยังไม่ถูกสร้าง (คือเราเป็นคนรับสาย/เข้าห้องทีหลัง)
+          if (!peer) {
             peer = new SimplePeer({
               initiator: false,
-              trickle: true, // <--- **แก้ไข: เปลี่ยนเป็น true**
-              stream: currentLocalStream, // ใช้ currentLocalStream
+              trickle: true,
+              stream: currentLocalStream,
               config: { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] }
             });
             peerRef.current = peer; currentPeer = peer;
-            peer.on('signal', (data) => socket.emit('sending signal', { userToSignal: payload.callerID, callerID: currentUser.id, signal: data }));
-            peer.on('stream', (stream) => { if (remoteVideoRef.current) remoteVideoRef.current.srcObject = stream; });
-            peer.on('error', (err) => { console.error('Peer error (non-initiator):', err); setError(`Peer connection error: ${err.message}`); setCallStatus(CALL_STATUS.ERROR); });
+
+            peer.on('signal', (data) => {
+              console.log('📡 [non-initiator] peer.signal', data);
+              socket.emit('sending signal', { userToSignal: payload.callerID, callerID: currentUser.id, signal: data });
+            });
+            peer.on('stream', (stream) => {
+              console.log('🎥 [non-initiator] peer.stream (remote video)', stream);
+              if (remoteVideoRef.current) {
+                remoteVideoRef.current.srcObject = stream;
+                console.log('✅ Set srcObject for remoteVideoRef', remoteVideoRef.current);
+              }
+            });
+            peer.on('error', (err) => {
+              console.error('❌ Peer error (non-initiator):', err);
+              setError(`Peer connection error: ${err.message}`);
+              setCallStatus(CALL_STATUS.ERROR);
+            });
           }
           peer.signal(payload.signal);
         });
 
         socket.on('user-left', (userId) => {
+          console.log('👋 user-left', userId);
           setParticipants((prev) => prev.filter(p => p.id !== userId));
           if (peerRef.current) { peerRef.current.destroy(); peerRef.current = null; }
-          if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { 
-              remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop()); // หยุด Tracks
-              remoteVideoRef.current.srcObject = null; 
+          if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+            remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            remoteVideoRef.current.srcObject = null;
+            console.log('🗑️ Cleared remoteVideoRef srcObject');
           }
         });
 
-        socket.on('toggleMicStatus', (payload) => setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isMicMuted: payload.isMuted } : p)));
-        socket.on('toggleCameraStatus', (payload) => setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isCameraOff: payload.isCameraOff } : p)));
+        socket.on('toggleMicStatus', (payload) => {
+          console.log('🎤 toggleMicStatus', payload);
+          setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isMicMuted: payload.isMuted } : p));
+        });
+        socket.on('toggleCameraStatus', (payload) => {
+          console.log('📷 toggleCameraStatus', payload);
+          setParticipants(prev => prev.map(p => p.id === payload.userId ? { ...p, isCameraOff: payload.isCameraOff } : p));
+        });
 
         socket.on('disconnect', () => {
-          console.log('Socket.IO Disconnected for Video Call (on event).');
-          setCallStatus(CALL_STATUS.DISCONNECTED); setError('Connection lost. Please try again.');
-          // Cleanup refs and streams
+          console.warn('🔌 Socket.IO Disconnected for Video Call (on event).');
+          setCallStatus(CALL_STATUS.DISCONNECTED);
+          setError('Connection lost. Please try again.');
           if (currentPeer) { currentPeer.destroy(); currentPeer = null; }
           if (currentLocalStream) { currentLocalStream.getTracks().forEach((track) => track.stop()); currentLocalStream = null; }
-          if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop()); remoteVideoRef.current.srcObject = null; }
+          if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
+            remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+            remoteVideoRef.current.srcObject = null;
+          }
         });
 
         socket.on('connect_error', (err) => {
-          console.error('Socket connection error:', err);
-          setCallStatus(CALL_STATUS.ERROR); setError(err.message || 'Socket connection failed.');
+          console.error('❌ Socket connection error:', err);
+          setCallStatus(CALL_STATUS.ERROR);
+          setError(err.message || 'Socket connection failed.');
         });
 
       } catch (err) {
-        console.error("Error in setupCall:", err);
-        setCallStatus(CALL_STATUS.ERROR); setError(err.message || 'Failed to initialize call resources.');
+        console.error("❌ Error in setupCall:", err);
+        setCallStatus(CALL_STATUS.ERROR);
+        setError(err.message || 'Failed to initialize call resources.');
       }
     };
 
-    setupCall(); // เรียกใช้ฟังก์ชัน setupCall เมื่อ Effect ถูก Mount
+    setupCall();
 
-    // --- Cleanup Function (ส่วนที่แก้ไข: จัดการ Cleanup ใน return ของ useEffect) ---
-    // **นี่คือส่วนสำคัญที่สุดในการแก้ปัญหา Loop การเชื่อมต่อ**
+    // --- Cleanup Function ---
     return () => {
-      console.log("Cleaning up VideoCall (useEffect return function)...");
-      // ใช้ตัวแปรที่ถูกเก็บไว้ใน closure ของ effect นี้ (currentSocket, currentLocalStream, currentPeer)
-      // เพื่อให้แน่ใจว่าเรา cleanup instance ที่ถูกต้อง
+      console.log("🧹 Cleaning up VideoCall (useEffect return function)...");
       if (currentSocket) {
-        currentSocket.emit('leaveRoom', { roomId: urlRoomId, userId: currentUser.id }); // บอก Backend ว่าออกจากห้อง
+        currentSocket.emit('leaveRoom', { roomId: urlRoomId, userId: currentUser.id });
         currentSocket.disconnect();
       }
       if (currentLocalStream) {
-        currentLocalStream.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานกล้อง/ไมค์
+        currentLocalStream.getTracks().forEach((track) => track.stop());
       }
       if (currentPeer) {
-        currentPeer.destroy(); // ทำลาย Peer Connection
+        currentPeer.destroy();
       }
-      // เคลียร์ remote stream ด้วย
       if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
-          remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
-          remoteVideoRef.current.srcObject = null;
+        remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        remoteVideoRef.current.srcObject = null;
+        console.log('🗑️ Cleared remoteVideoRef srcObject on cleanup');
       }
-      // เคลียร์ refs ใน component's scope ให้เป็น null เพื่อความสมบูรณ์
       socketRef.current = null;
       localStreamRef.current = null;
       peerRef.current = null;
 
-      clearTeleState(); // เคลียร์ Zustand store state
-      console.log("Cleanup complete (useEffect return).");
+      clearTeleState();
+      console.log("🧹 Cleanup complete (useEffect return).");
     };
     // eslint-disable-next-line
-  }, []); // <--- **ลด Dependencies เหลือแค่นี้เท่านั้น! (สำคัญมาก!)**
+  }, []);
 
-  // --- Handlers (ส่วนที่แก้ไข: เพิ่มการเคลียร์ ref ใน handleEndCall) ---
   const handleToggleMic = useCallback(() => {
     const newMicMuted = !isMicMuted;
     setMicMuted(newMicMuted);
@@ -245,28 +466,28 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
     setCallStatus(CALL_STATUS.DISCONNECTED);
     // ทำ Cleanup ทันทีที่กดวางสาย
     try {
-        if (socketRef.current) {
-            socketRef.current.emit('leaveRoom', { roomId: currentRoomId, userId: currentUser.id });
-            socketRef.current.disconnect(); // ตัดการเชื่อมต่อ Socket
-            socketRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (localStreamRef.current) {
-            localStreamRef.current.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานกล้อง/ไมค์
-            localStreamRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (peerRef.current) {
-            peerRef.current.destroy(); // ทำลาย Peer Connection
-            peerRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { // ตรวจสอบ remote stream
-            remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
-            remoteVideoRef.current.srcObject = null;
-        }
+      if (socketRef.current) {
+        socketRef.current.emit('leaveRoom', { roomId: currentRoomId, userId: currentUser.id });
+        socketRef.current.disconnect(); // ตัดการเชื่อมต่อ Socket
+        socketRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (localStreamRef.current) {
+        localStreamRef.current.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานกล้อง/ไมค์
+        localStreamRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (peerRef.current) {
+        peerRef.current.destroy(); // ทำลาย Peer Connection
+        peerRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { // ตรวจสอบ remote stream
+        remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
+        remoteVideoRef.current.srcObject = null;
+      }
     } catch (error) {
-        console.error("Error during end call cleanup:", error);
+      console.error("Error during end call cleanup:", error);
     } finally {
-        clearTeleState(); // เคลียร์ store
-        navigate('/'); // กลับไปหน้า Home
+      clearTeleState(); // เคลียร์ store
+      navigate('/'); // กลับไปหน้า Home
     }
   }, [setCallStatus, currentRoomId, currentUser, navigate, clearTeleState]);
 
