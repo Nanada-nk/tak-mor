@@ -1,2 +1,4 @@
 .vscode/
 .env
+/server/.env
+/client/.env
