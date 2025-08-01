@@ -394,6 +394,7 @@ function DoctorAvailabilityPage() {
 
 
       </div>
+
     </div>
   );
 }

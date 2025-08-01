@@ -130,6 +130,7 @@ const handleSubmit = async () => {
   const selectedDate = dateTime?.date || null;
   const selectedTime = dateTime?.time || null;
   return (
+
    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full font-prompt">
          <div className="h-1/7 w-full flex items-center justify-center">
            <ul className="steps h-full">
