@@ -5,12 +5,12 @@ export const createAppointment = async (req, res) => {
     const {
       patientId,
       doctorId,
-      date,         // ISO string or Date
-      startTime,    // "HH:mm"
-      endTime,      // "HH:mm"
+      date, // ISO string or Date
+      startTime, // "HH:mm"
+      endTime, // "HH:mm"
       symptoms,
       price,
-      status = "PENDING"
+      status = "PENDING",
     } = req.body;
 
     // Optionally: validate required fields here
@@ -36,28 +36,54 @@ export const createAppointment = async (req, res) => {
   }
 };
 
-      // Get all appointments for a doctor (with patient and doctor info)
-      export const getAppointmentsByDoctor = async (req, res) => {
-        try {
-          const doctorId = Number(req.params.doctorId);
-          if (!doctorId) return res.status(400).json({ error: "Invalid doctor id" });
-      
-          const appointments = await prisma.appointment.findMany({
-            where: { doctorId },
-            orderBy: { date: 'desc' },
-            include: {
-              Patient: {
-                include: {
-                  PatientMedicalProfile: true,
-                  Account: true,
-                },
-              },
-              Doctor: true,
-            },
-          });
-          res.json(appointments);
-        } catch (err) {
-          console.error(err);
-          res.status(500).json({ error: "Failed to fetch appointments" });
-        }
-      };
+// Get all appointments for a doctor (with patient and doctor info)
+export const getAppointmentsByDoctor = async (req, res) => {
+  try {
+    const doctorId = Number(req.params.doctorId);
+    if (!doctorId) return res.status(400).json({ error: "Invalid doctor id" });
+
+    const appointments = await prisma.appointment.findMany({
+      where: { doctorId },
+      orderBy: { date: "desc" },
+      include: {
+        Patient: {
+          include: {
+            PatientMedicalProfile: true,
+            Account: true,
+          },
+        },
+        Doctor: true,
+      },
+    });
+    res.json(appointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch appointments" });
+  }
+};
+// Get all appointments for a patient (with doctor and patient info)
+export const getAppointmentsByPatient = async (req, res) => {
+  try {
+    const patientId = Number(req.params.patientId);
+    if (!patientId)
+      return res.status(400).json({ error: "Invalid patient id" });
+
+    const appointments = await prisma.appointment.findMany({
+      where: { patientId },
+      orderBy: { date: "desc" },
+      include: {
+        Doctor: true,
+        Patient: {
+          include: {
+            PatientMedicalProfile: true,
+            Account: true,
+          },
+        },
+      },
+    });
+    res.json(appointments);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to fetch appointments" });
+  }
+};
