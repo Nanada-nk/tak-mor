@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill';
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill';
+import rollupNodePolyFill from 'rollup-plugin-node-polyfills'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -18,7 +19,13 @@ export default defineConfig({
       stream: 'rollup-plugin-node-polyfills/polyfills/stream',
       events: 'rollup-plugin-node-polyfills/polyfills/events',
       util: 'rollup-plugin-node-polyfills/polyfills/util',
+      sys: 'util',
       timers: 'rollup-plugin-node-polyfills/polyfills/timers',
+      console: 'rollup-plugin-node-polyfills/polyfills/console',
+      vm: 'rollup-plugin-node-polyfills/polyfills/vm',
+      zlib: 'rollup-plugin-node-polyfills/polyfills/zlib',
+      tty: 'rollup-plugin-node-polyfills/polyfills/tty',
+      domain: 'rollup-plugin-node-polyfills/polyfills/domain'
     }
   },
   optimizeDeps: {
@@ -26,8 +33,8 @@ export default defineConfig({
       'buffer',
       'stream',
       'events',
-      'util',
       'process',
+      'util',
       "cally",
       "simple-peer",
       "socket.io-client",
@@ -36,6 +43,7 @@ export default defineConfig({
     esbuildOptions: {
       define: {
         global: 'globalThis',
+        'process.env': '{}',
       },
       plugins: [
         NodeGlobalsPolyfillPlugin({
@@ -49,11 +57,7 @@ export default defineConfig({
   build: {
     rollupOptions: {
       plugins: [
-        NodeGlobalsPolyfillPlugin({
-          process: true,
-          buffer: true
-        }),
-        NodeModulesPolyfillPlugin()
+        rollupNodePolyFill()
       ]
     }
   }
