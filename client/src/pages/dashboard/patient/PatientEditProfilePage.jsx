@@ -5,6 +5,7 @@ import accountApi from '../../../api/accountApi';
 import PatientProfile from '../../../components/profile/PatientProfile';
 import patientApi from '../../../api/patientApi';
 
+
 function PatientEditProfilePage() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,6 +13,7 @@ function PatientEditProfilePage() {
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
   const [editLoading, setEditLoading] = useState(false);
+
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -92,6 +94,7 @@ function PatientEditProfilePage() {
     }
   };
 
+
   const handleInputKey = (e) => {
     if (e.key === "Enter") {
       saveEdit();
@@ -103,6 +106,7 @@ function PatientEditProfilePage() {
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen text-blue-800">Loading...</div>;
   }
+
   if (error) {
     return <div className="flex items-center justify-center min-h-screen text-red-600">{error}</div>;
   }
@@ -110,11 +114,11 @@ function PatientEditProfilePage() {
   // Merge Patient info with account email, phone, and PatientMedicalProfile
   const mergedProfile = profile && profile.Patient
     ? {
-        ...profile.Patient,
-        email: profile.email,
-        phone: profile.phone,
-        ...(profile.Patient.PatientMedicalProfile || {})
-      }
+      ...profile.Patient,
+      email: profile.email,
+      phone: profile.phone,
+      ...(profile.Patient.PatientMedicalProfile || {})
+    }
     : null;
 
   return (

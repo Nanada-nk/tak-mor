@@ -6,11 +6,6 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
-  useEffect(() => {
-    fetchCsrfToken();
-  }, []);
-
-
   return (
     <>
       <AppRouter />

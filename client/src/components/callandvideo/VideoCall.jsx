@@ -413,3 +413,7 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
 }
 
 export default VideoCall;
+
+
+
+

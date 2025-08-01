@@ -23,7 +23,6 @@ const authStore = create(
 
      
       checkAuth: async () => {
-        set({ isLoading: true })
         const token = get().token;
         if (token) {
           try {
