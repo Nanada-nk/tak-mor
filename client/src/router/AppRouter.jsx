@@ -69,6 +69,7 @@ import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
 import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
+import QrCallbackPage from "../pages/qrCallbackPage.jsx";
 import AddDoctorDashboard from "../pages/dashboard/doctor/AddDoctorDashboard.jsx";
 import AdminTelePage from "../pages/dashboard/admin/AdminTelePage.jsx";
 import AdminStatisticalData from "../pages/dashboard/admin/AdminStatisticalData.jsx";
@@ -156,6 +157,9 @@ function AppRouter() {
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation" element={<BookingComfirmationPage />} />
           <Route path="prescription" element={<PrescriptionDetailPage />} />
+          <Route path="qr-callback" element={<QrCallbackPage />} />
+          {/* Patient Profile */}
+          <Route path="patientprofile" element={<PatientProfilePage />} />
           {/* Patient Management (legacy routes removed, use dashboard routes below) */}
           <Route path="patientmanagement" element={<PatientManagementPage />} />
           <Route path="editprofile" element={<EditProfilePage />} />

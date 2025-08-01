@@ -1,13 +1,43 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { CheckCircle2, MessageCircle, Phone, Mail, FileText, Send } from 'lucide-react';
 import { PinIcon, StarIcon } from '../../components/icons/index.jsx';
 import useBookingStore from '../../stores/bookingStore.js';
 import usePatientFormStore from '../../stores/usePatientFormStore.js';
-
+import axios from 'axios';
 
 function BookingComfirmationPage() {
+  const handleResend = () => {
+    setCooldown(10); // 10 second cooldown
+  };
+  const navigate = useNavigate();
+  const {
+    specialty,
+    service,
+    hospital,
+    dateTime,
+    servicePrice
+  } = useBookingStore();
+
+//  const doctorId = useBookingStore(state => state.doctorId);
+
+//   const [doctor, setDoctor] = useState(null);
+// console.log(doctorId)
+
+// useEffect(() => {
+//    console.log("doctorId:", doctorId);
+//   if (!doctorId) return;
+//   console.log("Fetching doctor with ID:", doctorId);
+//   axios.get(`http://localhost:9090/api/doctor/${doctorId}`)
+//     .then(res => {
+//       console.log("Doctor response:", res.data);
+//       setDoctor(res.data);
+//     })
+//     .catch(err => console.error("Failed to fetch doctor:", err));
+// }, [doctorId]);
+
+
   const [showEmailPopup] = useState(true); // Always true, popup stays
   const [cooldown, setCooldown] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -20,17 +50,6 @@ function BookingComfirmationPage() {
     }
   }, [cooldown]);
 
-  const handleResend = () => {
-    setCooldown(10); // 10 second cooldown
-  };
-  const navigate = useNavigate();
-  const {
-    specialty,
-    service,
-    hospital,
-    dateTime,
-    servicePrice
-  } = useBookingStore();
 
   // fallback mock data for demo if store is empty
   const fallback = {
@@ -52,7 +71,7 @@ function BookingComfirmationPage() {
 
   // Compose booking info from store or fallback
   const bookingInfo = {
-    doctor: 'Dr. John Nontakaeng', // Not in store, static for now
+    doctor: fallback.doctor, // Not in store, static for now
     specialty: specialty || fallback.specialty,
     date: dateTime?.date ? dateTime.date.toLocaleDateString() : fallback.date,
     time: dateTime?.time || fallback.time,
