@@ -4,11 +4,13 @@ import PatientProfile from "../../../components/profile/PatientProfile";
 import authApi from "../../../api/authApi";
 import authStore from "../../../stores/authStore";
 
+
 function PatientProfilePage() {
   const user = authStore(state => state.user);
   const [profile, setProfile] = useState(user);
   const [loading, setLoading] = useState(!user);
   const [error, setError] = useState(null);
+
 
   useEffect(() => {
     if (!user) {
@@ -34,6 +36,7 @@ function PatientProfilePage() {
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen text-blue-800">Loading...</div>;
   }
+
   if (error) {
     return <div className="flex items-center justify-center min-h-screen text-red-600">{error}</div>;
   }

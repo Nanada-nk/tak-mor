@@ -9,6 +9,7 @@ import ImageCropper from "../../../components/ImageCropper";
 import Modal from "../../../components/Modal.jsx";
 import { fetchCsrfToken } from "../../../config/axios.js";
 
+
 function PatientEditProfilePage() {
   const user = authStore(state => state.user);
   const [profile, setProfile] = useState(user);
@@ -154,6 +155,7 @@ function PatientEditProfilePage() {
     }
   };
 
+
   useEffect(() => {
     if (!user) {
       const fetchProfile = async () => {
@@ -272,6 +274,7 @@ function PatientEditProfilePage() {
     }
   };
 
+
   const handleInputKey = (e) => {
     if (e.key === "Enter") {
       saveEdit();
@@ -283,6 +286,7 @@ function PatientEditProfilePage() {
   if (loading) {
     return <div className="flex items-center justify-center min-h-screen text-blue-800">Loading...</div>;
   }
+
   if (error) {
     return <div className="flex items-center justify-center min-h-screen text-red-600">{error}</div>;
   }

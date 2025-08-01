@@ -1,4 +1,4 @@
-import { User, Calendar } from "lucide-react";
+import { Calendar } from "lucide-react";
 
 function NewsBox() {
     return (
