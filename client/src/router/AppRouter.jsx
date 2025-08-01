@@ -69,6 +69,7 @@ import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
 import AddDoctorDashboard from "../pages/dashboard/doctor/AddDoctorDashboard.jsx";
+import AdminStatisticalData from "../pages/dashboard/admin/AdminStatisticalData.jsx";
 import PatientEditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
 
 
@@ -162,14 +163,16 @@ function AppRouter() {
           </Route>
         {/* </Route> */}
 
-        <Route element={<AdminRoute />}>
+        {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminStatisticalData/>}/>
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
           <Route path="doctordashboard/add" element={<AddDoctorDashboard/>}/>
+          
           </Route>
-        </Route>
+        {/* </Route> */}
 
         
         <Route path="*" element={<NotFoundPage />} />
