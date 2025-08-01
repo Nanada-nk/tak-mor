@@ -118,7 +118,6 @@ app.use(passport.session());
 // app.get('/csrf-token', (req, res) => {
 //   res.json({ csrfToken: req.csrfToken() });
 // });
-
 const csrfProtection = csurf({ cookie: true });
 app.get('/csrf-token', csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
