@@ -117,7 +117,7 @@ function CallingPage() {
           });
           // ******** แก้ไขตำแหน่ง: setCallStatus(CALL_STATUS.INCALL) จะอยู่ตรงนี้ **********
           // เพื่อให้มั่นใจว่า Stream พร้อมและเข้าร่วมห้องแล้ว ก่อนเปลี่ยนสถานะเป็น INCALL
-          setCallStatus(CALL_STATUS.INCALL); 
+          setCallStatus(CALL_STATUS.INCALL);
           console.log('Call status set to INCALL after joining room.');
         });
 
@@ -280,8 +280,8 @@ function CallingPage() {
       }
       // เคลียร์ remote stream ด้วย
       if (remoteAudioRef.current && remoteAudioRef.current.srcObject) {
-          remoteAudioRef.current.srcObject.getTracks().forEach(track => track.stop());
-          remoteAudioRef.current.srcObject = null;
+        remoteAudioRef.current.srcObject.getTracks().forEach(track => track.stop());
+        remoteAudioRef.current.srcObject = null;
       }
       // เคลียร์ refs ใน component's scope ให้เป็น null เพื่อความสมบูรณ์ (แม้จะถูกทำลายไปแล้ว)
       socketRef.current = null;
@@ -293,8 +293,8 @@ function CallingPage() {
     };
     // eslint-disable-next-line
   }, [urlRoomId, currentUser]); // <--- **ลด Dependencies เหลือแค่นี้เท่านั้น! (สำคัญมาก!)**
-                               //       setCallStatus, setError, clearTeleState เป็น Zustand actions ที่ควรจะ stable แล้ว
-                               //       การใส่พวกนี้เข้าไปใน Dependency Array ทำให้เกิด Loop การเชื่อมต่อซ้ำๆ
+  //       setCallStatus, setError, clearTeleState เป็น Zustand actions ที่ควรจะ stable แล้ว
+  //       การใส่พวกนี้เข้าไปใน Dependency Array ทำให้เกิด Loop การเชื่อมต่อซ้ำๆ
 
   // =============== Handlers (แก้ไขส่วน cleanup ใน handleEndCall) ===============
   const handleToggleMic = useCallback(() => {
@@ -316,29 +316,29 @@ function CallingPage() {
     setCallStatus(CALL_STATUS.DISCONNECTED);
     // ทำ Cleanup ทันทีที่กดวางสาย
     try {
-        if (socketRef.current) { // ตรวจสอบว่ามี socket instance อยู่
-            socketRef.current.emit('leaveRoom', { roomId: currentRoomId, userId: currentUser.id });
-            socketRef.current.disconnect(); // ตัดการเชื่อมต่อ Socket
-            socketRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (localStreamRef.current) { // ตรวจสอบว่ามี stream อยู่
-            localStreamRef.current.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานไมค์
-            localStreamRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (peerRef.current) { // ตรวจสอบว่ามี peer อยู่
-            peerRef.current.destroy(); // ทำลาย Peer Connection
-            peerRef.current = null; // เคลียร์ ref ทันที
-        }
-        if (remoteAudioRef.current && remoteAudioRef.current.srcObject) { // ตรวจสอบ remote stream
-            remoteAudioRef.current.srcObject.getTracks().forEach(track => track.stop());
-            remoteAudioRef.current.srcObject = null;
-        }
+      if (socketRef.current) { // ตรวจสอบว่ามี socket instance อยู่
+        socketRef.current.emit('leaveRoom', { roomId: currentRoomId, userId: currentUser.id });
+        socketRef.current.disconnect(); // ตัดการเชื่อมต่อ Socket
+        socketRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (localStreamRef.current) { // ตรวจสอบว่ามี stream อยู่
+        localStreamRef.current.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานไมค์
+        localStreamRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (peerRef.current) { // ตรวจสอบว่ามี peer อยู่
+        peerRef.current.destroy(); // ทำลาย Peer Connection
+        peerRef.current = null; // เคลียร์ ref ทันที
+      }
+      if (remoteAudioRef.current && remoteAudioRef.current.srcObject) { // ตรวจสอบ remote stream
+        remoteAudioRef.current.srcObject.getTracks().forEach(track => track.stop());
+        remoteAudioRef.current.srcObject = null;
+      }
     } catch (error) {
-        console.error("Error during end call cleanup:", error);
+      console.error("Error during end call cleanup:", error);
     } finally {
-        // Clear Zustand store state
-        clearTeleState(); // เคลียร์ store
-        navigate('/'); // กลับไปหน้า Home
+      // Clear Zustand store state
+      clearTeleState(); // เคลียร์ store
+      navigate('/'); // กลับไปหน้า Home
     }
   }, [setCallStatus, currentRoomId, currentUser, navigate, clearTeleState]);
 
@@ -347,7 +347,7 @@ function CallingPage() {
     return <div className="text-center py-4">Please log in to make a call.</div>;
   }
 
-  
+
   if (callStatus === CALL_STATUS.ERROR || callStatus === CALL_STATUS.DISCONNECTED) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-red-100 text-red-800">
@@ -361,18 +361,18 @@ function CallingPage() {
       </div>
     );
   }
-  
-  const otherParticipant = participants.find((p) => p.id !== currentUser.id);
-  const otherParticipantName = otherParticipant?.name || 'Connecting...'; 
+  const participantsSafe = Array.isArray(participants) ? participants : [];
+  const otherParticipant = participantsSafe.find(p => p.id !== currentUser?.id);
+  const otherParticipantName = otherParticipant?.name || 'Connecting...';
 
   return (
     <div className="font-prompt">
       {/* --- AUDIO TAGS FOR WEBRTC STREAMS --- */}
       {/* <audio ref={localAudioRef} autoPlay playsInline hidden />  */}
-      <audio ref={localAudioRef} autoPlay muted playsInline hidden /> 
-      <audio ref={remoteAudioRef} autoPlay playsInline /> 
-      
-      <Brandner title="การโทรด้วยเสียง" /> 
+      <audio ref={localAudioRef} autoPlay muted playsInline hidden />
+      <audio ref={remoteAudioRef} autoPlay playsInline />
+
+      <Brandner title="การโทรด้วยเสียง" />
       <div className="px-10 py-5">
         <CallAndVideo
           user={{
@@ -385,12 +385,12 @@ function CallingPage() {
               'https://res.cloudinary.com/dhoyopcr7/image/upload/v1753972209/%E0%B8%AB%E0%B8%A1%E0%B8%AD%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%8A%E0%B8%B2%E0%B8%A2%E0%B8%8A%E0%B8%B2%E0%B8%A7%E0%B9%84%E0%B8%97%E0%B8%A2_bn2nf6.jpg',
           }}
           localUserAvatar={currentUser.profilePictureUrl || 'https://www.svgrepo.com/show/530412/user.svg'}
-          callStatus={callStatus} 
-          callTime={callTime} 
+          callStatus={callStatus}
+          callTime={callTime}
           isMicMuted={isMicMuted}
           onToggleMic={handleToggleMic}
           onEndCall={handleEndCall}
-          isAudioOnly={true} 
+          isAudioOnly={true}
           localAudioRef={localAudioRef}
           remoteAudioRef={remoteAudioRef}
         />

@@ -2,16 +2,14 @@ import { create } from "zustand";
 
 // Enum สำหรับ call status (optional)
 export const CALL_STATUS = {
-  IDLE: 'idle',                   // ไม่มีการโทร
-  LOADING_APPOINTMENT: 'LOADING_APPOINTMENT', // กำลังโหลดข้อมูลการนัดหมาย
-  APPOINTMENT_ERROR: 'APPOINTMENT_ERROR',     // เกิดข้อผิดพลาดในการโหลดข้อมูลการนัดหมาย
-  CONNECTING: 'connecting',       // กำลังพยายามเชื่อมต่อ
-  RINGING: 'ringing',             // กำลังโทรออก/มีสายเรียกเข้า
-  INCALL: 'in-call',              // อยู่ในสาย
-  DISCONNECTED: 'disconnected',   // สายถูกตัด/จบลง
-  ERROR: 'error',                 // เกิดข้อผิดพลาดในการโทร
-  LOADING_APPOINTMENT: 'loading-appointment', // กำลังโหลดข้อมูลการนัดหมาย
-  APPOINTMENT_ERROR: 'appointment-error',     // เกิดข้อผิดพลาดในการโหลดข้อมูลการนัดหมาย
+  IDLE: 'idle',
+  LOADING_APPOINTMENT: 'loading-appointment',
+  APPOINTMENT_ERROR: 'appointment-error',
+  CONNECTING: 'connecting',
+  RINGING: 'ringing',
+  INCALL: 'in-call',
+  DISCONNECTED: 'disconnected',
+  ERROR: 'error',
 };
 
 const getDefaultState = () => ({
@@ -37,7 +35,9 @@ const teleStore = create((set, get) => ({
 
   setChatMessages: (messages) => set({ chatMessages: messages }),
 
-  setParticipants: (participants) => set({ participants }),
+  setParticipants: (participants) => set({
+    participants: Array.isArray(participants) ? participants : []
+  }),
 
   setCurrentRoomId: (roomId) => set({ currentRoomId: roomId }),
 

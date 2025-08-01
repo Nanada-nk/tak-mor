@@ -527,7 +527,8 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
   }
 
   // UI หลักของการโทร เมื่ออยู่ในสถานะ INCALL
-  const otherParticipant = participants.find(p => p.id !== currentUser.id);
+  const participantsSafe = Array.isArray(participants) ? participants : [];
+  const otherParticipant = participantsSafe.find(p => p.id !== currentUser?.id);
   const otherParticipantName = otherParticipant?.name || 'Connecting...';
 
   return (
