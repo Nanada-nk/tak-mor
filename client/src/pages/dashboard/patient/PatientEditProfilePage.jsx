@@ -74,7 +74,40 @@ function PatientEditProfilePage() {
       } else if (["height", "weight", "bloodType", "congenital", "allergies", "surgeries", "medications", "medicalHistory"].includes(editField)) {
         const patientId = profile?.Patient?.id;
         if (patientId) {
-          await patientApi.updateMedicalProfile(patientId, { [editField]: editValue });
+          const med = profile?.Patient?.PatientMedicalProfile || {};
+          const allMedical = {
+            height: editField === 'height' ? editValue?.height ?? editValue : med.height ?? '',
+            weight: editField === 'weight' ? editValue?.weight ?? editValue : med.weight ?? '',
+            bloodType: editField === 'bloodType' ? editValue?.bloodType ?? editValue : med.bloodType ?? '',
+            congenital: editField === 'congenital' ? editValue?.congenital ?? editValue : med.congenital ?? '',
+            allergies: editField === 'allergies' ? editValue?.allergies ?? editValue : med.allergies ?? '',
+            surgeries: editField === 'surgeries' ? editValue?.surgeries ?? editValue : med.surgeries ?? '',
+            medications: editField === 'medications' ? editValue?.medications ?? editValue : med.medications ?? '',
+            medicalHistory: editField === 'medicalHistory' ? editValue?.medicalHistory ?? editValue : med.medicalHistory ?? '',
+          };
+          await patientApi.updateMedicalProfile(patientId, allMedical);
+        }
+      } else if (["emergencyContactName", "emergencyContactPhone", "emergencyContactRelation"].includes(editField)) {
+        const patientId = profile?.Patient?.id;
+        if (patientId) {
+          // Always send all three fields to the profile endpoint (medical profile), which handles emergency contact fields
+          const med = profile?.Patient?.PatientMedicalProfile || {};
+          const allMedical = {
+            // Pass through all medical fields unchanged
+            height: med.height ?? '',
+            weight: med.weight ?? '',
+            bloodType: med.bloodType ?? '',
+            congenital: med.congenital ?? '',
+            allergies: med.allergies ?? '',
+            surgeries: med.surgeries ?? '',
+            medications: med.medications ?? '',
+            medicalHistory: med.medicalHistory ?? '',
+            // Emergency contact fields: always send all three
+            emergencyContactName: editValue?.emergencyContactName ?? '',
+            emergencyContactPhone: editValue?.emergencyContactPhone ?? '',
+            emergencyContactRelation: editValue?.emergencyContactRelation ?? '',
+          };
+          await patientApi.updateMedicalProfile(patientId, allMedical);
         }
       } else {
         setEditLoading(false);
