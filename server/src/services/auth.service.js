@@ -6,22 +6,40 @@ import crypto from 'crypto'
 
 const authService = {}
 
+
 authService.findAccountByEmail = (email) => {
   return prisma.account.findUnique({
     where: { email },
     include: {
-      Patient: true,
+      Patient: {
+        include: {
+          PatientMedicalProfile: true
+        }
+      },
       Doctor: true
     },
   });
 }
 
+
 authService.findAccountById = (id) => {
   return prisma.account.findUnique({
     where: { id },
     include: {
-      Patient: true,
-      Doctor: true
+      Patient: {
+        include: {
+          PatientMedicalProfile: true
+        }
+      },
+      Doctor: {
+        include: {
+          specialties: { include: { Specialty: true } },
+          Appointment: true,
+          Account: true,
+          DoctorAvailability: true,
+          DoctorAvailableSlot: true,
+        }
+      }
     }
   })
 }

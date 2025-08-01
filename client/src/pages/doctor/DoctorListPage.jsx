@@ -35,6 +35,9 @@ function DoctorListPage() {
                   {/* {Array.isArray(doc.specialties) && doc.specialties.map((spec) => (
                     <span key={spec} className="badge badge-primary badge-sm daisyui-badge">{spec}</span>
                   ))} */}
+                  {Array.isArray(doc.specialties) && doc.specialties.map((spec) => (
+                    <span key={spec.specialtyId} className="badge badge-primary badge-sm daisyui-badge">{spec.Specialty?.name || ''}</span>
+                  ))}
                 </div>
               }
               rating={doc.rating}

@@ -38,11 +38,11 @@ function AuthCallbackPage() {
           toast.success('Login successful!');
 
           if (user.role === 'DOCTOR') {
-            navigate('/doctorprofile', { replace: true });
+            navigate('/dashboard/doctor', { replace: true });
           } else if (user.role === 'ADMIN') {
             navigate('/admin/patientdashboard', { replace: true });
           } else {
-            navigate('/patientprofile', { replace: true });
+            navigate('/dashboard/patient/profile', { replace: true });
           }
 
         } catch (fetchError) {

@@ -1,7 +1,9 @@
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
+import DoctorLayout from "../layouts/DoctorLayout.jsx";
+import PatientLayout from "../layouts/PatientLayout.jsx";
 
 import HomePage from "../pages/HomePage.jsx";
 import LoginPage from "../pages/auth/LoginPage.jsx";
@@ -25,6 +27,9 @@ import DoctorListPage from "../pages/doctor/DoctorListPage.jsx";
 import DoctorAvailabilityPage from "../pages/doctor/DoctorAvailabilityPage.jsx";
 import DoctorProfilePage from "../pages/dashboard/doctor/DoctorProfilePage.jsx"
 
+import DoctorAppointmentsPage from "../pages/dashboard/doctor/DoctorAppointmentsPage.jsx";
+import DoctorProfileEditPage from "../pages/dashboard/doctor/DoctorProfileEditPage.jsx";
+
 import AppointmentTypePage from "../pages/booking/AppointmentTypePage.jsx";
 import BookingComfirmationPage from "../pages/booking/BookingComfirmationPage.jsx";
 import BookingDateTimePage from "../pages/booking/BookingDateTimePage.jsx";
@@ -40,7 +45,7 @@ import VideoCallPage from "../pages/tele/videoCall/VideoCallPage.jsx";
 import AdminPatientDashboardManagementPage from "../pages/dashboard/admin/AdminPatientDashboardManagementPage.jsx";
 import PatientProfilePage from "../pages/dashboard/patient/PatientProfilePage.jsx";
 import PatientManagementPage from "../pages/dashboard/patient/PatientManagementPage.jsx"
-import EditProfilePage from "../pages/dashboard/patient/EditProfilePage.jsx";
+import EditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
@@ -54,7 +59,7 @@ import ServerErrorPage from "../pages/utils/ServerErrorPage.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
-import authStore from '../stores/authStore.js';
+// import authStore from '../stores/authStore.js';
 import AdminDoctorDashboardMenagementPage from "../pages/dashboard/admin/AdminDoctorDashboardMenagementPage.jsx";
 import AdminAppointmentDashboardManagementPage from "../pages/dashboard/admin/AdminAppointmentDashboardManagementPage.jsx";
 import AboutUsPage from "../pages/AboutUsPage.jsx";
@@ -64,6 +69,9 @@ import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
 import QrCallbackPage from "../pages/qrCallbackPage.jsx";
+import AddDoctorDashboard from "../pages/dashboard/doctor/AddDoctorDashboard.jsx";
+import AdminStatisticalData from "../pages/dashboard/admin/AdminStatisticalData.jsx";
+import PatientEditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
 
 
 function AppRouter() {
@@ -106,11 +114,11 @@ function AppRouter() {
           <Route path="contactus" element={<ContactUsPage />} />
           <Route path="aboutus" element={<AboutUsPage />} />
           <Route path="categoryspecialties" element={<CategorySpecialtiesPage />} />
-          {/* Doctor */}
-          <Route path="doctorlist" element={<DoctorListPage />} />
-          <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
-          <Route path="doctorprofile" element={<DoctorProfilePage />} />
-
+        {/* Doctor public pages */}
+        <Route path="doctorlist" element={<DoctorListPage />} />
+        <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
+        {/* Doctor dashboard (protected) */}
+      
           {/* Utils Page */}
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
@@ -134,20 +142,39 @@ function AppRouter() {
           <Route path="qr-callback" element={<QrCallbackPage />} />
           {/* Patient Profile */}
           <Route path="patientprofile" element={<PatientProfilePage />} />
+          {/* Patient Management (legacy routes removed, use dashboard routes below) */}
           <Route path="patientmanagement" element={<PatientManagementPage />} />
           <Route path="editprofile" element={<EditProfilePage />} />
           <Route path="changepassword" element={<ChangePasswordPage />} />
           <Route path="patienttable" element={<PatientTableColumns />} />
           {/* Doctor Profile */}
+          <Route path="/dashboard/doctor" element={<DoctorLayout />}>
+            <Route index element={<DoctorProfilePage />} />
+            <Route path="profile" element={<DoctorProfilePage />} />
+            <Route path="profile/edit" element={<DoctorProfileEditPage />} />
+            <Route path="appointments" element={<DoctorAppointmentsPage />} />
+          </Route>
+          {/* Patient Profile (Dashboard) */}
+          <Route path="/dashboard/patient" element={<PatientLayout />}>
+            <Route index element={<PatientProfilePage />} />
+            <Route path="profile" element={<PatientProfilePage />} />
+            <Route path="profile/edit" element={<PatientEditProfilePage />} />
+            <Route path="changepassword" element={<ChangePasswordPage />} />
+            <Route path="management" element={<PatientManagementPage />} />
+            <Route path="table" element={<PatientTableColumns />} />
+          </Route>
           <Route path="doctormanagement" element={<DoctorManagementPage />} />
           </Route>
         {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
           <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminStatisticalData/>}/>
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
+          <Route path="doctordashboard/add" element={<AddDoctorDashboard/>}/>
+          
           </Route>
         {/* </Route> */}
 

@@ -22,6 +22,7 @@ import appointmentRouter from './routes/appointment.route.js'
 import http from 'http'
 import teleRouter from './routes/tele.route.js'
 import paymentRouter from './routes/payment.route.js'
+import accountRouter from './routes/account.route.js'
 
 
 const app = express()
@@ -67,6 +68,7 @@ app.get('/csrf-token', (req, res) => {
 
 app.use('/api/auth', authRouter);
 // app.use('/api/users', authenticateUser, usersRouter);
+app.use('/api/account', accountRouter);
 app.use('/api/dashboard', dashboardRouter);
 app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);

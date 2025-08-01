@@ -35,3 +35,29 @@ export const createAppointment = async (req, res) => {
     res.status(500).json({ error: "Failed to create appointment" });
   }
 };
+
+      // Get all appointments for a doctor (with patient and doctor info)
+      export const getAppointmentsByDoctor = async (req, res) => {
+        try {
+          const doctorId = Number(req.params.doctorId);
+          if (!doctorId) return res.status(400).json({ error: "Invalid doctor id" });
+      
+          const appointments = await prisma.appointment.findMany({
+            where: { doctorId },
+            orderBy: { date: 'desc' },
+            include: {
+              Patient: {
+                include: {
+                  PatientMedicalProfile: true,
+                  Account: true,
+                },
+              },
+              Doctor: true,
+            },
+          });
+          res.json(appointments);
+        } catch (err) {
+          console.error(err);
+          res.status(500).json({ error: "Failed to fetch appointments" });
+        }
+      };
