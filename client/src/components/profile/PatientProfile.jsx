@@ -1,5 +1,6 @@
 
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 function PatientProfile({
   profile,
@@ -10,8 +11,11 @@ function PatientProfile({
   cancelEdit,
   saveEdit,
   setEditValue,
-  handleInputKey
+  handleInputKey,
+  onProfilePictureClick
 }) {
+  const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
+  const navigate = useNavigate();
   // Helper to get value for a field from editValue or profile
   const getFieldValue = (field) => {
     let val = '';
@@ -54,21 +58,63 @@ function PatientProfile({
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative">
+        {/* Edit/Done button top right */}
+        {isDisplayOnly ? (
+          <button
+            className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded shadow hover:bg-blue-800 transition-colors z-20"
+            onClick={() => navigate('/dashboard/patient/profile/edit')}
+            title="Edit Profile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-2-2" /></svg>
+            Edit
+          </button>
+        ) : (
+          <button
+            className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded shadow hover:bg-green-800 transition-colors z-20"
+            onClick={() => navigate('/dashboard/patient/profile')}
+            title="Done"
+          >
+            Done
+          </button>
+        )}
         {/* Profile Pic + Name Row */}
         <div className="flex flex-col items-center md:flex-row md:items-center gap-6 mb-8">
           {/* Profile Picture */}
           <div className="relative">
-            <div className="h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none">
-              <span className="text-6xl font-bold text-white">
-                {profile?.firstName?.[0]?.toUpperCase() || ''}{profile?.lastName?.[0]?.toUpperCase() || ''}
-              </span>
+            <div 
+              className={`h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none ${!isDisplayOnly ? 'cursor-pointer hover:ring-4 hover:ring-blue-300' : ''}`}
+              onClick={!isDisplayOnly && typeof onProfilePictureClick === 'function' ? onProfilePictureClick : undefined}
+              title={!isDisplayOnly ? 'Change Profile Picture' : undefined}
+            >
+              {profile?.profilePictureUrl ? (
+                <img
+                  src={profile.profilePictureUrl}
+                  alt="Patient Avatar"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-6xl font-bold text-white">
+                  {profile?.firstName?.[0]?.toUpperCase() || ''}{profile?.lastName?.[0]?.toUpperCase() || ''}
+                </span>
+              )}
             </div>
+            {!isDisplayOnly && (
+              <div 
+                className="absolute bottom-0 right-0 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-full p-2.5 shadow-lg transition-all duration-200 hover:shadow-xl transform hover:scale-105 ring-2 ring-white cursor-pointer"
+                onClick={typeof onProfilePictureClick === 'function' ? onProfilePictureClick : undefined}
+                title="Change Profile Picture"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+            )}
           </div>
           {/* Name */}
           <div className="flex flex-col items-center md:items-start">
-            <h1 className="text-2xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
-            <p className="text-sm text-gray-500">Patient Profile</p>
+            <h1 className="text-3xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
           </div>
         </div>
 
