@@ -238,70 +238,78 @@ function DoctorAvailabilityPage() {
 
             <div className="font-prompt">
               {doctors.map(doctor => (
-                <div key={doctor.id} className="mb-8 border rounded-xl p-4">
-                  <h2 className="text-xl font-semibold mb-2">
-                    {doctor.firstName} {doctor.lastName} ({doctor.specialty?.name || "General"})
-                  </h2>
-                  <div className="flex">
+                <div key={doctor.id} className=" mb-8 border rounded-xl p-4">
+                  <div>
+                    <h2 className="text-xl font-semibold mb-2">
+                      {doctor.firstName} {doctor.lastName} ({doctor.specialty?.name || "General"})
+                    </h2>
 
-                  <DoctorCardList/>
-                  {/* Calendar for each doctor */}
-                  <DatePicker
-                    inline
-                    selected={selectedDates[doctor.id] || new Date()}
-                    onChange={date =>
-                      setSelectedDates(prev => ({
-                        ...prev,
-                        [doctor.id]: date
-                      }))
-                    }
-                    dateFormat="yyyy-MM-dd"
-                    minDate={new Date()}
-                    />
-                    </div>
-                  {/* Slots for each doctor */}
-                  <div className="mt-4">
-                    <h3 className="font-bold mb-2">Available Slots</h3>
-                    {/* Show DoctorAvailableSlot */}
-                    {slotsByDoctor[doctor.id] && slotsByDoctor[doctor.id].length > 0 && (
-                      <>
-                        <div className="font-semibold text-blue-700 mb-1">Manual/Generated Slots</div>
-                        <div className="flex flex-wrap gap-2 mb-2">
-                          {slotsByDoctor[doctor.id].map(slot => (
-                            <span key={slot.startTime + slot.endTime} className="px-3 py-1 rounded bg-blue-100 border border-blue-300">
-                              {slot.startTime} - {slot.endTime}
-                            </span>
-                          ))}
-                        </div>
-                      </>
-                    )}
-                    {/* Show DoctorAvailability */}
-                    {/* {fixedByDoctor[doctor.id] && fixedByDoctor[doctor.id].length > 0 && (
-              <>
-                <div className="font-semibold text-green-700 mb-1">Fixed Weekly Slots</div>
-                <div className="flex flex-wrap gap-2 mb-2">
-                  {fixedByDoctor[doctor.id].map(avail => (
-                    <span key={avail.startTime + avail.endTime} className="px-3 py-1 rounded bg-green-100 border border-green-300">
-                      {avail.startTime} - {avail.endTime}
-                    </span>
-                  ))}
-                </div>
-              </>
-            )} */}
-                    {/* If no slots at all */}
-                    {(!slotsByDoctor[doctor.id] || slotsByDoctor[doctor.id].length === 0) &&
-                      //  (!fixedByDoctor[doctor.id] || fixedByDoctor[doctor.id].length === 0) && 
-                      (
-                        <p className="text-gray-400">No slots available</p>
-                      )}
                   </div>
 
-                  <button
-                    onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
-                    className="btn btn-info text-white"
-                  >
-                    จองเลย
-                  </button>
+                  <div className="flex">
+                    <div>
+                      <DoctorCardList />
+                    </div>
+                    {/* Calendar for each doctor */}
+                    <div>
+
+                      <DatePicker
+                        inline
+                        selected={selectedDates[doctor.id] || new Date()}
+                        onChange={date =>
+                          setSelectedDates(prev => ({
+                            ...prev,
+                            [doctor.id]: date
+                          }))
+                        }
+                        dateFormat="yyyy-MM-dd"
+                        minDate={new Date()}
+                      />
+                    </div>
+                    {/* Slots for each doctor */}
+                    <div className="mt-4">
+                      <h3 className="font-bold mb-2">Available Slots</h3>
+                      {/* Show DoctorAvailableSlot */}
+                      {slotsByDoctor[doctor.id] && slotsByDoctor[doctor.id].length > 0 && (
+                        <>
+                          <div className="font-semibold text-blue-700 mb-1">Manual/Generated Slots</div>
+                          <div className="flex flex-wrap gap-2 mb-2">
+                            {slotsByDoctor[doctor.id].map(slot => (
+                              <span key={slot.startTime + slot.endTime} className="px-3 py-1 rounded bg-blue-100 border border-blue-300">
+                                {slot.startTime} - {slot.endTime}
+                              </span>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                      {/* Show DoctorAvailability */}
+                      {/* {fixedByDoctor[doctor.id] && fixedByDoctor[doctor.id].length > 0 && (
+              <>
+              <div className="font-semibold text-green-700 mb-1">Fixed Weekly Slots</div>
+              <div className="flex flex-wrap gap-2 mb-2">
+              {fixedByDoctor[doctor.id].map(avail => (
+                <span key={avail.startTime + avail.endTime} className="px-3 py-1 rounded bg-green-100 border border-green-300">
+                {avail.startTime} - {avail.endTime}
+                </span>
+                ))}
+                </div>
+                </>
+                )} */}
+                      {/* If no slots at all */}
+                      {(!slotsByDoctor[doctor.id] || slotsByDoctor[doctor.id].length === 0) &&
+                        //  (!fixedByDoctor[doctor.id] || fixedByDoctor[doctor.id].length === 0) && 
+                        (
+                          <p className="text-gray-400">No slots available</p>
+                        )}
+                    </div>
+
+                    <button
+                      onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
+                      className="btn btn-info text-white"
+                    >
+                      จองเลย
+                    </button>
+                  </div>
                 </div>
 
               ))}

@@ -1,6 +1,6 @@
 
 import { Link, useLocation, useNavigate } from "react-router";
-import { ChartColumnStackedIcon, FolderCog, PackageSearch, Star, Ticket, TrashIcon, UsersRound } from 'lucide-react';
+import { ChartColumnStackedIcon, FolderCog, PackageSearch, Star, Ticket, TrashIcon, UsersRound , ShieldUser , BriefcaseMedical, ClipboardCheck} from 'lucide-react';
 import authStore from "../stores/authStore.js";
 import { toast } from "react-toastify";
 
@@ -8,12 +8,9 @@ import { toast } from "react-toastify";
 
 
 const adminNavLinks = [
-  { path: '/admin/users', label: 'Customer Management', icon: <UsersRound size={18} /> },
-  { path: '/admin/categories', label: 'Category Management', icon: <ChartColumnStackedIcon size={20} /> },
-  { path: '/admin/products', label: 'Product Management', icon: <PackageSearch size={20} /> },
-  { path: '/admin/orders', label: 'Order Management', icon: <FolderCog size={20} /> },
-  { path: '/admin/coupons', label: 'Coupon Management', icon: <Ticket size={20} /> },
-  { path: '/admin/reviews', label: 'Review Management', icon: <Star size={20} /> },
+  { path: '/admin/patientdashboard', label: 'Patient Dashboard', icon: <ShieldUser size={18} /> },
+  { path: '/admin/doctordashboard', label: 'Doctor Dashboard', icon: <BriefcaseMedical size={20} /> },
+  { path: '/admin/appointmentdashboard', label: 'Appointment Dashboard', icon: <ClipboardCheck size={20} /> },
 ];
 
 
@@ -29,9 +26,11 @@ function AdminSidebar() {
   };
 
   return (
-    <div className="w-64 bg-pri-gr1 text-white p-4 flex flex-col">
+    <div className="w-64 bg-primary-gradient text-white p-4 flex flex-col">
       <div className="flex-shrink-0 mb-8">
-        LOGO
+        <div>
+                        <img src="../../../public/takmor.svg" alt='logo' className="h-12 w-auto object-contain" /> 
+                    </div>
       </div>
       <nav className="flex-grow">
         <ul>
