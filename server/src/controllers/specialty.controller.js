@@ -1,4 +1,4 @@
-import prisma from '../config/prisma.config.js';
+import prisma from "../config/prisma.config";
 
 export const getAllSpecialties = async (req, res, next) => {
   try {
