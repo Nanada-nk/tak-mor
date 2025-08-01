@@ -27,11 +27,12 @@ model Account {
   RefreshToken         RefreshToken?
 
   // Telemedicine
-  SentMessages      ChatMessage[]  @relation(name: "SentMessages")
-  ReceivedMessages  ChatMessage[]  @relation(name: "ReceivedMessages")
-  Notifications     Notification[]
-  CallLogsInitiated CallLog[]      @relation(name: "InitiatedCalls")
-  CallLogsReceived  CallLog[]      @relation(name: "ReceivedCalls")
+  SentMessages            ChatMessage[]   @relation(name: "SentMessages")
+  ReceivedMessages        ChatMessage[]   @relation(name: "ReceivedMessages")
+  Notifications           Notification[]
+  CallLogsInitiated       CallLog[]       @relation(name: "InitiatedCalls")
+  CallLogsReceived        CallLog[]       @relation(name: "ReceivedCalls")
+  WebRTCSessionsCreatedBy WebRTCSession[] @relation("WebRTCRoomCreator")
 }
 
 model Appointment {
@@ -60,6 +61,7 @@ model Appointment {
   // Telemedicine
   ChatMessages ChatMessage[]
   CallLogs     CallLog[]
+  roomId       String?       @unique
 
   @@index([doctorId], map: "Appointment_doctorId_fkey")
   @@index([patientId], map: "Appointment_patientId_fkey")
@@ -233,6 +235,8 @@ model WebRTCSession {
   appointmentId Int         @unique
   roomId        String      @unique
   isActive      Boolean     @default(true)
+  createdBy     Int
+  Admin         Account     @relation("WebRTCRoomCreator", fields: [createdBy], references: [id])
   createdAt     DateTime    @default(now())
   endedAt       DateTime?
   sessionType   SessionType @default(VIDEO)

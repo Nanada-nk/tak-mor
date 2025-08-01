@@ -311,23 +311,10 @@ function DoctorAvailabilityPage() {
 
           </div>
 
-<<<<<<< HEAD
-            <button
-              onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
-              className="btn btn-info text-white"
-            >
-              จองเลย
-            </button>
-          </div>
-
-
-        ))}
-=======
         </div>
 
 
 
->>>>>>> 35ae0ca6f5a67454ff3fb15400f98ae2fcd525ff
       </div>
 
     </div>

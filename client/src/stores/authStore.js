@@ -23,6 +23,7 @@ const authStore = create(
 
      
       checkAuth: async () => {
+        set({ isLoading: true })
         const token = get().token;
         if (token) {
           try {
@@ -43,7 +44,6 @@ const authStore = create(
     {
       name: "auth-storage", 
       storage: createJSONStorage(() => localStorage),
-
       partialize: (state) => ({ token: state.token }),
     }
   )
