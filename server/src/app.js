@@ -21,6 +21,7 @@ import patientRouter from './routes/patient.route.js'
 import appointmentRouter from './routes/appointment.route.js'
 import http from 'http'
 import teleRouter from './routes/tele.route.js'
+import paymentRouter from './routes/payment.route.js'
 
 
 const app = express()
@@ -71,6 +72,7 @@ app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);
 app.use('/api/patient', patientRouter);
 app.use('/api/appointment', appointmentRouter);
+app.use('/api/payment', paymentRouter);
 // app.use('/api/tele', ()=>{});
 // app.use('/api/patient', ()=>{});
 app.use('/api/tele', teleRouter);

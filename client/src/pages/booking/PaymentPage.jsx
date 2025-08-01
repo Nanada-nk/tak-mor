@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CreditCard, QrCode } from 'lucide-react';
 import { useNavigate } from "react-router";
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx"; 
@@ -12,6 +12,19 @@ import authStore from "../../stores/authStore.js";
 
 
 function PaymentPage() {
+
+
+useEffect(() => {
+  window.Omise.setPublicKey(import.meta.env.VITE_OMISE_PUBLIC_KEY);
+}, []);
+
+
+
+
+
+
+
+
   // Animation state for redirect
   const [fadeOut, setFadeOut] = useState(false);
   // Payment processing state
@@ -33,6 +46,7 @@ function PaymentPage() {
   // Payment method state
   const [paymentMethod, setPaymentMethod] = useState('card'); // 'card' or 'qr'
 
+  
   // Card form state
   const [cardNumber, setCardNumber] = useState('');
   const [cardName, setCardName] = useState('');
@@ -41,6 +55,7 @@ function PaymentPage() {
   const [cardTouched, setCardTouched] = useState(false);
   const isCardValid = cardNumber && cardName && cardExpiry && cardCVV;
 
+  
   
   // Dynamic doctor, specialty, location
   const doctorName = fallback.doctor; // Not in store, static for now
@@ -56,6 +71,7 @@ function PaymentPage() {
   const tax = 35;
   const discount = 20;
   const total = servicePrice + bookingFee + tax - discount;
+
 const handleCreateAppointment = async () => {
   try {
     // Compose start and end time (assume 30 min slot)
@@ -174,30 +190,93 @@ const handleCreateAppointment = async () => {
                          className="btn btn-primary flex-1"
                          disabled={isProcessing || paymentSuccess}
                          onClick={async () => {
-                           setIsProcessing(true);
-                           // Simulate payment processing delay
-                           await new Promise(res => setTimeout(res, 1800));
-                           setIsProcessing(false);
-                           setPaymentSuccess(true);
-                           setConfirmState(false);
-                  
-                
-                          try {
-                            await handleCreateAppointment();
-                          } catch (err) {
-                            alert("Payment succeeded but failed to create appointment. Please contact support.");
-                            return;
-                          }
+  setIsProcessing(true);
+  
+  try {
+    if (paymentMethod === 'card') {
+      const [expMonth, expYear] = cardExpiry.split('/');
+      await new Promise((resolve, reject) => {
+        window.Omise.createToken('card', {
+          name: cardName,
+          number: cardNumber,
+          expiration_month: parseInt(expMonth),
+          expiration_year: parseInt('20' + expYear),
+          security_code: cardCVV
+        }, async (statusCode, response) => {
+          
+          if (response.object === "token") {
+            const token = response.id;
+            try {
+              const tokenResponse = await axios.get("http://localhost:9090/csrf-token", {
+                      withCredentials: true,
+                    });
+                    const csrfToken = tokenResponse.data.csrfToken;
+              await axios.post("http://localhost:9090/api/payment/credit", {
+                token,
+                amount: Math.round(Number(total) * 100),
+                method: 'CARD',
+                patientId: user.Patient.id
+              }, {
+          headers: { "CSRF-Token": csrfToken },
+          withCredentials: true,
+        });
+              setPaymentSuccess(true);
+              await handleCreateAppointment();
+              setTimeout(() => {
+                setFadeOut(true);
+                setTimeout(() => {
+                  navigate("/confirmation");
+                  setPaymentSuccess(false);
+                  setFadeOut(false);
+                }, 600);
+              }, 1000);
+              resolve();
+            } catch (err) {
+              console.error("Payment or appointment creation failed:", err);
+              alert("Payment failed.");
+              reject();
+            }
+          } else {
+            alert(response.message);
+            setIsProcessing(false);
+            setConfirmState(false);
+            reject();
+          }
+        });
+      });
+    } else if (paymentMethod === 'qr') {
+       const tokenResponse = await axios.get("http://localhost:9090/csrf-token", {
+                      withCredentials: true,
+                    });
+                    const csrfToken = tokenResponse.data.csrfToken;
+      const res = await axios.post("http://localhost:9090/api/payment/qr", {
+        amount: total * 100,
+         patientId: user.Patient.id
+      }, {
+          headers: { "CSRF-Token": csrfToken },
+          withCredentials: true,
+        });
+      const qrUrl = res.data.authorizeUri;
+      window.open(qrUrl, "_blank");
 
-                           setTimeout(() => {
-                             setFadeOut(true);
-                             setTimeout(() => {
-                               setPaymentSuccess(false);
-                               navigate("/confirmation");
-                               setFadeOut(false);
-                             }, 600); // duration of fade-out
-                           }, 1200);
-                         }}
+         navigate('/qr-callback');
+
+      // Simulate delay before confirming appointment
+      // setPaymentSuccess(true);
+      // await handleCreateAppointment();
+      // setTimeout(() => {
+      //   navigate("/confirmation");
+      // }, 1000);
+    }
+  } catch (err) {
+    console.error(err);
+    alert("Something went wrong. Please try again.");
+  } finally {
+    setIsProcessing(false);
+    setConfirmState(false);
+  }
+}}
+
                        >
                          Confirm
                        </button>

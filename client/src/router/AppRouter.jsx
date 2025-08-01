@@ -63,6 +63,7 @@ import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
 import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
+import QrCallbackPage from "../pages/qrCallbackPage.jsx";
 
 
 function AppRouter() {
@@ -130,6 +131,7 @@ function AppRouter() {
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation" element={<BookingComfirmationPage />} />
           <Route path="prescription" element={<PrescriptionDetailPage />} />
+          <Route path="qr-callback" element={<QrCallbackPage />} />
           {/* Patient Profile */}
           <Route path="patientprofile" element={<PatientProfilePage />} />
           <Route path="patientmanagement" element={<PatientManagementPage />} />

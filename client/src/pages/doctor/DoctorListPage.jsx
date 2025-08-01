@@ -32,9 +32,9 @@ function DoctorListPage() {
               name={`Dr. ${doc.firstName} ${doc.lastName}`}
               title={
                 <div className="flex flex-wrap gap-1">
-                  {Array.isArray(doc.specialties) && doc.specialties.map((spec) => (
+                  {/* {Array.isArray(doc.specialties) && doc.specialties.map((spec) => (
                     <span key={spec} className="badge badge-primary badge-sm daisyui-badge">{spec}</span>
-                  ))}
+                  ))} */}
                 </div>
               }
               rating={doc.rating}
