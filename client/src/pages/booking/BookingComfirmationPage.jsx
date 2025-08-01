@@ -20,21 +20,22 @@ function BookingComfirmationPage() {
     servicePrice
   } = useBookingStore();
 
- const doctorId = useBookingStore(state => state.doctorId);
+//  const doctorId = useBookingStore(state => state.doctorId);
 
-  const [doctor, setDoctor] = useState(null);
-console.log(doctorId)
-useEffect(() => {
-   console.log("doctorId:", doctorId);
-  if (!doctorId) return;
-  console.log("Fetching doctor with ID:", doctorId);
-  axios.get(`http://localhost:9090/api/doctor/${doctorId}`)
-    .then(res => {
-      console.log("Doctor response:", res.data);
-      setDoctor(res.data);
-    })
-    .catch(err => console.error("Failed to fetch doctor:", err));
-}, [doctorId]);
+//   const [doctor, setDoctor] = useState(null);
+// console.log(doctorId)
+
+// useEffect(() => {
+//    console.log("doctorId:", doctorId);
+//   if (!doctorId) return;
+//   console.log("Fetching doctor with ID:", doctorId);
+//   axios.get(`http://localhost:9090/api/doctor/${doctorId}`)
+//     .then(res => {
+//       console.log("Doctor response:", res.data);
+//       setDoctor(res.data);
+//     })
+//     .catch(err => console.error("Failed to fetch doctor:", err));
+// }, [doctorId]);
 
 
   const [showEmailPopup] = useState(true); // Always true, popup stays
@@ -70,7 +71,7 @@ useEffect(() => {
 
   // Compose booking info from store or fallback
   const bookingInfo = {
-    doctor: doctor.firstName, // Not in store, static for now
+    doctor: fallback.doctor, // Not in store, static for now
     specialty: specialty || fallback.specialty,
     date: dateTime?.date ? dateTime.date.toLocaleDateString() : fallback.date,
     time: dateTime?.time || fallback.time,
