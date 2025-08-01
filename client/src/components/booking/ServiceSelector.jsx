@@ -1,6 +1,6 @@
 import React from "react";
 
-function ServiceSelector({ services, selected, onSelect, disabled }) {
+function ServiceSelector({ services, selected, onChange, disabled }) {
   return (
     <>
       <div>Services</div>
@@ -13,7 +13,7 @@ function ServiceSelector({ services, selected, onSelect, disabled }) {
               <button
                 key={service.name}
                 className={`flex flex-row items-center justify-between border rounded-xl px-3 pt-2 h-17 w-full bg-white shadow-sm transition-all ${selected === service.name ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
-                onClick={() => onSelect(service.name)}
+                onClick={() => onChange(service.name)}
                 type="button"
                 disabled={disabled}
               >

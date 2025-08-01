@@ -49,7 +49,7 @@ export const addManualSlot = async (req, res) => {
     return res.status(409).json({ error: "Time slot overlaps with an existing slot." });
   }
 
-const selectedDate = new Date('2025-07-30');
+const selectedDate = new Date(availableDate);
 selectedDate.setUTCHours(0, 0, 0, 0);
 
   const rec = await prisma.doctorAvailableSlot.create({

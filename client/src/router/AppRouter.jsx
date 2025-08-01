@@ -1,4 +1,4 @@
-// import { useEffect } from "react";
+import { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router";
 import MainLayout from "../layouts/MainLayout.jsx";
 import AdminLayout from "../layouts/AdminLayout.jsx";
@@ -69,10 +69,12 @@ import CategorySpecialtiesPage from "../pages/CategorySpecialtiesPage.jsx";
 import AllDoctorList from "../pages/doctorList/DoctorList.jsx";
 
 import InternalMedicinePage from "../pages/InternalMedicinePage.jsx";
+import QrCallbackPage from "../pages/qrCallbackPage.jsx";
 import AddDoctorDashboard from "../pages/dashboard/doctor/AddDoctorDashboard.jsx";
 import AdminTelePage from "../pages/dashboard/admin/AdminTelePage.jsx";
 import AdminStatisticalData from "../pages/dashboard/admin/AdminStatisticalData.jsx";
 import PatientEditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
+
 
 
 function AppRouter() {
@@ -80,22 +82,8 @@ function AppRouter() {
   const isLoading = authStore((state) => state.isLoading)
 
   useEffect(() => {
-    const setupAxiosInterceptors = async () => {
-      try {
-        const backendUrl = import.meta.env.VITE_API_BASE_URL;
-        if (!backendUrl) {
-          console.error("VITE_API_BASE_URL is not defined in client/.env");
-          return;
-        }
-        await fetchCsrfToken(); // Call fetchCsrfToken from config/axios.js
-      } catch (error) {
-        console.error('Failed to setup Axios interceptor:', error);
-      }
-    };
-
-    setupAxiosInterceptors();
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -142,11 +130,11 @@ function AppRouter() {
           <Route path="contactus" element={<ContactUsPage />} />
           <Route path="aboutus" element={<AboutUsPage />} />
           <Route path="categoryspecialties" element={<CategorySpecialtiesPage />} />
-        {/* Doctor public pages */}
-        <Route path="doctorlist" element={<DoctorListPage />} />
-        <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
-        {/* Doctor dashboard (protected) */}
-      
+          {/* Doctor public pages */}
+          <Route path="doctorlist" element={<DoctorListPage />} />
+          <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
+          {/* Doctor dashboard (protected) */}
+
           {/* Utils Page */}
           <Route path="comingsoon" element={<ComingSoonPage />} />
           <Route path="maintenance" element={<MaintenancePage />} />
@@ -156,12 +144,13 @@ function AppRouter() {
         {/* <Route element={<ProtectedRoute />}> */}
         <Route path="/" element={<MainLayout />}>
           {/* Telecommunication */}
+          console.log("AppRouter rendered. Current URL:", window.location.pathname);
           <Route path="call/:roomId" element={<CallingPage />} />
           <Route path="chat/:appointmentId" element={<ChatPage />} />
           <Route path="video/:roomId" element={<VideoCallPage />} />
-          <Route path="call" element={<CallingPage />} />
-          <Route path="chat" element={<ChatPage />} />
-          <Route path="video" element={<VideoCallPage />} />
+          {/* <Route path="call" element={<CallingPage />} /> */}
+          {/* <Route path="chat" element={<ChatPage />} /> */}
+          {/* <Route path="video" element={<VideoCallPage />} /> */}
           {/* Booking */}
           <Route path="booking" element={<BookingPage />} />
           <Route path="appointment" element={<AppointmentTypePage />} />
@@ -170,6 +159,9 @@ function AppRouter() {
           <Route path="payment" element={<PaymentPage />} />
           <Route path="confirmation" element={<BookingComfirmationPage />} />
           <Route path="prescription" element={<PrescriptionDetailPage />} />
+          <Route path="qr-callback" element={<QrCallbackPage />} />
+          {/* Patient Profile */}
+          <Route path="patientprofile" element={<PatientProfilePage />} />
           {/* Patient Management (legacy routes removed, use dashboard routes below) */}
           <Route path="patientmanagement" element={<PatientManagementPage />} />
           <Route path="editprofile" element={<EditProfilePage />} />
@@ -196,24 +188,24 @@ function AppRouter() {
         {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
-            <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
-            <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
-            <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
-            <Route path="telemanagement" element={<AdminTelePage />} />
-          </Route>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
+          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
+          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
+          <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
+          <Route path="telemanagement" element={<AdminTelePage />} />
+        </Route>
         {/* </Route> */}
 
         {/* <Route element={<AdminRoute />}> */}
-          <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminStatisticalData/>}/>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminStatisticalData />} />
           <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
-          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage/>} />
-          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage/>}/>
-          <Route path="doctordashboard/add" element={<AddDoctorDashboard/>}/>
-          
-          </Route>
+          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
+          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
+          <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
+
+        </Route>
         {/* </Route> */}
 
         <Route path="*" element={<NotFoundPage />} />
