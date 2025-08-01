@@ -183,7 +183,17 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
         socket.on('user-left', (userId) => {
           console.log('👋 user-left', userId);
           setParticipants((prev) => prev.filter(p => p.id !== userId));
-          if (peerRef.current) { peerRef.current.destroy(); peerRef.current = null; }
+          if (peerRef.current) {
+            if (peerRef.current.connected || peerRef.current._connected) {
+              peerRef.current.destroy();
+            } else {
+              // ให้ delay เล็กน้อยกรณียังไม่ได้เชื่อมต่อ (ป้องกัน abort)
+              setTimeout(() => {
+                if (peerRef.current) peerRef.current.destroy();
+              }, 1000);
+            }
+            peerRef.current = null;
+          }
           if (remoteVideoRef.current && remoteVideoRef.current.srcObject) {
             remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());
             remoteVideoRef.current.srcObject = null;
@@ -291,8 +301,15 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
         localStreamRef.current = null; // เคลียร์ ref ทันที
       }
       if (peerRef.current) {
-        peerRef.current.destroy(); // ทำลาย Peer Connection
-        peerRef.current = null; // เคลียร์ ref ทันที
+        if (peerRef.current.connected || peerRef.current._connected) {
+          peerRef.current.destroy();
+        } else {
+          // ให้ delay เล็กน้อยกรณียังไม่ได้เชื่อมต่อ (ป้องกัน abort)
+          setTimeout(() => {
+            if (peerRef.current) peerRef.current.destroy();
+          }, 1000);
+        }
+        peerRef.current = null;
       }
       if (remoteVideoRef.current && remoteVideoRef.current.srcObject) { // ตรวจสอบ remote stream
         remoteVideoRef.current.srcObject.getTracks().forEach(track => track.stop());

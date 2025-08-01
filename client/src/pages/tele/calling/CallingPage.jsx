@@ -215,7 +215,14 @@ function CallingPage() {
           // Event เมื่อผู้ใช้อื่นออกจากห้อง
           setParticipants((prev) => prev.filter((p) => p.id !== userId)); // ลบออกจากรายชื่อผู้เข้าร่วม
           if (peerRef.current) {
-            peerRef.current.destroy(); // ทำลาย Peer Connection
+            if (peerRef.current.connected || peerRef.current._connected) {
+              peerRef.current.destroy();
+            } else {
+              // ให้ delay เล็กน้อยกรณียังไม่ได้เชื่อมต่อ (ป้องกัน abort)
+              setTimeout(() => {
+                if (peerRef.current) peerRef.current.destroy();
+              }, 1000);
+            }
             peerRef.current = null;
           }
           if (remoteAudioRef.current && remoteAudioRef.current.srcObject) {
@@ -325,9 +332,16 @@ function CallingPage() {
         localStreamRef.current.getTracks().forEach((track) => track.stop()); // หยุดการใช้งานไมค์
         localStreamRef.current = null; // เคลียร์ ref ทันที
       }
-      if (peerRef.current) { // ตรวจสอบว่ามี peer อยู่
-        peerRef.current.destroy(); // ทำลาย Peer Connection
-        peerRef.current = null; // เคลียร์ ref ทันที
+      if (peerRef.current) {
+        if (peerRef.current.connected || peerRef.current._connected) {
+          peerRef.current.destroy();
+        } else {
+          // ให้ delay เล็กน้อยกรณียังไม่ได้เชื่อมต่อ (ป้องกัน abort)
+          setTimeout(() => {
+            if (peerRef.current) peerRef.current.destroy();
+          }, 1000);
+        }
+        peerRef.current = null;
       }
       if (remoteAudioRef.current && remoteAudioRef.current.srcObject) { // ตรวจสอบ remote stream
         remoteAudioRef.current.srcObject.getTracks().forEach(track => track.stop());
