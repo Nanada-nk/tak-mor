@@ -60,7 +60,7 @@ try {
         paymentId: finalPaymentId,
         roomId: videoRoomId,        
       },
-      select: { // เลือกคอลัมน์ที่ต้องการให้ Prisma คืนกลับมา (เพื่อให้ Controller ส่งกลับ Frontend ได้)
+      select: { 
         id: true, vn: true, patientId: true, doctorId: true, date: true, startTime: true, endTime: true,
         duration: true, symptoms: true, status: true, price: true, paymentId: true, roomId: true,
         createdAt: true, updatedAt: true,
@@ -72,8 +72,8 @@ try {
 
   } catch (error) {
     console.error('Prisma error during appointment creation:', error);
-    // จัดการ Error ที่มาจาก Prisma (เช่น Unique constraint violation P2002)
-    if (error.code === 'P2002') { // เป็น Error Code สำหรับ Unique constraint violation
+    
+    if (error.code === 'P2002') { 
         if (error.meta?.target?.includes('vn')) {
             throw new Error('A duplicate VN entry occurred. VN must be unique.');
         }
