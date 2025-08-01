@@ -24,6 +24,7 @@ import specialtyRouter from './routes/specialty.route.js';
 import patientRouter from './routes/patient.route.js'
 import appointmentRouter from './routes/appointment.route.js'
 import teleRouter from './routes/tele.route.js'
+import paymentRouter from './routes/payment.route.js'
 import adminTeleRouter from './routes/admin.tele.route.js';
 import accountRouter from './routes/account.route.js'
 
@@ -162,6 +163,11 @@ app.use('/api/doctor', bookingRouter, doctorRouter);
 app.use('/api/specialty', specialtyRouter);
 app.use('/api/patient', patientRouter);
 app.use('/api/appointment', appointmentRouter);
+
+app.use('/api/payment', paymentRouter);
+// app.use('/api/tele', ()=>{});
+// app.use('/api/patient', ()=>{});
+
 app.use('/api/tele', teleRouter);
 app.use('/api/admin/tele', adminTeleRouter);
 // app.use('/api/prescription', ()=>{});

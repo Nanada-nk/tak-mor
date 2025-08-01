@@ -6,6 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
+<<<<<<< HEAD
+=======
+  //rutclose
+  // useEffect(() => {
+  //   fetchCsrfToken();
+  // }, []);
+
+
+>>>>>>> feature/InternalMedicineByRuj
   return (
     <>
       <AppRouter />

@@ -23,6 +23,11 @@ const authStore = create(
 
      
       checkAuth: async () => {
+<<<<<<< HEAD
+=======
+        //rutclose
+        // set({ isLoading: true })
+>>>>>>> feature/InternalMedicineByRuj
         const token = get().token;
         if (token) {
           try {
