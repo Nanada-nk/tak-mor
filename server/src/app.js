@@ -113,11 +113,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// const csrfProtection = csurf({ cookie: true });
-// app.use(csrfProtection);
-// app.get('/csrf-token', (req, res) => {
-//   res.json({ csrfToken: req.csrfToken() });
-// });
+
 const csrfProtection = csurf({ cookie: true });
 app.get('/csrf-token', csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });

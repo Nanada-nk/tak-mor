@@ -53,6 +53,17 @@ io.on('connection', (socket) => {
         // io.to(roomId).emit('receive_message', { senderId: 'System', senderName: 'System', message: `User ${userName || userId} has joined the chat.`, timestamp: new Date().toISOString() });
     });
 
+    socket.on('joinRoom', (payload) => {
+        const { roomId, userId, userName } = payload;
+        console.log(`[VideoCall] joinRoom: userId=${userId}, roomId=${roomId}, socketId=${socket.id}`);
+        socket.join(roomId);
+
+        if (!rooms[roomId]) rooms[roomId] = {};
+        rooms[roomId][userId] = { socketId: socket.id, userName };
+        socketToUserMap[socket.id] = { roomId, userId };
+
+        socket.to(roomId).emit('user-joined', { userId, userName });
+    });
 
     // --- Event: Client ส่งสัญญาณ WebRTC (SDP/ICE Candidate) ---
     socket.on('sending signal', (payload) => {
