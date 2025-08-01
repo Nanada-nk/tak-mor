@@ -163,11 +163,15 @@ export const updateDoctorProfile = async (req, res, next) => {
       if (updateData[key] === undefined) delete updateData[key];
     });
 
-    // Handle specialties if provided and array
+    // Handle specialties if provided and array (explicit join table)
     if (Array.isArray(specialties)) {
-      updateData.specialties = {
-        set: specialties.map(id => ({ specialtyId: Number(id) }))
-      };
+      // Remove all current specialties for this doctor
+      await prisma.doctorSpecialty.deleteMany({ where: { doctorId: doctor.id } });
+      // Add new specialties
+      await prisma.doctorSpecialty.createMany({
+        data: specialties.map(id => ({ doctorId: doctor.id, specialtyId: Number(id) })),
+        skipDuplicates: true
+      });
     }
 
     // Update doctor

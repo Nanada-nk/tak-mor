@@ -20,9 +20,9 @@ function HeaderNavBar() {
   const handleProfileClick = () => {
     if (!user) return;
     if (user.role === 'DOCTOR') {
-      navigate('/doctorprofile');
+      navigate('/dashboard/doctor');
     } else {
-      navigate('/patientprofile');
+      navigate('/dashboard/patient/profile');
     }
   };
 

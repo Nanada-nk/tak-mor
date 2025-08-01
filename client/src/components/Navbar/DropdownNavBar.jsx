@@ -55,7 +55,7 @@ function DropdownNavBar() {
           className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg">
           <li>
            
-            <a onClick={() => navigate("/patientprofile")}>โปรไฟล์ผู้ป่วย</a> 
+            <a onClick={() => navigate("/dashboard/patient/profile")}>โปรไฟล์ผู้ป่วย</a>
           </li>
           <li>
 
