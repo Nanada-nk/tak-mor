@@ -1,40 +1,38 @@
-import { Phone, Video, Mic } from "lucide-react"
+import { Phone, Video, Mic, MicOff } from "lucide-react";
+import { CALL_STATUS } from '../../stores/teleStore.js';
 
-function CallAndVideo() {
-    const user = {
-        name: 'Deny Hendrawan',
-        status: 'Online',
-        avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=2928&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // URL รูปโปรไฟล์ผู้ใช้
-    };
-
-    const doctor = {
-        name: 'Dr. Michael Brown',
-        avatar: 'https://static.vecteezy.com/system/resources/previews/026/375/249/non_2x/ai-generative-portrait-of-confident-male-doctor-in-white-coat-and-stethoscope-standing-with-arms-crossed-and-looking-at-camera-photo.jpg', // URL รูปแพทย์กลางจอ
-    };
-
-    const localUserAvatar = 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'; // URL รูปผู้ใช้มุมขวา (ตัวเอง)
-
-    const callTime = '00:24'; // เวลาที่ใช้ในการโทร
+function CallAndVideo({
+    user,               // { name, avatar, status }
+    doctor,             // { name, avatar }
+    localUserAvatar,
+    callStatus,
+    callTime = '00:00', // << รับ callTime จาก props
+    isMicMuted,
+    onToggleMic,
+    onEndCall,
+    isAudioOnly = false,
+    localAudioRef,
+    remoteAudioRef,
+}) {
     return (
-        <div className="flex flex-col h-screen  p-4">
+        <div className="flex flex-col h-full p-4 font-prompt mt">
             <div className="bg-white rounded-lg shadow-xl flex-grow flex flex-col overflow-hidden">
-                {/* Top Bar / Header */}
+                {/* Top Bar */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200">
                     <div className="flex items-center">
                         <img
-                            src={user.avatar}
-                            alt={user.name}
+                            src={user.avatar || 'https://www.svgrepo.com/show/453054/guy-blank.svg'}
+                            alt={`${user.name}'s profile`}
                             className="w-10 h-10 rounded-full object-cover mr-3 border-2 border-blue-500"
                         />
                         <div>
                             <p className="font-semibold text-lg text-gray-800">{user.name}</p>
-                            <p className="text-sm text-gray-500">{user.status}</p>
+                            <p className="text-sm text-gray-500">{user.status || 'Online'}</p>
                         </div>
                     </div>
-                    <button className="p-2 rounded-full hover:bg-gray-100 transition duration-150">
-                        {/* User Icon */}
+                    <button className="p-2 rounded-full hover:bg-gray-100 transition duration-150" aria-label="User Menu">
                         <svg
-                            xmlns="http://www.w3.org/2000/svg"
+                            xmlns="https://res.cloudinary.com/dhoyopcr7/image/upload/v1753282411/takmor_2_vkivfo.png"
                             className="h-6 w-6 text-gray-600"
                             fill="none"
                             viewBox="0 0 24 24"
@@ -50,50 +48,68 @@ function CallAndVideo() {
                     </button>
                 </div>
 
-                {/* Main Video Area */}
-                <div className="relative flex-grow flex items-center justify-center bg-gray-50">
-                    {/* Doctor's Video Feed (Central) */}
+                {/* Main Content */}
+                <div className="relative flex-grow flex items-center justify-center bg-gray-50 py-4">
                     <div className="text-center">
                         <img
-                            src={doctor.avatar}
-                            alt={doctor.name}
+                            src={doctor.avatar || 'https://www.svgrepo.com/show/453042/doctor-m.svg'}
+                            alt={`Doctor's profile`}
                             className="w-40 h-40 rounded-full object-cover mx-auto mb-4 border-4 border-blue-400 shadow-lg"
                         />
                         <h2 className="text-xl font-bold text-gray-800">{doctor.name}</h2>
                         <p className="text-gray-600 text-sm">{callTime}</p>
                     </div>
-
-                    {/* Local User's Small Video Feed (Bottom Right) */}
+                    {/* Local User's Avatar */}
                     <div className="absolute bottom-4 right-4 w-24 h-24 rounded-lg overflow-hidden border-2 border-white shadow-md">
                         <img
-                            src={localUserAvatar}
-                            alt="You"
+                            src={localUserAvatar || 'https://www.svgrepo.com/show/532363/user-alt-1.svg'}
+                            alt="Your profile"
                             className="w-full h-full object-cover"
                         />
                     </div>
+                    {/* Call Status Overlay */}
+                    {callStatus !== CALL_STATUS.INCALL && (
+                        <div className="absolute inset-0 flex items-center justify-center bg-gray-700 bg-opacity-75 text-white text-2xl">
+                            {callStatus === CALL_STATUS.CONNECTING && 'Connecting...'}
+                            {callStatus === CALL_STATUS.RINGING && 'Ringing...'}
+                            {callStatus === CALL_STATUS.DISCONNECTED && 'Call Ended'}
+                            {callStatus === CALL_STATUS.IDLE && 'Ready to Call'}
+                        </div>
+                    )}
                 </div>
 
-                {/* Bottom Control Bar */}
+                {/* Controls */}
                 <div className="flex justify-center items-center p-4 bg-white border-t border-gray-200 space-x-4">
-                    {/* Video Toggle */}
-                    <button className="p-3 bg-gray-300 text-white rounded-full shadow-md hover:bg-red-600 transition duration-150">
-                        <Video />
-                    </button>
-
-                    {/* Call End Button */}
-                    <button className="p-3 bg-red-400 text-white rounded-full shadow-md hover:bg-red-600 transition duration-150">
+                    {!isAudioOnly && (
+                        <button
+                            className="p-3 rounded-full shadow-md transition duration-150 bg-gray-300 text-gray-800 hover:bg-gray-400"
+                            aria-label="Toggle Video"
+                            disabled={callStatus !== CALL_STATUS.INCALL}
+                        >
+                            <Video />
+                        </button>
+                    )}
+                    <button
+                        onClick={onEndCall}
+                        className="p-3 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition duration-150"
+                        aria-label="End Call"
+                        disabled={callStatus !== CALL_STATUS.INCALL}
+                    >
                         <Phone />
                     </button>
-
-                    {/* Microphone Toggle */}
-                    <button className="p-3 bg-gray-300 text-white rounded-full shadow-md hover:bg-red-600 transition duration-150">
-                        <Mic />
+                    <button
+                        onClick={onToggleMic}
+                        className={`p-3 rounded-full shadow-md transition duration-150 ${isMicMuted ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                            }`}
+                        aria-label={isMicMuted ? 'Unmute Microphone' : 'Mute Microphone'}
+                        disabled={callStatus !== CALL_STATUS.INCALL}
+                    >
+                        {isMicMuted ? <MicOff /> : <Mic />}
                     </button>
                 </div>
             </div>
         </div>
-
-    )
+    );
 }
 
-export default CallAndVideo
+export default CallAndVideo;
