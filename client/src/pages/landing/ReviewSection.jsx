@@ -16,27 +16,50 @@ const patientReviews = [
     location: "กรุงเทพฯ",
     review: `บริการดีมาก คุณหมอให้คำปรึกษาอย่างละเอียด...`,
   },
+    {
+    id: 3,
+    imageSrc: "/patient3.svg",
+    name: "ณัฐวุฒิ วงศ์ทอง",
+    location: "ขอนแก่น",
+    review: `ใช้งานง่ายและสะดวกมากครับ ไม่ต้องรอนาน คุณหมอให้คำแนะนำที่ชัดเจนและตรงประเด็น รู้สึกประทับใจมากกับบริการนี้`,
+  },
+  {
+    id: 4,
+    imageSrc: "/patient4.svg",
+    name: "มาลี สวัสดิ์",
+    location: "เชียงราย",
+    review: `แอปใช้งานง่าย สามารถจองเวลาพบแพทย์ได้รวดเร็วและสะดวกมาก แพทย์มีความเป็นมืออาชีพและตอบคำถามได้ละเอียดทุกเรื่องค่ะ`,
+  },
+  {
+    id: 5,
+    imageSrc: "/patient5.svg",
+    name: "ปกรณ์ วัฒนา",
+    location: "นครราชสีมา",
+    review: `ประสบการณ์ดีมากครับ การติดต่อสื่อสารกับแพทย์รวดเร็วและชัดเจน ทำให้การรักษาเป็นไปอย่างราบรื่นและมั่นใจ`,
+  },
 ];
 
 function ReviewSection({ bgColor }) {
   const defaultBgColor = "#EEF7FB";
   const visibleCount = 1;
   const [review, setReview] = useState(0);
+  const visibleReviews = [
+    ...patientReviews.slice(review, review + visibleCount),
+    ...patientReviews.slice(
+      0,
+      Math.max(0, review + visibleCount - patientReviews.length)
+    ),
+  ];
 
   const handlePrev = () => {
-    setCurrentIndex((prev) =>
-      prev === 0 ? review.length - 1 : prev - 1
-    );
+    setReview((prev) => (prev === 0 ? patientReviews.length - 1 : prev - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex((prev) =>
-      prev === review.length - 1 ? 0 : prev + 1
-    );
+    setReview((prev) => (prev === patientReviews.length - 1 ? 0 : prev + 1));
   };
 
-    const currentReview = patientReviews[review];
-
+  
   return (
     <div
       className="relative flex flex-col items-center w-full py-10 px-4 sm:px-6 lg:px-8 overflow-hidden"
@@ -55,11 +78,13 @@ function ReviewSection({ bgColor }) {
       />
 
       <div className="flex flex-col lg:flex-row gap-8 lg:gap-20 items-center w-full max-w-6xl">
-        <button className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block" onClick={handlePrev}>
+        <button
+          className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block"
+          onClick={handlePrev}
+        >
           {"<"}
         </button>
-
-        {patientReviews.map((item) => (
+        {visibleReviews?.map((item) => (
           <PatientReview
             key={item.id}
             id={item.id}
@@ -70,7 +95,10 @@ function ReviewSection({ bgColor }) {
           />
         ))}
 
-        <button className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block" onClick={handleNext}>
+        <button
+          className="btn btn-circle btn-sm hover:bg-[#0E82FD] hover:text-white transition-colors hidden lg:block"
+          onClick={handleNext}
+        >
           {">"}
         </button>
       </div>

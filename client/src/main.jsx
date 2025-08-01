@@ -6,8 +6,8 @@ import App from './App.jsx';
 import './index.css';
 import authStore from './stores/authStore.js'
 
-
-authStore.getState().checkAuth();
+//rutclose
+// authStore.getState().checkAuth();
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     

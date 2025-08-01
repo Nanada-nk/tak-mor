@@ -216,7 +216,7 @@ function VideoCall({ roomId: urlRoomId, appointmentData }) {
       console.log("Cleanup complete (useEffect return).");
     };
     // eslint-disable-next-line
-  }, [urlRoomId, currentUser, appointmentData]); // <--- **ลด Dependencies เหลือแค่นี้เท่านั้น! (สำคัญมาก!)**
+  }, []); // <--- **ลด Dependencies เหลือแค่นี้เท่านั้น! (สำคัญมาก!)**
 
   // --- Handlers (ส่วนที่แก้ไข: เพิ่มการเคลียร์ ref ใน handleEndCall) ---
   const handleToggleMic = useCallback(() => {

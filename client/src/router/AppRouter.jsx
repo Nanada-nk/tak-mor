@@ -80,22 +80,8 @@ function AppRouter() {
   const isLoading = authStore((state) => state.isLoading)
 
   useEffect(() => {
-    const setupAxiosInterceptors = async () => {
-      try {
-        const backendUrl = import.meta.env.VITE_API_BASE_URL;
-        if (!backendUrl) {
-          console.error("VITE_API_BASE_URL is not defined in client/.env");
-          return;
-        }
-        await fetchCsrfToken(); // Call fetchCsrfToken from config/axios.js
-      } catch (error) {
-        console.error('Failed to setup Axios interceptor:', error);
-      }
-    };
-
-    setupAxiosInterceptors();
     checkAuth();
-  }, [checkAuth]);
+  }, []);
 
   if (isLoading) {
     return (
@@ -159,9 +145,9 @@ function AppRouter() {
           <Route path="call/:roomId" element={<CallingPage />} />
           <Route path="chat/:appointmentId" element={<ChatPage />} />
           <Route path="video/:roomId" element={<VideoCallPage />} />
-          <Route path="call" element={<CallingPage />} />
-          <Route path="chat" element={<ChatPage />} />
-          <Route path="video" element={<VideoCallPage />} />
+          {/* <Route path="call" element={<CallingPage />} /> */}
+          {/* <Route path="chat" element={<ChatPage />} /> */}
+          {/* <Route path="video" element={<VideoCallPage />} /> */}
           {/* Booking */}
           <Route path="booking" element={<BookingPage />} />
           <Route path="appointment" element={<AppointmentTypePage />} />

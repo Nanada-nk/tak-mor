@@ -6,9 +6,10 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
 
-  useEffect(() => {
-    fetchCsrfToken();
-  }, []);
+  //rutclose
+  // useEffect(() => {
+  //   fetchCsrfToken();
+  // }, []);
 
 
   return (
