@@ -245,6 +245,7 @@ model WebRTCSession {
   Appointment   Appointment @relation(fields: [appointmentId], references: [id])
 }
 
+
 model ChatMessage {
   id             Int         @id @default(autoincrement())
   appointmentId  Int

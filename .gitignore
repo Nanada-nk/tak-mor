@@ -1,5 +1,4 @@
 .vscode/
 .env
 /server/.env
-/server/src/config/certs/ca.pem
 /client/.env
