@@ -113,16 +113,19 @@ import VideoCallTwilio from "../../../components/callandvideo/VideoCallTwilio.js
 import teleApi from '../../../api/teleApi.js';
 import adminTeleApi from '../../../api/adminTeleApi.js';
 import teleStore, { CALL_STATUS } from '../../../stores/teleStore.js';
+import authStore from '../../../stores/authStore.js';
 
 function VideoCallPage() {
   const { roomId } = useParams();
   const navigate = useNavigate();
+  const currentUser = authStore((state) => state.user)
 
   // ดึง state และ action ที่จำเป็นจาก teleStore
   const callStatus = teleStore((state) => state.callStatus);
   const setCallStatus = teleStore((state) => state.setCallStatus);
   const setError = teleStore((state) => state.setError);
   const teleError = teleStore((state) => state.error);
+  
 
   const [appointmentData, setAppointmentData] = useState(null);
   const [twilioToken, setTwilioToken] = useState(null);
@@ -131,7 +134,7 @@ function VideoCallPage() {
   useEffect(() => {
     console.log('useEffectVideoCallPage')
     const fetchAllData = async () => {
-      if (!roomId) {
+      if (!roomId || !currentUser) {
         setError("Room ID is missing in URL.");
         setCallStatus(CALL_STATUS.APPOINTMENT_ERROR);
         return;
@@ -155,7 +158,8 @@ function VideoCallPage() {
         setAppointmentData(fetchedAppointment);
 
         // 2. โหลด Twilio Token (เรียก Endpoint ที่เราสร้างเมื่อกี้)
-        const userId = fetchedAppointment.patientId;
+        // const userId = fetchedAppointment.patientId;
+        const userId = currentUser.id;
         const token = await teleApi.getTwilioVideoToken(userId, roomId);
         console.log('token', token)
 
@@ -174,7 +178,7 @@ function VideoCallPage() {
     return () => {
       teleStore.getState().clearTeleState();
     };
-  }, [roomId, navigate, setCallStatus, setError]);
+  }, [roomId, navigate, setCallStatus, setError, currentUser]);
 
 
   if (callStatus === CALL_STATUS.LOADING_APPOINTMENT) {
