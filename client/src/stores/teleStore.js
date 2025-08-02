@@ -15,11 +15,11 @@ export const CALL_STATUS = {
 const getDefaultState = () => ({
   callStatus: CALL_STATUS.IDLE,
   chatMessages: [],
-  participants: [],
+  // participants: [],
   currentRoomId: null,
   isMicMuted: false,
   isCameraOff: false,
-  socketConnected: false,
+  // socketConnected: false,
   error: null,
 });
 
@@ -35,9 +35,9 @@ const teleStore = create((set, get) => ({
 
   setChatMessages: (messages) => set({ chatMessages: messages }),
 
-  setParticipants: (participants) => set({
-    participants: Array.isArray(participants) ? participants : []
-  }),
+  // setParticipants: (participants) => set({
+  //   participants: Array.isArray(participants) ? participants : []
+  // }),
 
   setCurrentRoomId: (roomId) => set({ currentRoomId: roomId }),
 
@@ -45,7 +45,7 @@ const teleStore = create((set, get) => ({
 
   setCameraOff: (isOff) => set({ isCameraOff: isOff }),
 
-  setSocketConnected: (connected) => set({ socketConnected: connected }),
+  // setSocketConnected: (connected) => set({ socketConnected: connected }),
 
   toggleMic: () => set((state) => ({ isMicMuted: !state.isMicMuted })),
 
