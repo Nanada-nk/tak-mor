@@ -1,10 +1,64 @@
 import prisma from "../config/prisma.config.js";
 import createError from "../utils/create-error.js"
+import twilio from 'twilio';
+
+const AccessToken = twilio.jwt.AccessToken
+const VideoGrant = AccessToken.VideoGrant
+const VoiceGrant = AccessToken.VoiceGrant
 
 const teleService = {}
 
+teleService.generateTwilioVideoToken = async (userId, roomId) => {
+  console.log('teleService.generateTwilioVideoToken')
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const apiKeySid = process.env.TWILIO_API_KEY_SID;
+  const apiKeySecret = process.env.TWILIO_API_KEY_SECRET;
+
+  if (!accountSid || !apiKeySid || !apiKeySecret) {
+    throw createError(500, 'Twilio credentials not configured.', 'missing_twilio_credentials');
+  }
+
+  const token = new AccessToken(accountSid, apiKeySid, apiKeySecret, {
+    identity: userId
+  });
+  console.log('token', token)
+
+  const videoGrant = new VideoGrant({
+    room: roomId,
+  });
+  console.log('videoGrant', videoGrant)
+
+  token.addGrant(videoGrant);
+
+  return token.toJwt();
+};
+
+teleService.generateTwilioVoiceToken = async (userId) => {
+  console.log('teleService.generateTwilioVoiceToken')
+  const accountSid = process.env.TWILIO_ACCOUNT_SID;
+  const apiKeySid = process.env.TWILIO_API_KEY_SID;
+  const apiKeySecret = process.env.TWILIO_API_KEY_SECRET;
+
+  if (!accountSid || !apiKeySid || !apiKeySecret) {
+    throw createError(500, 'Twilio credentials not configured.', 'missing_twilio_credentials');
+  }
+
+  const token = new AccessToken(accountSid, apiKeySid, apiKeySecret, {
+    identity: userId
+  });
+  console.log('token', token)
+
+  const voiceGrant = new VoiceGrant({
+    outgoingApplicationSid: process.env.TWILIO_VOICE_APP_SID,
+  });
+  console.log('voiceGrant', voiceGrant)
+  token.addGrant(voiceGrant);
+
+  return token.toJwt();
+};
 
 teleService.createChatMessage = async (messageData) => {
+  console.log('teleService.createChatMessage')
   const { appointmentId, senderId, receiverId, messageContent, messageType, mediaUrl } = messageData;
 
   const appointment = await prisma.appointment.findUnique({
@@ -38,11 +92,12 @@ teleService.createChatMessage = async (messageData) => {
       isRead: false,
     },
   });
+  console.log('newMessage', newMessage)
   return newMessage;
 }
 
 teleService.getMessagesByAppointment = async (appointmentId) => {
-
+  console.log('teleService.getMessagesByAppointment')
   const messages = await prisma.chatMessage.findMany({
     where: { appointmentId: parseInt(appointmentId) },
     orderBy: { timestamp: 'asc' },
@@ -51,10 +106,12 @@ teleService.getMessagesByAppointment = async (appointmentId) => {
       Receiver: { select: { id: true, firstName: true, lastName: true } },
     },
   });
+  console.log('messages', messages)
   return messages;
 }
 
 teleService.setChatMessageRead = async (messageId, userId) => {
+  console.log('teleService.setChatMessageRead')
   const message = await prisma.chatMessage.findUnique({
     where: { id: parseInt(messageId) },
     select: { receiverId: true },
@@ -72,10 +129,12 @@ teleService.setChatMessageRead = async (messageId, userId) => {
     where: { id: parseInt(messageId) },
     data: { isRead: true },
   });
+  console.log('updatedMessage', updatedMessage)
   return updatedMessage;
 }
 
 teleService.createCallLog = async (callData) => {
+  console.log('teleService.createCallLog')
   const { appointmentId, callerId, receiverId, callType, startTime, endTime, durationMinutes, status, webRTCSessionId } = callData;
 
 
@@ -115,10 +174,12 @@ teleService.createCallLog = async (callData) => {
       webRTCSessionId: webRTCSessionId ? parseInt(webRTCSessionId) : null,
     },
   });
+  console.log('newCallLog', newCallLog)
   return newCallLog;
 }
 
 teleService.updateExistingCallLog = async (callLogId, updateData, userId) => {
+  console.log('teleService.updateExistingCallLog')
   const existingCallLog = await prisma.callLog.findUnique({
     where: { id: parseInt(callLogId) },
 
@@ -142,10 +203,12 @@ teleService.updateExistingCallLog = async (callLogId, updateData, userId) => {
       status: updateData.status || undefined,
     },
   });
+  console.log('updatedCallLog', updatedCallLog)
   return updatedCallLog;
 }
 
 teleService.getCallLogsByAppointmentId = async (appointmentId) => {
+  console.log('teleService.getCallLogsByAppointmentId')
   const callLogs = await prisma.callLog.findMany({
     where: { appointmentId: parseInt(appointmentId) },
     orderBy: { startTime: 'asc' },
@@ -155,18 +218,22 @@ teleService.getCallLogsByAppointmentId = async (appointmentId) => {
       Receiver: { select: { id: true, firstName: true, lastName: true } },
     },
   });
+  console.log('callLogs', callLogs)
   return callLogs;
 }
 
 teleService.getNotificationsByUserId = async (userId) => {
+  console.log('teleService.getNotificationsByUserId')
   const notifications = await prisma.notification.findMany({
     where: { userId: parseInt(userId) },
     orderBy: { createdAt: 'desc' },
   });
+  console.log('notifications', notifications)
   return notifications;
 }
 
 teleService.setNotificationRead = async (notificationId, userId) => {
+  console.log('teleService.setNotificationRead')
   const notification = await prisma.notification.findUnique({
     where: { id: parseInt(notificationId) },
     select: { userId: true },
@@ -184,10 +251,12 @@ teleService.setNotificationRead = async (notificationId, userId) => {
     where: { id: parseInt(notificationId) },
     data: { isRead: true },
   });
+  console.log('updatedNotification', updatedNotification)
   return updatedNotification;
 }
 
 teleService.deleteExistingNotification = async (notificationId, userId, userRole) => {
+  console.log('teleService.deleteExistingNotification')
   const notification = await prisma.notification.findUnique({
     where: { id: parseInt(notificationId) },
     select: { userId: true },
@@ -204,6 +273,7 @@ teleService.deleteExistingNotification = async (notificationId, userId, userRole
   await prisma.notification.delete({
     where: { id: parseInt(notificationId) },
   });
+  console.log('await prisma.notification.delete success')
 }
 
 

@@ -1,6 +1,7 @@
 import express from 'express'
 import teleController from '../controllers/tele.controller.js';
 
+
 const teleRouter = express.Router()
 
 // --- Chat Message Routes ---
@@ -20,5 +21,10 @@ teleRouter.get('/notifications/users/:userId', teleController.getNotificationsBy
 teleRouter.put('/notifications/:notificationId/read', teleController.markNotificationAsRead);
 teleRouter.delete('/notifications/:notificationId', teleController.deleteNotification);
 
+
+// --- twilio /api/tele/token ---
+teleRouter.post('/token/video', teleController.generateTwilioVideoToken)
+teleRouter.post('/token/voice', teleController.generateTwilioVoiceToken)
+teleRouter.post('/voice', teleController.handleVoiceTwiML);
 
 export default teleRouter
