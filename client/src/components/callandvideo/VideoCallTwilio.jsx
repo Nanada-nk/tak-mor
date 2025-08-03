@@ -204,15 +204,15 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
     <div className="flex flex-col items-center p-4">
       {/* <h1 className="text-2xl font-bold mb-4">การโทรด้วยวีดีโอ</h1> */}
       <p className="text-sm text-gray-600 mb-4">{statusMessage}</p>
-      <div className="flex flex-col relative md:flex-row space-y-4 md:space-y-0 md:space-x-4 w-full max-w-4xl">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {/* Local Video Stream */}
-        <div className="absolute z-10 right-0 bottom-4 w-1/3 h-1/3 bg-black rounded-lg overflow-hidden shadow-lg aspect-video">
-          <div ref={localVideoRef} className="absolute inset-0 z-20 w-full h-full"></div>
+        <div className="relative w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video">
+          <div ref={localVideoRef} className="relative w-full h-full"></div>
           <span className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 p-1 px-2 rounded-md z-20">คุณ</span>
         </div>
         {/* Remote Video Stream */}
         <div className="relative w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video">
-          <div ref={remoteVideoRef} className="relative w-full h-full object-cover"></div>
+          <div ref={remoteVideoRef} className="relative w-full h-full"></div>
           <span className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 p-1 px-2 rounded-md z-20">คู่สนทนา</span>
         </div>
       </div>
