@@ -39,7 +39,6 @@ function ChatPage() {
     socketRef.current = io(import.meta.env.VITE_API_BASE_URL, {
       withCredentials: true,
       transports: ['websocket'],
-      // query: { appointmentId: appointmentId, userId: currentUser.id, userName: currentUser.firstName || currentUser.email },
     });
 
     socketRef.current.on('connect', () => {
@@ -80,12 +79,11 @@ function ChatPage() {
     const messageData = {
       roomId: appointmentId,
       senderId: currentUser.id,
-      senderName: currentUser.firstName || currentUser.email, // เพิ่ม senderName
-      // TODO: ถ้าต้องการ receiverId ใน Frontend ต้องหาจาก participants หรือ API อื่น
-      receiverId: currentUser.role === 'PATIENT' ? 0 : 0, // Placeholder
+      senderName: currentUser.firstName || currentUser.email,
+      receiverId: currentUser.role === 'PATIENT' ? 0 : 0,
       message: newMessageContent.trim(),
       messageType: 'TEXT',
-      timestamp: new Date().toISOString(), // ส่ง timestamp จาก Frontend
+      timestamp: new Date().toISOString(),
       isRead: false,
     };
 
@@ -93,7 +91,6 @@ function ChatPage() {
       // *** ส่งข้อความผ่าน Socket.IO โดยตรง ไม่เรียก API เพื่อบันทึกลง DB ***
       if (socketRef.current && socketRef.current.connected) {
         socketRef.current.emit('chatMessage', messageData); // Emit 'chatMessage' event
-        // addChatMessage(messageData); // อัปเดต UI ของผู้ส่งทันที
         setNewMessageContent('');
       } else {
         setLocalError("Socket not connected. Cannot send message.");
@@ -127,40 +124,65 @@ function ChatPage() {
     )
   }
 
+ 
   return (
-    <div className="flex flex-col h-[900px] font-prompt bg-gray-100">
+    <div className="font-prompt flex flex-col container mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-[840px] shadow-lg rounded-lg overflow-hidden bg-[#d9e6f7] my-2">
       {/* Chat Header */}
-      <div className="bg-white p-4 shadow-sm border-b border-gray-200">
-        <h2 className="font-bold text-lg">Chat with {currentUser.role === 'PATIENT' ? 'DOCTOR' : 'PATIENT'}</h2>
+      <div className="bg-white p-4 shadow-sm border-b border-gray-200 flex items-center gap-3">
+        <h2 className="font-bold text-lg">Chat with {currentUser?.role === 'PATIENT' ? 'DOCTOR' : 'PATIENT'}</h2>
         <p className="text-sm text-gray-500">Appointment ID: {appointmentId}</p>
       </div>
 
       {/* Messages Area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-2 md:space-y-3 bg-[#d9e6f7]">
         {chatMessages.length === 0 ? (
           <div className="text-center text-gray-500 mt-10">No messages yet. Start a conversation!</div>
         ) : (
-          chatMessages.map((msg, index) => (
-            <div
-              key={msg.id || index} // ใช้ index เป็น fallback key ถ้า msg.id ไม่มี
-              className={`flex ${msg.senderId === currentUser.id ? 'justify-end' : 'justify-start'}`}
-            >
+          chatMessages.map((msg, index) => {
+            // เตรียม URL รูปภาพสำหรับผู้ส่งแต่ละคน และสำหรับ currentUser
+            const senderAvatarSrc = msg.senderProfileImageUrl || 'https://res.cloudinary.com/dhoyopcr7/image/upload/v1754248709/user-hands-svgrepo-com_puf9vw.svg';
+            const currentUserAvatarSrc = currentUser?.profilePictureUrl || 'https://res.cloudinary.com/dhoyopcr7/image/upload/v1754248709/user-hands-svgrepo-com_puf9vw.svg'; 
+
+            return (
               <div
-                className={`max-w-xs px-4 py-2 rounded-lg shadow-md ${msg.senderId === currentUser.id
-                  ? 'bg-blue-500 text-white'
-                  : 'bg-white text-gray-800'
-                  }`}
+                key={msg.id || index}
+                className={`flex ${msg.senderId === currentUser?.id ? 'justify-end' : 'justify-start'} items-end`}
               >
-                <p className="font-semibold text-xs mb-1">
-                  {msg.senderId === currentUser.id ? 'You' : msg.senderName || 'Unknown User'} {/* ใช้ msg.senderName */}
-                </p>
-                <p>{msg.message}</p>
-                <span className="block text-right text-xs opacity-70 mt-1">
-                  {new Date(msg.timestamp).toLocaleTimeString()}
-                </span>
+                {/* รูปโปรไฟล์ของคู่สนทนา (เมื่อไม่ใช่ข้อความของเรา) */}
+                {msg.senderId !== currentUser?.id && ( 
+                  <img
+                    src={senderAvatarSrc}
+                    alt={`${msg.senderName || 'User'} Avatar`}
+                    className="w-10 h-10 rounded-full mr-2 bg-white p-1 shadow-md"
+                  />
+                )}
+
+                <div
+                  className={`max-w-xs px-3 py-2 rounded-lg shadow-xl break-words ${msg.senderId === currentUser?.id
+                    ? 'bg-blue-500 text-white'
+                    : 'bg-white text-gray-800'
+                  }`}
+                >
+                  <p className="font-semibold text-xs mb-1">
+                    {msg.senderId === currentUser?.id ? 'You' : msg.senderName || 'Unknown User'}
+                  </p>
+                  <p className="text-sm">{msg.message}</p>
+                  <span className="block text-right text-xs opacity-70 mt-0.5">
+                    {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </span>
+                </div>
+
+                {/* รูปโปรไฟล์ของเรา (เมื่อเป็นข้อความของเรา) */}
+                {msg.senderId === currentUser?.id && ( 
+                  <img
+                    src={currentUserAvatarSrc}
+                    alt="Your Avatar"
+                    className="w-10 h-10 rounded-full ml-2 bg-white p-1 shadow-md"
+                  />
+                )}
               </div>
-            </div>
-          ))
+            );
+          })
         )}
         <div ref={messagesEndRef} />
       </div>
@@ -173,11 +195,11 @@ function ChatPage() {
             value={newMessageContent}
             onChange={(e) => setNewMessageContent(e.target.value)}
             placeholder="Type your message..."
-            className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            className="flex-1 border border-blue-50 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm"
           />
           <button
             type="submit"
-            className="btn btn-primary rounded-full px-4 py-2"
+            className="btn btn-primary rounded-full px-7 py-2 text-sm"
             disabled={!newMessageContent.trim()}
           >
             Send
@@ -186,6 +208,7 @@ function ChatPage() {
       </div>
     </div>
   );
+
 }
 
 export default ChatPage;
