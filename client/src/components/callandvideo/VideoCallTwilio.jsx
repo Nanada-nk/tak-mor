@@ -198,6 +198,22 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
         setStatusMessage(`เชื่อมต่อสำเร็จแล้วค่ะ! ห้อง: ${room.name}`);
         console.log(`เข้าร่วม Room ได้สำเร็จ: ${room.name}`);
 
+        room.participants.forEach(participant => {
+          participant.tracks.forEach(publication => {
+            if (publication.isSubscribed) {
+              const track = publication.track;
+              if (remoteVideoRef.current) {
+                remoteVideoRef.current.appendChild(track.attach());
+              }
+            }
+          });
+          participant.on('trackSubscribed', track => {
+            if (remoteVideoRef.current) {
+              remoteVideoRef.current.appendChild(track.attach());
+            }
+          });
+        });
+
         // 3. จัดการเหตุการณ์เมื่อมีผู้เข้าร่วมใหม่
         room.on('participantConnected', participant => {
           console.log(`ผู้ใช้ "${participant.identity}" เข้าร่วมค่ะ`);
