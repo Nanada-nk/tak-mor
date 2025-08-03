@@ -1,5 +1,6 @@
 import { Phone, Video, Mic, MicOff } from "lucide-react";
 import { CALL_STATUS } from '../../stores/teleStore.js';
+import { NavLink } from "react-router";
 
 function CallAndVideo({
     user,               
@@ -89,17 +90,18 @@ function CallAndVideo({
                             <Video />
                         </button>
                     )}
-                    <button
+                    <NavLink
+                        to="/"
                         onClick={onEndCall}
                         className="p-3 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600 transition duration-150"
                         aria-label="End Call"
                         disabled={callStatus !== CALL_STATUS.INCALL}
                     >
                         <Phone />
-                    </button>
+                    </NavLink>
                     <button
                         onClick={onToggleMic}
-                        className={`p-3 rounded-full shadow-md transition duration-150 ${isMicMuted ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
+                        className={`p-3 rounded-full shadow-md transition duration-150 cursor-pointer ${isMicMuted ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-gray-300 text-gray-800 hover:bg-gray-400'
                             }`}
                         aria-label={isMicMuted ? 'Unmute Microphone' : 'Mute Microphone'}
                         disabled={callStatus !== CALL_STATUS.INCALL}
