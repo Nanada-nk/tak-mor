@@ -2,11 +2,11 @@ import { Phone, Video, Mic, MicOff } from "lucide-react";
 import { CALL_STATUS } from '../../stores/teleStore.js';
 
 function CallAndVideo({
-    user,               // { name, avatar, status }
-    doctor,             // { name, avatar }
+    user,               
+    doctor,            
     localUserAvatar,
     callStatus,
-    callTime = '00:00', // << รับ callTime จาก props
+    callTime = '00:00',
     isMicMuted,
     onToggleMic,
     onEndCall,
