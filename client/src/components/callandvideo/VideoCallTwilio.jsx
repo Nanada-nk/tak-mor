@@ -212,7 +212,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
         </div>
         {/* Remote Video Stream */}
         <div className="relative w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video">
-          <div ref={remoteVideoRef} className="absolute inset-0 z-20 w-full h-full"></div>
+          <div ref={remoteVideoRef} className="relative w-full"></div>
           <span className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 p-1 px-2 rounded-md z-20">คู่สนทนา</span>
         </div>
       </div>
