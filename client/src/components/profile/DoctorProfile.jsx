@@ -15,7 +15,8 @@ function DoctorProfile({
   saveEdit,
   setEditValue,
   handleInputKey,
-  onSpecialtiesSave
+  onSpecialtiesSave,
+  onProfilePictureClick // Add this line
 }) {
   // Determine if the profile is in display-only mode (no edit props passed)
   const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
@@ -89,12 +90,24 @@ function DoctorProfile({
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-200/40 to-transparent pointer-events-none" />
           {/* Profile Picture on the left */}
           <div className="relative z-10 flex-shrink-0">
-            <div className="h-36 w-36 flex items-center justify-center rounded-full bg-blue-100 border-4 border-blue-300 shadow-lg overflow-hidden ring-4 ring-white">
+            <div
+              className={`h-36 w-36 flex items-center justify-center rounded-full bg-blue-100 border-4 border-blue-300 shadow-lg overflow-hidden ring-4 ring-white ${!isDisplayOnly ? 'cursor-pointer hover:ring-blue-400' : ''}`}
+              onClick={!isDisplayOnly && typeof onProfilePictureClick === 'function' ? onProfilePictureClick : undefined}
+              title={!isDisplayOnly ? 'Change Profile Picture' : undefined}
+            >
               <img
-                src={`https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=3b82f6&color=fff&size=160`}
+                src={profile.profilePictureUrl ? profile.profilePictureUrl : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=3b82f6&color=fff&size=160`}
                 alt="Doctor Avatar"
                 className="h-full w-full object-cover"
               />
+              {!isDisplayOnly && (
+                <div className="absolute bottom-0 right-0 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-full p-2.5 shadow-lg transition-all duration-200 hover:shadow-xl transform hover:scale-105 ring-2 ring-white">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+              )}
             </div>
           </div>
           {/* Name, Email, Phone on the right */}

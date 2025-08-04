@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BubblesIcon } from "lucide-react";
 import authStore from '../../../stores/authStore.js';
-import DoctorProfile from "../../../components/profile/doctorProfile.jsx";
+import DoctorProfile from "../../../components/profile/DoctorProfile.jsx";
 
 function DoctorProfilePage() {
   const user = authStore(state => state.user);

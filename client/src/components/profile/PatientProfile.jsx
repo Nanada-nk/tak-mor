@@ -1,5 +1,6 @@
 
 import { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router";
 
 function PatientProfile({
   profile,
@@ -10,8 +11,22 @@ function PatientProfile({
   cancelEdit,
   saveEdit,
   setEditValue,
-  handleInputKey
+  handleInputKey,
+  onProfilePictureClick
 }) {
+  const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
+  const navigate = useNavigate();
+  // Helper to get value for a field from editValue or profile
+  const getFieldValue = (field) => {
+    let val = '';
+    if (editField && typeof editValue === 'object' && editValue !== null && field in editValue) {
+      val = editValue[field];
+    } else if (profile?.[field] !== undefined && profile?.[field] !== null) {
+      val = profile[field];
+    }
+    // Always return a string for input value
+    return val === undefined || val === null ? '' : String(val);
+  };
   const [tab, setTab] = useState("personal");
   const firstNameRef = useRef(null);
   const lastNameRef = useRef(null);
@@ -43,22 +58,65 @@ function PatientProfile({
 
   return (
     <div className="min-h-screen bg-gray-50 py-10">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex flex-col md:flex-row gap-8 items-center md:items-start">
+      <div className="max-w-4xl mx-auto relative">
+        {/* Edit/Done button top right */}
+        {isDisplayOnly ? (
+          <button
+            className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded shadow hover:bg-blue-800 transition-colors z-20"
+            onClick={() => navigate('/dashboard/patient/profile/edit')}
+            title="Edit Profile"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-2-2" /></svg>
+            Edit
+          </button>
+        ) : (
+          <button
+            className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded shadow hover:bg-green-800 transition-colors z-20"
+            onClick={() => navigate('/dashboard/patient/profile')}
+            title="Done"
+          >
+            Done
+          </button>
+        )}
+        {/* Profile Pic + Name Row */}
+        <div className="flex flex-col items-center md:flex-row md:items-center gap-6 mb-8">
           {/* Profile Picture */}
-          <div className="flex flex-col items-center md:items-center md:w-1/4 pt-2">
-            <div className="relative flex flex-col items-center">
-              <div className="h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none">
+          <div className="relative">
+            <div 
+              className={`h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none ${!isDisplayOnly ? 'cursor-pointer hover:ring-4 hover:ring-blue-300' : ''}`}
+              onClick={!isDisplayOnly && typeof onProfilePictureClick === 'function' ? onProfilePictureClick : undefined}
+              title={!isDisplayOnly ? 'Change Profile Picture' : undefined}
+            >
+              {profile?.profilePictureUrl ? (
+                <img
+                  src={profile.profilePictureUrl}
+                  alt="Patient Avatar"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
                 <span className="text-6xl font-bold text-white">
                   {profile?.firstName?.[0]?.toUpperCase() || ''}{profile?.lastName?.[0]?.toUpperCase() || ''}
                 </span>
-              </div>
-              <div className="mt-3 text-center">
-                <h1 className="text-2xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
-                <p className="text-sm text-gray-500">Patient Profile</p>
-              </div>
+              )}
             </div>
+            {!isDisplayOnly && (
+              <div 
+                className="absolute bottom-0 right-0 bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 rounded-full p-2.5 shadow-lg transition-all duration-200 hover:shadow-xl transform hover:scale-105 ring-2 ring-white cursor-pointer"
+                onClick={typeof onProfilePictureClick === 'function' ? onProfilePictureClick : undefined}
+                title="Change Profile Picture"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              </div>
+            )}
           </div>
+          {/* Name */}
+          <div className="flex flex-col items-center md:items-start">
+            <h1 className="text-3xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
+          </div>
+        </div>
 
           {/* Tabs and Content */}
           <div className="flex-1">
@@ -249,15 +307,99 @@ function PatientProfile({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Name</label>
-                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactName || '-'}</span>
+                    {editField === "emergencyContactName" ? (
+                      <>
+                        <input
+                          className="input input-sm w-full"
+                          value={typeof editValue === 'object' ? editValue.emergencyContactName || '' : editValue || ''}
+                          onChange={e => setEditValue({ ...editValue, emergencyContactName: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="Emergency Contact Name"
+                        />
+                        <div className="flex items-center gap-2 mt-1">
+                          <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                          <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.emergencyContactName || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactName", {
+                            emergencyContactName: profile?.emergencyContactName || '',
+                            emergencyContactPhone: profile?.emergencyContactPhone || '',
+                            emergencyContactRelation: profile?.emergencyContactRelation || ''
+                          })} title="Edit Emergency Contact Name">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Phone</label>
-                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactPhone || '-'}</span>
+                    {editField === "emergencyContactPhone" ? (
+                      <>
+                        <input
+                          className="input input-sm w-full"
+                          value={typeof editValue === 'object' ? editValue.emergencyContactPhone || '' : editValue || ''}
+                          onChange={e => setEditValue({ ...editValue, emergencyContactPhone: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="Emergency Contact Phone"
+                        />
+                        <div className="flex items-center gap-2 mt-1">
+                          <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                          <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.emergencyContactPhone || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactPhone", {
+                            emergencyContactName: profile?.emergencyContactName || '',
+                            emergencyContactPhone: profile?.emergencyContactPhone || '',
+                            emergencyContactRelation: profile?.emergencyContactRelation || ''
+                          })} title="Edit Emergency Contact Phone">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
                   </div>
                   <div className="md:col-span-2">
                     <label className="block text-xs font-medium text-gray-500">Relation</label>
-                    <span className="text-gray-900 mt-1 font-medium">{profile?.emergencyContactRelation || '-'}</span>
+                    {editField === "emergencyContactRelation" ? (
+                      <>
+                        <input
+                          className="input input-sm w-full"
+                          value={typeof editValue === 'object' ? editValue.emergencyContactRelation || '' : editValue || ''}
+                          onChange={e => setEditValue({ ...editValue, emergencyContactRelation: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="Emergency Contact Relation"
+                        />
+                        <div className="flex items-center gap-2 mt-1">
+                          <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                          <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                        </div>
+                      </>
+                    ) : (
+                      <span className="text-gray-900 mt-1 font-medium">
+                        {profile?.emergencyContactRelation || '-'}
+                        {startEdit && (
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactRelation", {
+                            emergencyContactName: profile?.emergencyContactName || '',
+                            emergencyContactPhone: profile?.emergencyContactPhone || '',
+                            emergencyContactRelation: profile?.emergencyContactRelation || ''
+                          })} title="Edit Emergency Contact Relation">
+                            ✎
+                          </button>
+                        )}
+                      </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -276,8 +418,8 @@ function PatientProfile({
                       <input
                         ref={heightRef}
                         className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
+                        value={getFieldValue('height')}
+                        onChange={e => setEditValue({ ...editValue, height: e.target.value })}
                         onKeyDown={handleInputKey}
                         disabled={editLoading}
                         placeholder="Height"
@@ -286,7 +428,7 @@ function PatientProfile({
                       <span className="text-gray-900 mt-1 font-medium">
                         {profile?.height || '-'}
                         {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("height", profile?.height)} title="Edit Height">
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("height", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Height">
                             ✎
                           </button>
                         )}
@@ -305,8 +447,8 @@ function PatientProfile({
                       <input
                         ref={weightRef}
                         className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
+                        value={getFieldValue('weight')}
+                        onChange={e => setEditValue({ ...editValue, weight: e.target.value })}
                         onKeyDown={handleInputKey}
                         disabled={editLoading}
                         placeholder="Weight"
@@ -315,7 +457,7 @@ function PatientProfile({
                       <span className="text-gray-900 mt-1 font-medium">
                         {profile?.weight || '-'}
                         {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("weight", profile?.weight)} title="Edit Weight">
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("weight", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Weight">
                             ✎
                           </button>
                         )}
@@ -334,8 +476,8 @@ function PatientProfile({
                       <input
                         ref={bloodTypeRef}
                         className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
+                        value={getFieldValue('bloodType')}
+                        onChange={e => setEditValue({ ...editValue, bloodType: e.target.value })}
                         onKeyDown={handleInputKey}
                         disabled={editLoading}
                         placeholder="Blood Type"
@@ -344,7 +486,7 @@ function PatientProfile({
                       <span className="text-gray-900 mt-1 font-medium">
                         {profile?.bloodType || '-'}
                         {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("bloodType", profile?.bloodType)} title="Edit Blood Type">
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("bloodType", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Blood Type">
                             ✎
                           </button>
                         )}
@@ -363,8 +505,8 @@ function PatientProfile({
                       <input
                         ref={congenitalRef}
                         className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
+                        value={getFieldValue('congenital')}
+                        onChange={e => setEditValue({ ...editValue, congenital: e.target.value })}
                         onKeyDown={handleInputKey}
                         disabled={editLoading}
                         placeholder="Congenital Diseases"
@@ -373,7 +515,7 @@ function PatientProfile({
                       <span className="text-gray-900 mt-1 font-medium">
                         {profile?.congenital || '-'}
                         {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("congenital", profile?.congenital)} title="Edit Congenital Diseases">
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("congenital", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Congenital Diseases">
                             ✎
                           </button>
                         )}
@@ -389,117 +531,30 @@ function PatientProfile({
                   <div>
                     <label className="block text-xs font-medium text-gray-500">Allergies</label>
                     {editField === "allergies" ? (
-                      <input
-                        ref={allergiesRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Allergies"
-                      />
+                      <>
+                        <input
+                          ref={allergiesRef}
+                          className="input input-sm w-full"
+                          value={getFieldValue('allergies')}
+                          onChange={e => setEditValue({ ...editValue, allergies: e.target.value })}
+                          onKeyDown={handleInputKey}
+                          disabled={editLoading}
+                          placeholder="Allergies"
+                        />
+                        <div className="flex items-center gap-2 mt-1">
+                          <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                          <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                        </div>
+                      </>
                     ) : (
                       <span className="text-gray-900 mt-1 font-medium">
                         {profile?.allergies || '-'}
                         {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("allergies", profile?.allergies)} title="Edit Allergies">
+                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("allergies", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Allergies">
                             ✎
                           </button>
                         )}
                       </span>
-                    )}
-                    {editField === "allergies" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500">Surgeries</label>
-                    {editField === "surgeries" ? (
-                      <input
-                        ref={surgeriesRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Surgeries"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.surgeries || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("surgeries", profile?.surgeries)} title="Edit Surgeries">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "surgeries" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
-                  </div>
-                  <div>
-                    <label className="block text-xs font-medium text-gray-500">Medications</label>
-                    {editField === "medications" ? (
-                      <input
-                        ref={medicationsRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Medications"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.medications || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("medications", profile?.medications)} title="Edit Medications">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "medications" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
-                  </div>
-                  <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-500">Medical History</label>
-                    {editField === "medicalHistory" ? (
-                      <input
-                        ref={medicalHistoryRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Medical History"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.medicalHistory || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("medicalHistory", profile?.medicalHistory)} title="Edit Medical History">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "medicalHistory" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
                     )}
                   </div>
                 </div>
@@ -508,8 +563,7 @@ function PatientProfile({
           </div>
         </div>
       </div>
-    </div>
-  );
+    );
 }
 
 export default PatientProfile;

@@ -9,9 +9,57 @@ import { Search, MapPin, Calendar, ChevronDown, BetweenHorizonalStart, LayoutTem
 import Brandner from "../../components/Brandner.jsx";
 import DoctorCardList from "../../components/DoctorList/DoctorCardList.jsx";
 
+
+const doctors = [
+  {
+    id: 1,
+    name: "พญ.ดาวเนอร์",
+    specialty: "แพทย์กระดูกและข้อ",
+    rating: 4.5,
+    reviews: 35,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer1.svg",
+  },
+  {
+    id: 2,
+    name: "นพ.เจมส์",
+    specialty: "แพทย์ระบบประสาทและสมอง",
+    rating: 3.8,
+    reviews: 29,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer2.svg",
+  },
+  {
+    id: 3,
+    name: "พญ.โรส",
+    specialty: "แพทย์กุมารเวช",
+    rating: 4,
+    reviews: 15,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer3.svg",
+  },
+  {
+    id: 4,
+    name: "พญ.เจมม่า",
+    specialty: "แพทย์อายุรกรรม",
+    rating: 5,
+    reviews: 30,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "../../public/DocContainer1.svg",
+  },
+];
+
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
-  const [doctors, setDoctors] = useState([]);
+  // const [doctors, setDoctors] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
@@ -238,52 +286,64 @@ function DoctorAvailabilityPage() {
 
             <div className="font-prompt">
               {doctors.map(doctor => (
-                <div key={doctor.id} className=" mb-8 border rounded-xl p-4">
-                  <div>
-                    <h2 className="text-xl font-semibold mb-2">
-                      {doctor.firstName} {doctor.lastName} ({doctor.specialty?.name || "General"})
-                    </h2>
+                <div key={doctor.id} className=" mb-8 border rounded-xl p-4 ">
 
-                  </div>
+                  <h2 className="text-xl font-semibold mb-2">
+                    {doctor.firstName} {doctor.lastName} ({doctor.specialty?.name || "General"})
+                  </h2>
+                  <div >
+                    <div className="flex justify-between items-center">
+                      <div className="w-1/3">
+                        <DoctorCardList
+                          key={doctor.id}
+                          showButton={false}
+                          name={doctor.name}
+                          specialty={doctor.specialty}
+                          rating={doctor.rating}
+                          reviews={doctor.reviews}
+                          hospital={doctor.hospital}
+                          status={doctor.status}
+                          price={doctor.price}
+                          imgSrc={doctor.imgSrc}
+                          linkPath={`/doctor/${doctor.id}`}
+                        />
+                      </div>
+                      {/* Calendar for each doctor */}
+                      <div className="w-1/3 items-center flex justify-center p-4" >
 
-                  <div className="flex">
-                    <div>
-                      <DoctorCardList />
-                    </div>
-                    {/* Calendar for each doctor */}
-                    <div>
+                        <DatePicker
+                          inline
+                          selected={selectedDates[doctor.id] || new Date()}
+                          onChange={date =>
+                            setSelectedDates(prev => ({
+                              ...prev,
+                              [doctor.id]: date
+                            }))
+                          }
+                          dateFormat="yyyy-MM-dd"
+                          minDate={new Date()}
+                        />
+                      </div>
+                      {/* Slots for each doctor */}
+                      <div className="mt-4 w-1/3 p-4">
+                        <h3 className="font-bold mb-2">Available Slots</h3>
+                        {/* Show DoctorAvailableSlot */}
+                        {slotsByDoctor[doctor.id] && slotsByDoctor[doctor.id].length > 0 && (
+                          <div>
+                            <div className="font-semibold text-blue-700 mb-1">Manual/Generated Slots</div>
+                            <div className="flex flex-wrap gap-2 mb-2">
+                              {slotsByDoctor[doctor.id].map(slot => (
+                                <span key={slot.startTime + slot.endTime} className="px-3 py-1 rounded bg-blue-100 border border-blue-300">
+                                  {slot.startTime} - {slot.endTime}
+                                </span>
+                              ))}
+                            </div>
 
-                      <DatePicker
-                        inline
-                        selected={selectedDates[doctor.id] || new Date()}
-                        onChange={date =>
-                          setSelectedDates(prev => ({
-                            ...prev,
-                            [doctor.id]: date
-                          }))
-                        }
-                        dateFormat="yyyy-MM-dd"
-                        minDate={new Date()}
-                      />
-                    </div>
-                    {/* Slots for each doctor */}
-                    <div className="mt-4">
-                      <h3 className="font-bold mb-2">Available Slots</h3>
-                      {/* Show DoctorAvailableSlot */}
-                      {slotsByDoctor[doctor.id] && slotsByDoctor[doctor.id].length > 0 && (
-                        <>
-                          <div className="font-semibold text-blue-700 mb-1">Manual/Generated Slots</div>
-                          <div className="flex flex-wrap gap-2 mb-2">
-                            {slotsByDoctor[doctor.id].map(slot => (
-                              <span key={slot.startTime + slot.endTime} className="px-3 py-1 rounded bg-blue-100 border border-blue-300">
-                                {slot.startTime} - {slot.endTime}
-                              </span>
-                            ))}
                           </div>
-                        </>
-                      )}
-                      {/* Show DoctorAvailability */}
-                      {/* {fixedByDoctor[doctor.id] && fixedByDoctor[doctor.id].length > 0 && (
+                        )}
+
+                        {/* Show DoctorAvailability */}
+                        {/* {fixedByDoctor[doctor.id] && fixedByDoctor[doctor.id].length > 0 && (
               <>
               <div className="font-semibold text-green-700 mb-1">Fixed Weekly Slots</div>
               <div className="flex flex-wrap gap-2 mb-2">
@@ -295,20 +355,22 @@ function DoctorAvailabilityPage() {
                 </div>
                 </>
                 )} */}
-                      {/* If no slots at all */}
-                      {(!slotsByDoctor[doctor.id] || slotsByDoctor[doctor.id].length === 0) &&
-                        //  (!fixedByDoctor[doctor.id] || fixedByDoctor[doctor.id].length === 0) && 
-                        (
-                          <p className="text-gray-400">No slots available</p>
-                        )}
+                        {/* If no slots at all */}
+                        {(!slotsByDoctor[doctor.id] || slotsByDoctor[doctor.id].length === 0) &&
+                          //  (!fixedByDoctor[doctor.id] || fixedByDoctor[doctor.id].length === 0) && 
+                          (
+                            <p className="text-gray-400">No slots available</p>
+                          )}
+                        <button
+                          onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
+                          className="btn btn-info text-white"
+                        >
+                          จองเลย
+                        </button>
+                      </div>
                     </div>
 
-                    <button
-                      onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
-                      className="btn btn-info text-white"
-                    >
-                      จองเลย
-                    </button>
+
                   </div>
                 </div>
 
@@ -332,6 +394,7 @@ function DoctorAvailabilityPage() {
 
 
       </div>
+
     </div>
   );
 }
