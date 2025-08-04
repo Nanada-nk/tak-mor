@@ -61,6 +61,36 @@ export const getAppointmentsByDoctor = async (req, res) => {
     res.status(500).json({ error: "Failed to fetch appointments" });
   }
 };
+
+
+export const getDailyAppointments = async (req, res) => {
+  const { date } = req.query;
+
+  if (!date) {
+    return res.status(400).json({ error: "Missing date parameter." });
+  }
+
+  try {
+    const appointments = await prisma.appointment.findMany({
+      where: {
+        date: new Date(date),
+      }, // Include related doctor and patient data
+      include: {
+        Doctor: true,
+        Patient: true,
+      },
+      orderBy: {
+        startTime: "asc", // Order by time for better readability
+      },
+    });
+
+    return res.status(200).json(appointments);
+  } catch (error) {
+    console.error("Error fetching daily appointments:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to fetch daily appointments." });
+
 // Get all appointments for a patient (with doctor and patient info)
 export const getAppointmentsByPatient = async (req, res) => {
   try {

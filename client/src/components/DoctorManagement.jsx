@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import axiosInstance from "../../../config/axios.js";
+import axiosInstance from "../config/axios.js";
+import { toast } from "react-toastify";
 
 // Generate 30-minute intervals from 09:00 to 19:30
 const generate30MinTimeOptions = () => {
@@ -36,9 +37,11 @@ function DoctorManagementPage() {
     return `${String(end.getHours()).padStart(2, "0")}:${String(end.getMinutes()).padStart(2, "0")}`;
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     if (!selectedDoctor || !startTime || !selectedDate) {
-      setMessage("Please fill all fields");
+      toast.error("กรุณากรอกข้อมูลให้ครบทุกช่อง");
+      setMessage("กรุณากรอกข้อมูลให้ครบทุกช่อง");
       return;
     }
 
@@ -50,35 +53,37 @@ function DoctorManagementPage() {
 
     try {
       const res = await axiosInstance.post(`/api/doctor/${selectedDoctor}/slots`, data);
-      setMessage("Slot added successfully ✅");
+      toast.success("เพิ่มเวลาสำเร็จแล้ว");
+      setMessage("เพิ่มเวลาสำเร็จแล้ว ✅");
     } catch (err) {
       console.error(err);
-      setMessage(err?.response?.data?.error || "Failed to add slot ❌");
+      toast.error("เพิ่มเวลาล้มเหลว");
+      setMessage(err?.response?.data?.error || "เพิ่มเวลาล้มเหลว ❌");
     }
   };
 
   return (
     <div className="p-6 max-w-xl mx-auto font-prompt">
-      <h1 className="text-2xl font-bold mb-4">Doctor Slot Manager</h1>
-
+      <h1 className="text-2xl font-bold ">เพิ่ม ตารางเวลาว่างการนัดหมายแพทย์ แบบรายครั้ง</h1>
+      <p className="font-light mb-4">เลือกแพทย์ เลือกวันเวลา (ระบบจะจองไว้เป็นทุก 30 นาที)</p>
       <div className="mb-4">
-        <label className="block mb-1 font-semibold">Select Doctor</label>
+        <label className="block mb-1 font-semibold">เลือกแพทย์</label>
         <select
           className="w-full border rounded px-3 py-2"
           value={selectedDoctor || ""}
           onChange={e => setSelectedDoctor(e.target.value)}
         >
-          <option value="">-- Select a doctor --</option>
+          <option value="">เลือกแพทย์</option>
           {doctors.map(doc => (
             <option key={doc.id} value={doc.id}>
-              {doc.firstName} {doc.lastName} ({doc.specialty?.name})
+              {'Dr. ' + doc.firstName} {doc.lastName} ({doc.specialty?.name})
             </option>
           ))}
         </select>
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1 font-semibold">Select Date</label>
+        <label className="block mb-1 font-semibold">เลือกวัน</label>
         <DatePicker
           selected={selectedDate}
           onChange={setSelectedDate}
@@ -89,7 +94,7 @@ function DoctorManagementPage() {
       </div>
 
       <div className="mb-4">
-        <label className="block mb-1 font-semibold">Start Time (30 min slots)</label>
+        <label className="block mb-1 font-semibold">เลือกเวลา (30 นาทีต่อครั้ง)</label>
         <select
           className="w-full border rounded px-3 py-2"
           value={startTime}
@@ -101,19 +106,22 @@ function DoctorManagementPage() {
         </select>
       </div>
 
-      <p className="mb-4">
-        <span className="font-semibold">End Time:</span>{" "}
-        {getEndTime(startTime)}
-      </p>
+      <div className="mb-4">
+        <span className="font-semibold">เวลาที่ถูกบันทึก </span>{" "}
+        <p className=" px-2 bg-green-300 py-2 rounded text-center font-semibold">
+        {startTime} - {getEndTime(startTime)}
+
+        </p>
+      </div>
 
       <button
         onClick={handleSubmit}
-        className="btn btn-primary w-full"
+        className="btn btn-primary text-xl w-full"
       >
-        Add Slot
+        เพิ่มเวลา
       </button>
 
-      {message && <p className="mt-4 text-center text-sm">{message}</p>}
+      {message && <p className="mt-4 text-center p-4 text-md bg-amber-200">{message}</p>}
     </div>
   );
 }

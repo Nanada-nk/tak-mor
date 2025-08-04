@@ -3,7 +3,7 @@ import React from "react";
 function AppointmentTypeSelector({ appointmentTypes, appointmentType, onSelect }) {
   return (
     <div className="flex flex-col gap-1 items-start border-b border-gray-200 pb-2 mb-2">
-      <h1>Select Appointment Type</h1>
+      <h1 className="text-xl font-semibold my-4 ml-1">กรุณาเลือก ช่องทางการสื่อสารหลังนัดหมาย</h1>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 mt-2 mb-2 w-full">
         {appointmentTypes.map((type) => {
           const isSelected = appointmentType === type.label;

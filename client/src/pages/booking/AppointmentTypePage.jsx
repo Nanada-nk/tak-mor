@@ -25,6 +25,7 @@ function AppointmentTypePage() {
     setAppointmentType,
     hospital,
     setHospital,
+    setDoctorDetails
   } = useBookingStore();
   
   const doctorId = useBookingStore(state => state.doctorId);
@@ -34,30 +35,13 @@ function AppointmentTypePage() {
 useEffect(() => {
   if (!doctorId) return;
   axios.get(`http://localhost:9090/api/doctor/${doctorId}`)
-    .then(res => setDoctor(res.data))
-   
+    .then(res => {setDoctor(res.data),setDoctorDetails(res.data);})
+
     .catch(err => console.error("Failed to fetch doctor:", err));
 }, [doctorId]);
+ console.log('log doctor',doctor)
+
  
-
-  // Get doctor from navigation state or fallback to default
-  // const doctorFromState = location.state?.doctor;
-  // const doctor = doctorFromState
-  //   ? {
-  //       name: doctorFromState.name || `Dr. ${doctorFromState.firstName ?? ''} ${doctorFromState.lastName ?? ''}`.trim(),
-  //       title: doctorFromState.title || doctorFromState.specialty || '',
-  //       rating: doctorFromState.rating,
-  //       address: doctorFromState.address,
-  //       img: doctorFromState.img,
-  //     }
-  //   : {
-  //       name: "Dr.Johny Nontakaeng",
-  //       title: "Psychologist",
-  //       rating: 5.0,
-  //       address: "742 Evergreen Terrace, Springfield",
-  //       img: "https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
-  //     };
-
   // Handle appointment type change
   const handleAppointmentTypeClick = (typeLabel) => {
     setAppointmentType(typeLabel);
@@ -82,17 +66,17 @@ useEffect(() => {
   };
 
   const steps = [
-    { label: "Appointment Type", dataContent: "1" },
-    { label: "Specialty", dataContent: "2" },
-    { label: "Date & Time", dataContent: "3" },
-    { label: "Patient Information", dataContent: "4" },
-    { label: "Payment", dataContent: "5" },
-    { label: "Confirmation", dataContent: "6" },
+    { label: "รูปแบบการนัดหมาย", dataContent: "1" },
+    { label: "เลือกเฉพาะทาง", dataContent: "2" },
+    { label: "วันเวลา นัดหมาย", dataContent: "3" },
+    { label: "ข้อมูลส่วนตัว", dataContent: "4" },
+    { label: "ชำระเงิน", dataContent: "5" },
+    { label: "ยืนยันสำเร็จ", dataContent: "6" },
   ];
 
 
   return (
-    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)]">
+    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full">
       <StepProgressBar steps={steps} currentStep={0} />
       <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
         <div className="h-fit mt-4 flex flex-col items-center justify-center">
@@ -102,7 +86,7 @@ useEffect(() => {
     title={doctor?.specialties?.[0]?.Specialty?.name || doctor.title || ""}
     rating={doctor.rating || 5}
     address={doctor.address || "N/A"}
-    img={doctor.img || "https://via.placeholder.com/150"}
+    img={doctor.Account.profilePictureUrl || "https://via.placeholder.com/150"}
   />
 )}
         </div>

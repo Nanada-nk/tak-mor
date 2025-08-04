@@ -1,126 +1,17 @@
+import React, { useEffect, useState } from 'react';
+import axiosInstance from '../../config/axios.js';
+
 function DoctorDashboard() {
-    const products = [
-        {
-            id: 1,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 2,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 3,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 4,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 5,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 6,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 7,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 8,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 9,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-        {
-            id: 10,
-            name: 'Handmade Pouch',
-            firstName: 'Emily',
-            lastName: "Johnson",
-            specialtyId: '302012',
-            role: "1",
-            address: '123 Main Street, Springfield, IL 62704, USA',
-            birthDate: '1 jan 2001',
-            statusColor: 'bg-red-100 text-red-800',
-            added: '29 Dec 2022',
-        },
-    ];
+    const [doctors, setDoctors] = useState([]);
+  useEffect(() => {
+    axiosInstance
+      .get("/api/doctor")
+      .then((res) => setDoctors(res.data))
+      .catch((err) => console.error("Failed to fetch doctors:", err));
+  }, []);
+
+
+    
     return (
         <div className="max-w-7xl mx-auto ">
             <div className="bg-white shadow-md ">
@@ -150,17 +41,18 @@ function DoctorDashboard() {
                                     </svg>
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    specialtyId
+                                    Phone
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    role
+                                    Email
+                                </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Role
                                 </th>
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Address
                                 </th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    birtDAte
-                                </th>
+
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Added
                                 </th>
@@ -170,8 +62,8 @@ function DoctorDashboard() {
                             </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-gray-200">
-                            {products.map((product) => (
-                                <tr key={product.id} className={`${product.selected ? 'bg-blue-50' : ''} hover:bg-gray-50`}>
+                            {doctors.map((doctor) => (
+                                <tr key={doctor.id} className={`${doctor.selected ? 'bg-blue-50' : ''} hover:bg-gray-50`}>
                                     <td className=" whitespace-nowrap">
 
                                     </td>
@@ -179,44 +71,57 @@ function DoctorDashboard() {
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10">
                                                 {/* รูปสินค้า (ตัวอย่าง) */}
+                                                
+{/* {profile?.profilePictureUrl ? (
+                <img
+                  src={profile.profilePictureUrl
+                    ? `${profile.profilePictureUrl}${profile.profilePictureUrl.includes('?') ? '&' : '?'}cb=${imgCacheBust}`
+                    : undefined}
+                  alt="Patient Avatar"
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <span className="text-6xl font-bold text-white">
+                  {profile?.firstName?.[0]?.toUpperCase() || ''}{profile?.lastName?.[0]?.toUpperCase() || ''}
+                </span>
+              )} */}
+                                                
                                                 <img
                                                     className="h-10 w-10 rounded-full object-cover"
-                                                    src={`https://via.placeholder.com/40?text=${product.firstName}`}
+                                                    src={`${doctor.Account?.profilePictureUrl || 'https://via.placeholder.com/40'}`}
                                                     alt=""
                                                 />
                                             </div>
                                             <div className="ml-4">
-                                                <div className="font-medium text-gray-900">{product.id}</div>
+                                                <div className="font-medium text-gray-900">{doctor.id}</div>
 
                                             </div>
                                         </div>
                                     </td>
 
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.firstName}
+                                        {doctor.firstName}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.lastName}
+                                        {doctor.lastName}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.specialtyId}
+                                        {doctor.Account?.phone || 'Not available'}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.role}
+                                        {doctor.Account.email}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.address.length >  10
-                                            ? product.address.substring(0, 10) + '...'
-                                            : product.address}
+                                        {doctor.Account.role}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                        {doctor.address?.length >  10
+                                            ? doctor.address?.substring(0, 10) + '...'
+                                            : doctor?.address}
                                     </td>
 
-                                    <td className="px-6 py-4 whitespace-nowrap">
-
-                                        {product.birthDate}
-
-                                    </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.added}
+                                        {doctor.Account.createdAt}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                         <a href="#" className="text-gray-600 hover:text-gray-900 mr-2">

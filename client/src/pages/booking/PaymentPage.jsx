@@ -18,12 +18,7 @@ useEffect(() => {
   window.Omise.setPublicKey(import.meta.env.VITE_OMISE_PUBLIC_KEY);
 }, []);
 
-
-
-
-
-
-
+const doctor = useBookingStore((state) => state.doctorDetails);
 
   // Animation state for redirect
   const [fadeOut, setFadeOut] = useState(false);
@@ -58,7 +53,7 @@ useEffect(() => {
   
   
   // Dynamic doctor, specialty, location
-  const doctorName = fallback.doctor; // Not in store, static for now
+  const doctorName = doctor.firstName + " " + doctor.lastName || fallback.doctor; // Not in store, static for now
   const doctorSpecialty = specialty || fallback.specialty;
   const doctorLocation = hospital || fallback.location;
   
@@ -111,15 +106,27 @@ const handleCreateAppointment = async () => {
 };
 
   return (
-    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-[calc(100vh-10rem)] font-prompt">
+    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full font-prompt">
          <div className="h-1/7 w-full flex items-center justify-center">
            <ul className="steps h-full">
-             <li data-content="✓" className="step step-primary step-success">Specialty</li>
-             <li data-content="✓" className="step step-primary step-success">Appointment Type</li>
-             <li data-content="✓" className="step step-primary step-success">Date & Time</li>
-             <li data-content="✓" className="step step-primary step-success">Patient Information</li>
-             <li data-content={paymentSuccess ? "✓" : "5"} className={`step step-primary${paymentSuccess ? ' step-success' : ''}`}>Payment</li>
-             <li data-content="6" className={`step${paymentSuccess ? ' step-primary' : ''}`}>Confirmation</li>
+            <li data-content="✓" className="step step-primary step-success">
+            รูปแบบการนัดหมาย
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+            เลือกเฉพาะทาง
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+           วันเวลา นัดหมาย
+          </li> 
+          <li data-content="✓" className="step step-primary step-success">
+            ข้อมูลส่วนตัว
+          </li>
+          <li data-content="5" className="step step-primary">
+           ชำระเงิน
+          </li>
+          <li data-content="6" className="step">
+            ยืนยันสำเร็จ
+          </li>
            </ul>
          </div>
          <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
@@ -129,7 +136,7 @@ const handleCreateAppointment = async () => {
                  <div className="w-1/5 avatar flex items-center justify-center">
                    <div className="w-25 rounded-full">
                      <img
-                       src="https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
+                       src={doctor.Account.profilePictureUrl || "https://via.placeholder.com/150"}
                        alt="doctor"
                      />
                    </div>
@@ -137,7 +144,7 @@ const handleCreateAppointment = async () => {
                  <div className="w-4/5 p-1 flex flex-col justify-between items-start">
                    <div className="flex items-start gap-2">
                      <div className="flex flex-col items-start ">
-                       <div className="font-bold">{doctorName}</div>
+                       <div className="font-bold text-2xl">{'Dr. ' + doctorName}</div>
                        <div className="text-blue-700 ">{doctorSpecialty}</div>
                      </div>
                      <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">
@@ -157,7 +164,7 @@ const handleCreateAppointment = async () => {
            </div>
            <div className="h-[360px] flex items-center justify-between pt-4 gap-3 w-19/20 m-auto">
              <div className="flex flex-col p-3 bg-white border border-gray-200 h-full w-1/2 rounded-2xl">
-               <p className="font-bold">Payment Gateway</p>
+               <p className="font-bold">ช่องทางการชำระเงิน</p>
                <div className="flex flex-col flex-1 mt-4">
                  {paymentSuccess ? (
                    <div className="flex flex-col items-center justify-center h-full gap-3">
@@ -176,15 +183,15 @@ const handleCreateAppointment = async () => {
                    </div>
                  ) : confirmState ? (
                    <div className="flex flex-col items-center justify-center h-full gap-3">
-                     <div className="text-xl font-bold text-blue-700">Are you sure?</div>
-                     <div className="text-gray-700 mb-2 text-center">Do you want to proceed with the payment?</div>
+                     <div className="text-xl font-bold text-blue-700">ยืนยันการชำระเงิน</div>
+                     <div className="text-gray-700 mb-2 text-center">คุณต้องการชำระเงินทันทีหรือไม่?</div>
                      <div className="flex gap-3 w-full max-w-xs justify-center">
                        <button
                          className="btn btn-outline flex-1"
                          onClick={() => setConfirmState(false)}
                          disabled={isProcessing || paymentSuccess}
                        >
-                         Cancel
+                         ยกเลิก
                        </button>
                        <button
                          className="btn btn-primary flex-1"
@@ -278,7 +285,7 @@ const handleCreateAppointment = async () => {
 }}
 
                        >
-                         Confirm
+                         ตกลง
                        </button>
                      </div>
                    </div>
@@ -379,7 +386,7 @@ const handleCreateAppointment = async () => {
                          className="btn btn-primary"
                          disabled={isProcessing || paymentSuccess || (paymentMethod === 'card' && !isCardValid)}
                        >
-                         Confirm and pay {" >"}
+                         ยืนยันการชำระเงิน {" >"}
                        </button>
                      </div>
                    </>
@@ -388,11 +395,11 @@ const handleCreateAppointment = async () => {
              </div>
              <div className={`flex flex-col p-3 bg-white border border-gray-200 h-full w-1/2 rounded-2xl transition-opacity duration-500 ${fadeOut ? 'opacity-0' : 'opacity-100'}`}>
                <div className="flex flex-col flex-1 border-b border-gray-200 mb-3 gap-2">
-               <p className="font-bold">Booking Info</p>
+               <p className="font-bold">ข้อมูลการจอง</p>
 
                 <div className='grid grid-cols-2 gap-x-8 gap-y-2'>
                   <div>
-                    <div className="font-medium text-gray-600">Appointment Type</div>
+                    <div className="font-medium text-gray-600">ประเภทการนัดหมาย</div>
                     <div className="font-semibold text-gray-800 text-base">
                       {appointmentType
                         ? appointmentType === 'Hospital'
@@ -402,7 +409,7 @@ const handleCreateAppointment = async () => {
                     </div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Date & Time</div>
+                    <div className="font-medium text-gray-600">วันที่ เวลา</div>
                     <div className="font-semibold text-gray-800 text-base">
                       {selectedDate && selectedTime
   ? `${(selectedDate instanceof Date ? selectedDate : new Date(selectedDate)).toLocaleDateString()} ${selectedTime}`
@@ -412,28 +419,28 @@ const handleCreateAppointment = async () => {
                 </div>
                </div>
                <div className="flex flex-col flex-2 ">
-                <p className="font-bold mb-2">Payment Info</p>
+                <p className="font-bold mb-2">ข้อมูล การชำระเงิน</p>
                 <div className="flex-1 flex flex-col justify-between">
                   <div className="grid grid-cols-2 gap-y-2 text-base">
                     <div className="text-gray-600">{service || <span className='text-gray-400'>No service selected</span>}</div>
                     <div className="text-right text-gray-800 font-semibold">{service ? `฿${servicePrice}` : <span className='text-gray-400'>-</span>}</div>
-                    <div className="text-gray-600">Booking Fees</div>
+                    <div className="text-gray-600">ค่าจอง</div>
                     <div className="text-right text-gray-800 font-semibold">฿{bookingFee}</div>
-                    <div className="text-gray-600">Tax</div>
+                    <div className="text-gray-600">ภาษี</div>
                     <div className="text-right text-gray-800 font-semibold">฿{tax}</div>
-                    <div className="text-gray-600">Discount</div>
+                    <div className="text-gray-600">ส่วนลด</div>
                     <div className="text-right text-green-600 font-semibold">-฿{discount}</div>
                   </div>
                   <div className="flex justify-between items-center border-t border-gray-200 mt-3 pt-2 text-lg font-bold">
-                    <div>Total</div>
+                    <div>ยอดทั้งหมด</div>
                     <div className="text-blue-600">฿{total}</div>
                   </div>
                 </div>
                </div>
              </div>
            </div>
-             <div className=" h-1/10 flex justify-between items-center px-5">
-               <button onClick={() => navigate("/patientinfo")} className="btn btn-error" disabled={isProcessing || paymentSuccess}>{"< "} Back</button>
+             <div className=" h-1/10 flex justify-between items-center px-8">
+               <button onClick={() => navigate("/patientinfo")} className="btn btn-error my-6 text-white" disabled={isProcessing || paymentSuccess}>{"< "} ย้อนกลับ</button>
              </div>
          </div>
        </div>
