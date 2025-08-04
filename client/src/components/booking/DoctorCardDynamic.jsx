@@ -14,7 +14,7 @@ function DoctorCardDynamic({
   addressIcon
 }) {
   return (
-    <div className="py-3 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex rounded-2xl">
+    <div className="py-4 bg-white border border-gray-200 h-2/3 min-h-[120px] w-19/20 flex rounded-2xl">
       <div className=" w-1/5 avatar flex items-center justify-center">
         <div className="w-25 rounded-full">
           <img src={img} alt={name} />
@@ -23,7 +23,7 @@ function DoctorCardDynamic({
       <div className=" w-4/5 p-1 flex flex-col justify-between items-start">
         <div className="flex items-start gap-2">
           <div className="flex flex-col items-start ">
-            <div className="font-bold">{name}</div>
+            <div className="font-bold text-2xl">{name}</div>
             <div className="text-blue-700 ">{title}</div>
           </div>
           <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">

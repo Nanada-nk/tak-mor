@@ -12,6 +12,13 @@ const usePatientFormStore = create((set) => ({
     medications: '',
     symptoms: '',
     reason: '',
+    address: '',
+     birthDate: '',
+      gender: '',
+      nationalId: '',
+      emergencyContactName: '',
+      emergencyContactPhone: '',
+      emergencyContactRelation: '',
   },
   setField: (field, value) =>
     set((state) => ({

@@ -3,7 +3,6 @@ import React from "react";
 function ServiceSelector({ services, selected, onChange, disabled }) {
   return (
     <>
-      <div>Services</div>
       <div className="flex flex-col items-start w-full overflow-auto">
         <div className="grid grid-cols-3 gap-4 mt-2 mb-2 w-full scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
           {services.length === 0 ? (

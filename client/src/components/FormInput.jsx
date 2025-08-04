@@ -61,8 +61,6 @@ export function BookingFormInput ({
   ...rest
 }) {
   let inputType = type;
- 
-  
 
   return (
     <div className={divClassName}>

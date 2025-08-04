@@ -2,13 +2,13 @@ import React from "react";
 
 function NextButton({ onClick, disabled, showWarning }) {
   return (
-    <div className="h-1/10 flex justify-end items-center px-5 relative">
+    <div className="h-1/10 flex justify-end items-center my-4 mx-3 px-5 relative">
       <button
         onClick={onClick}
         className="btn btn-primary"
         disabled={disabled}
       >
-        Select Specialty & Service {" >"}
+        เลือกเฉพาะทาง {" >"}
       </button>
       {showWarning && (
         <div className="absolute bottom-14 right-0 bg-red-500 text-white px-4 py-2 rounded shadow-lg animate-fade-in z-50">

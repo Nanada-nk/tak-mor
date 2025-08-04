@@ -49,7 +49,7 @@ import EditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.j
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
-import DoctorManagementPage from "../pages/dashboard/doctor/DoctorManagementPage.jsx";
+import DoctorManagementPage from "../components/DoctorManagement.jsx";
 
 import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
 import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx";
@@ -75,15 +75,8 @@ import PatientEditProfilePage from "../pages/dashboard/patient/PatientEditProfil
 
 
 function AppRouter() {
-  //   const { checkAuth, isLoggedIn, isLoading } = authStore((state) => state);
 
-  // useEffect(() => {
-  //   checkAuth(); // ตรวจสอบและโหลดข้อมูลผู้ใช้เมื่อหน้าเว็บถูกรีเฟรช
-  // }, [checkAuth]);
 
-  // if (isLoading) {
-  //   return <div>Loading...</div>;
-  // }
   return (
     <BrowserRouter>
       <Routes>
@@ -104,8 +97,6 @@ function AppRouter() {
           <Route path="privacyPolicy" element={<PrivacyPolicy/>} />
           <Route path="alldoctor" element={<AllDoctorList/>}/>
           
-          
-
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
           <Route path="news/:id" element={<NewContentPage />} />
