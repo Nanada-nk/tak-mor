@@ -1,5 +1,5 @@
 import express from 'express';
-import { createAppointment, getAppointmentsByDoctor, getAppointmentsByPatient } from '../controllers/appointment.controller.js';
+import { createAppointment, getAppointmentsByDoctor, getDailyAppointments, getAppointmentsByPatient } from '../controllers/appointment.controller.js';
 
 const appointmentRouter = express.Router();
 
@@ -9,6 +9,7 @@ appointmentRouter.get("/patient/:patientId", getAppointmentsByPatient);
 appointmentRouter.post("/", createAppointment);
 
 // Get all appointments for a doctor
+appointmentRouter.get("/", getDailyAppointments);
 appointmentRouter.get("/doctor/:doctorId", getAppointmentsByDoctor);
 
 export default appointmentRouter;

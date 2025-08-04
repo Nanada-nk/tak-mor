@@ -49,7 +49,7 @@ import EditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.j
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
-import DoctorManagementPage from "../pages/dashboard/doctor/DoctorManagementPage.jsx";
+import DoctorManagementPage from "../components/DoctorManagement.jsx";
 
 import NotFoundPage from "../pages/utils/NotFoundPage.jsx";
 import ComingSoonPage from "../pages/utils/ComingSoonPage.jsx";
@@ -77,6 +77,8 @@ import PatientEditProfilePage from "../pages/dashboard/patient/PatientEditProfil
 
 
 
+
+
 function AppRouter() {
   const checkAuth = authStore((state) => state.checkAuth)
   const isLoading = authStore((state) => state.isLoading)
@@ -100,6 +102,7 @@ function AppRouter() {
     );
   }
 
+
   return (
     <BrowserRouter>
       <Routes>
@@ -115,6 +118,8 @@ function AppRouter() {
           <Route path="otp" element={<EmailOTPPage />} />
           <Route path="rolepick" element={<SignupRolePick />} />
           <Route path="auth/callback" element={<AuthCallbackPage />} />
+
+
           <Route path="faq" element={<FaqPage />} />
           <Route path="termsOfService" element={<TermOfService />} />
           <Route path="privacyPolicy" element={<PrivacyPolicy />} />

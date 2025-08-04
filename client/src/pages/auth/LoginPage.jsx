@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -12,21 +12,20 @@ import AuthFormCard from "../../components/auth/AuthFormCard.jsx";
 import SocialLogins from "../../components/auth/SocialLogins.jsx";
 
 function LoginPage() {
-  // ดึง state และ action จาก Zustand store
   const setAuth = authStore((state) => state.setAuth);
   const isLoggedIn = authStore((state) => state.isLoggedIn);
   const user = authStore((state) => state.user);
   const isLoading = authStore((state) => state.isLoading);
 
-
   const navigate = useNavigate();
+  const [loginSuccess, setLoginSuccess] = useState(false);
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-    setValue, 
+    setValue,
   } = useForm({
     resolver: yupResolver(schemaLogin),
     mode: 'onBlur',
@@ -37,7 +36,7 @@ function LoginPage() {
     },
   });
 
- const onSubmit = async (data) => {
+  const onSubmit = async (data) => {
     try {
       if (data.remember) {
         localStorage.setItem("rememberEmail", data.email);
@@ -45,35 +44,29 @@ function LoginPage() {
         localStorage.removeItem("rememberEmail");
       }
 
-      
       const response = await authApi.login(data);
       const { user, accessToken } = response.data;
 
-     
       setAuth({ user, accessToken });
-
       toast.success("Login successful!");
-      
+      setLoginSuccess(true);
+
+      // Wait 3 seconds then redirect based on role
+      setTimeout(() => {
+        if (user.role === "ADMIN") {
+          navigate("/admin/patientdashboard");
+        } else if (user.role === "DOCTOR") {
+          navigate("/dashboard/doctor");
+        } else {
+          navigate("/dashboard/patient/profile");
+        }
+      }, 3000);
     } catch (error) {
       console.error("Login failed:", error);
       toast.error(error.response?.data?.message || "Invalid email or password.");
     }
   };
 
- 
-  useEffect(() => {
-    if (!isLoading && isLoggedIn && user) {
-      if (user.role === 'ADMIN') {
-        navigate("/admin/patientdashboard", { replace: true });
-      } else if (user.role === 'DOCTOR') {
-        navigate("/dashboard/doctor", { replace: true });
-      } else {
-        navigate("/dashboard/patient/profile", { replace: true });
-      }
-    }
-  }, [isLoggedIn, user, isLoading, navigate]);
-
- 
   useEffect(() => {
     const savedEmail = localStorage.getItem("rememberEmail");
     if (savedEmail) {
@@ -82,8 +75,29 @@ function LoginPage() {
     }
   }, [setValue]);
 
+  if (loginSuccess) {
+    return (
+      <div className="flex items-center justify-center h-full bg-gray-50 px-4 py-12 font-prompt">
+        <div className="bg-white rounded-xl shadow-md p-10 max-w-md text-center space-y-4">
+          <h1 className="text-3xl font-semibold text-green-600">Login Successful</h1>
+          <p className="text-gray-600">You will be redirected to your dashboard shortly...</p>
+          <button
+            className="mt-4 px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 transition"
+            onClick={() => {
+              if (user?.role === "ADMIN") navigate("/admin/patientdashboard");
+              else if (user?.role === "DOCTOR") navigate("/dashboard/doctor");
+              else navigate("/dashboard/patient/profile");
+            }}
+          >
+            Go Now
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-prompt">
+    <div className="flex items-center justify-center h-full bg-gray-50 py-12 px-4 sm:px-6 lg:px-8 font-prompt">
       <div className="w-full max-w-md space-y-8">
         <AuthFormCard
           title={["Sign in"]}
@@ -94,7 +108,6 @@ function LoginPage() {
           bottomLinkPath="/rolepick"
           bottomLinkText="Sign Up"
         >
-          <h1 className="text-2xl font-semibold">Sign in</h1>
           <p className="text-slate-400 text-xs">
             Sign in to continue to your account.
           </p>

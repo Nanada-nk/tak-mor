@@ -6,51 +6,16 @@ import {BookingFormInput} from "../../components/FormInput.jsx";
 import authStore from "../../stores/authStore.js";
 import usePatientFormStore from "../../stores/usePatientFormStore.js";
 import axios from "axios";
+import BookingNavButtons from "../../components/booking/BookingNavButtons.jsx";
 
 function PatientInfoPage() {
   const user = authStore((state) => state.user)
+  const doctor = useBookingStore((state) => state.doctorDetails);
   const navigate = useNavigate();
 
 const { patientForm, setField } = usePatientFormStore();
 
 
-// const handleSubmit = async () => {
-//   try {
-//     const user = authStore.getState().user;
-//     const { patientForm } = usePatientFormStore.getState();
-//     const patientId = user?.Patient?.id;
-//     if (!patientId) {
-//       console.error("Missing patient ID");
-//       return;
-//     }
-
-// const tokenResponse = await axios.get("http://localhost:9090/csrf-token", {
-//       withCredentials: true,
-//     });
-//     const csrfToken = tokenResponse.data.csrfToken;
-
-
-    
-//     const response = await axios.post(
-//       `http://localhost:9090/api/patient/${patientId}/profile`,
-//       {
-//         ...patientForm,
-//         patientId: user?.Patient?.id,
-//       },
-//       {
-//         headers: {
-//           "CSRF-Token": csrfToken, // ✅ correct header for csurf
-//         },
-//         withCredentials: true, // ✅ important if using cookies
-//       }
-//     );
-//     alert("Profile saved successfully");
-//     console.log("Profile saved", response.data);
-//     navigate("/payment");
-//   } catch (error) {
-//     console.error("Error submitting profile:", error);
-//   }
-// };
 
 const handleSubmit = async () => {
   try {
@@ -93,6 +58,13 @@ const handleSubmit = async () => {
       allergies: patientForm.allergies,
       surgeries: patientForm.surgeries,
       medications: patientForm.medications,
+      address: patientForm.address,
+      birthDate: patientForm.birthDate,
+      gender: patientForm.gender,
+      nationalId: patientForm.nationalId,
+      emergencyContactName: patientForm.emergencyContactName,
+      emergencyContactPhone: patientForm.emergencyContactPhone,
+      emergencyContactRelation: patientForm.emergencyContactRelation, 
     };
 
     // 3. Create or update
@@ -125,21 +97,50 @@ const handleSubmit = async () => {
   }
 };
 
+//  const handleNext = () => {
+//     if (!selectedDate || !selectedSlot) return alert("Select date and time");
 
-  const { specialty, appointmentType, hospital, service, dateTime } = useBookingStore();
-  const selectedDate = dateTime?.date || null;
-  const selectedTime = dateTime?.time || null;
+//     const startDateTime = new Date(
+//       `${selectedDate}T${selectedSlot.startTime}:00`
+//     );
+//     const endDateTime = new Date(`${selectedDate}T${selectedSlot.endTime}:00`);
+
+//     // Set to global state
+//     setStartDateTime(startDateTime.toISOString());
+//     setEndDateTime(endDateTime.toISOString());
+
+//     navigate("/payment");
+//   };
+
+  const handlePrevious = () => {
+    navigate('/bookingdatetime');
+  };
+
+  const { specialty, appointmentType, hospital, service, selectedDate, selectedTime } = useBookingStore();
+ const dateObj = selectedDate ? new Date(selectedDate) : null;
   return (
 
    <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full font-prompt">
          <div className="h-1/7 w-full flex items-center justify-center">
            <ul className="steps h-full">
-             <li data-content="✓" className="step step-primary step-success">Specialty</li>
-             <li data-content="✓" className="step step-primary step-success">Appointment Type</li>
-             <li data-content="✓" className="step step-primary step-success">Date & Time</li>
-             <li data-content="4" className="step step-primary">Patient Information</li>
-             <li data-content="5" className="step">Payment</li>
-             <li data-content="6" className="step">Confirmation</li>
+             <li data-content="✓" className="step step-primary step-success">
+            รูปแบบการนัดหมาย
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+            เลือกเฉพาะทาง
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+           วันเวลา นัดหมาย
+          </li> 
+          <li data-content="4" className="step step-primary">
+            ข้อมูลส่วนตัว
+          </li>
+          <li data-content="5" className="step">
+           ชำระเงิน
+          </li>
+          <li data-content="6" className="step">
+            ยืนยันสำเร็จ
+          </li>
            </ul>
          </div>
          <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
@@ -149,7 +150,7 @@ const handleSubmit = async () => {
                  <div className="w-1/5 avatar flex items-center justify-center">
                    <div className="w-25 rounded-full">
                      <img
-                       src="https://www.future-doctor.de/wp-content/uploads/2024/08/shutterstock_2480850611.jpg.webp"
+                       src={doctor.Account.profilePictureUrl || "https://via.placeholder.com/150"}
                        alt="doctor"
                      />
                    </div>
@@ -157,8 +158,8 @@ const handleSubmit = async () => {
                  <div className="w-4/5 p-1 flex flex-col justify-between items-start">
                    <div className="flex items-start gap-2">
                      <div className="flex flex-col items-start ">
-                       <div className="font-bold">Dr.John Nontakaeng</div>
-                       <div className="text-blue-700 ">Psychologist</div>
+                       <div className="font-bold text-2xl">{'Dr. ' + doctor.firstName + " " + doctor.lastName || 'Dr.John Nontakaeng'}</div>
+                       <div className="text-blue-700 ">{doctor?.specialties?.[0]?.Specialty?.name}</div>
                      </div>
                      <div className="flex bg-orange-400 p-[5px] rounded-lg justify-center items-center gap-1">
                        <StarIcon className="h-4" />
@@ -167,7 +168,7 @@ const handleSubmit = async () => {
                    </div>
                    <div className="flex items-center justify-start">
                      <PinIcon className="h-5" />
-                     <div className="text-gray-500">742 Evergreen Terrace, Springfield</div>
+                     <div className="text-gray-500">{doctor.address || '742 Evergreen Terrace, Springfield'}</div>
                    </div>
                  </div>
                </div>
@@ -175,88 +176,131 @@ const handleSubmit = async () => {
                <div className="mt-2 w-full border-gray-200 pt-2 px-4">
                  <div className="flex flex-row justify-between gap-4 text-sm">
                    <div className="flex flex-col items-start justify-center w-1/4">
-                     <span className="font-medium  mb-1">Specialty</span>
-                     <span className="font-semibold text-gray-700">{specialty || <span className="text-gray-400">Not selected</span>}</span>
+                     <span className="font-medium  mb-1">สาขา เฉพาะทาง</span>
+                     <span className="font-semibold text-gray-700">{specialty || <span className="text-gray-400">ไม่ได้เลือก</span>}</span>
                    </div>
                    <div className="flex flex-col items-start justify-center w-1/4">
-                     <span className="font-medium  mb-1">Service</span>
-                     <span className="font-semibold text-gray-700">{service || <span className="text-gray-400">Not selected</span>}</span>
+                     <span className="font-medium  mb-1">บริการ</span>
+                     <span className="font-semibold text-gray-700">{service || <span className="text-gray-400">ไม่ได้เลือก</span>}</span>
                    </div>
                    <div className="flex flex-col items-start justify-center w-1/4">
-                     <span className="font-medium  mb-1">Date & Time</span>
+                     <span className="font-medium  mb-1">วันที่ เวลา</span>
                      <span className="font-semibold text-gray-700">
-                       {selectedDate && selectedTime
-                         ? <span className="text-gray-600">{`${selectedDate.toLocaleDateString()} ${selectedTime}`}</span>
-                         : <span className="text-gray-400">Not selected</span>}
+                       {dateObj && selectedTime
+                         ? <span className="text-gray-600">{`${dateObj.toLocaleDateString()} ${selectedTime}`}</span>
+                         : <span className="text-gray-400">ไม่ได้เลือก</span>}
                      </span>
                    </div>
                    <div className="flex flex-col items-start justify-center w-1/4">
-                     <span className="font-medium  mb-1">Appointment Type</span>
+                     <span className="font-medium  mb-1">ประเภท การนัดหมาย</span>
                      <span className="font-semibold text-gray-700">
                        {appointmentType
                          ? appointmentType === 'Hospital'
                            ? `Hospital${hospital ? ` (${hospital})` : ''}`
                            : appointmentType
-                         : <span className="text-gray-400">Not selected</span>}
+                         : <span className="text-gray-400">ไม่ได้เลือก</span>}
                      </span>
                    </div>
                  </div>
                </div>
              </div>
            </div>
-           <div className="h-[360px] flex flex-col items-center pt-4 gap-3">
-             <div className="flex flex-row p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
+           <div className="h-[600px] flex flex-col  items-center pt-4 gap-3">
+             <div className="flex flex-col p-3 bg-white border border-gray-200 h-full w-19/20 rounded-2xl">
+             <h2 className="font-bold text-xl mx-3 my-2">กรุณากรอกข้อมูลส่วนตัว ก่อนทำการนัดหมาย</h2>
                 <form className="w-full flex flex-col gap-5" encType="multipart/form-data">
+
                 <div className="flex justify-between gap-2 items-start pt-2 mx-2">
-                  <div className="flex justify-between gap-10 items-start pt-2 mx-1">
-  <div className="w-auto">
-    <div className="font-medium">First Name</div>
-    <div>{user.Patient?.firstName || "Loading..."}</div>
-  </div>
-  <div className="w-auto">
-    <div className="font-medium">Last Name</div>
-    <div>{user.Patient?.lastName || "Loading..."}</div>
-  </div>
-  <div className="w-auto">
-    <div className="font-medium">Phone Number</div>
-    <div>{user.phone || "Loading..."}</div>
-  </div>
-  <div className="w-auto">
-    <div className="font-medium">Email Address</div>
-    <div>{user.email || "Loading..."}</div>
-  </div>
-</div>
+
+                  <div className="flex justify-between  gap-6 items-start pt-2 mx-1">
+                    <div className="w-auto">
+                      <div className="font-medium">ชื่อจริง</div>
+                      <div className="font-light text-slate-500">{user?.Patient?.firstName || "Loading..."}</div>
+                    </div>
+                    <div className="w-auto">
+                      <div className="font-medium">นามสกุล</div>
+                      <div className="font-light text-slate-500">{user?.Patient?.lastName || "Loading..."}</div>
+                    </div>
+                    <div className="w-auto">
+                      <div className="font-medium">เบอร์มือถือ</div>
+                      <div className="font-light text-slate-500">{user?.phone || "Loading..."}</div>
+                    </div>
+                    <div className="w-auto">
+                      <div className="font-medium">อีเมล</div>
+                      <div className="font-light text-slate-500">{user?.email || "Loading..."}</div>
+                    </div>
+                  </div>
 
                     <BookingFormInput
+                      label="ที่อยู่"
+                      name="address"
+                      value={patientForm.address || ""}
+                      onChange={(e) => setField("address", e.target.value)}
+                      required
+                      className="w-70"
+                    />
+                      <BookingFormInput
+                    label="เลขบัตรประชาชน"
+                    name="nationalId"
+                      value={patientForm.nationalId || ""}
+                    onChange={(e) => setField("nationalId", e.target.value)}
+                    required
+                    className="w-full"
+                  />
+                   
+                </div>
+                 <div className="flex justify-between gap-2 items-start pt-2 mx-2">
+                   <BookingFormInput
                       label="ส่วนสูง"
                       name="height"
                       value={patientForm.height || ""}
                       onChange={(e) => setField("height", e.target.value)}
                       required
+                      className="w-full"
                     />
                   <BookingFormInput
                     label="น้ำหนัก"
                     name="weight"
                       value={patientForm.weight || ""}
                     onChange={(e) => setField("weight", e.target.value)}
+                    className="w-full"
                     required
                   />
-                </div>
-                <div className="flex justify-between gap-2 items-start pt-2 mx-2">
                   <BookingFormInput
                     label="กรุ๊ปเลือด"
                     name="bloodtype"
                       value={patientForm.bloodtype || ""}
                     onChange={(e) => setField("bloodtype", e.target.value)}
                     required
+                    className="w-full"
                   />
-                    <BookingFormInput
-                      label="โรคประจำตัว"
-                      name="congenital"
-                        value={patientForm.congenital || ""}
-                      onChange={(e) => setField("congenital", e.target.value)}
-                      required
-                    />
+                  <BookingFormInput
+                    label="วัดเกิด"
+                    name="birthDate"
+                      value={patientForm.birthDate || ""}
+                    onChange={(e) => setField("birthDate", e.target.value)}
+                    required
+                    className="w-full"
+                  />
+                  <BookingFormInput
+                    label="เพศ"
+                    name="gender"
+                      value={patientForm.gender || ""}
+                    onChange={(e) => setField("gender", e.target.value)}
+                    required
+                    className="w-full"
+                  />
+                
+                 </div>
+                <div className="flex justify-between gap-2 items-start pt-2 mx-2">
+                  <BookingFormInput
+                    label="โรคประจำตัว"
+                    name="congenital"
+                      value={patientForm.congenital || ""}
+                    onChange={(e) => setField("congenital", e.target.value)}
+                    required
+                    className="w-80"
+                  />
                   <BookingFormInput
                     label="ภูมิแพ้"
                     name="allergies"
@@ -280,10 +324,35 @@ const handleSubmit = async () => {
                     required
                   />
                 </div>
-
-                <div className="flex justify-center gap-3 mx-2 pt-2 w-49/50">
+ <div className="flex flex-col justify-between gap-2 items-start pt-2 mx-2">
+  <h2 className="text-xl font-semibold ">ข้อมูลติดต่อฉุกเฉิน</h2>
+  <div className="flex justify-between gap-2 items-start pt-2">
+                    <BookingFormInput
+                    label="ชื่อผู้ติดต่อฉุกเฉิน"
+                    name="emergencyContactName"
+                      value={patientForm.emergencyContactName || ""}
+                    onChange={(e) => setField("emergencyContactName", e.target.value)}
+                    required
+                  />
+                    <BookingFormInput
+                    label="เบอร์โทรศัพท์ผู้ติดต่อฉุกเฉิน"
+                    name="emergencyContactPhone"
+                      value={patientForm.emergencyContactPhone || ""}
+                    onChange={(e) => setField("emergencyContactPhone", e.target.value)}
+                    required
+                  />
+                    <BookingFormInput
+                    label="ความสัมพันธ์กับผู้ติดต่อฉุกเฉิน"
+                    name="emergencyContactRelation"
+                      value={patientForm.emergencyContactRelation || ""}
+                    onChange={(e) => setField("emergencyContactRelation", e.target.value)}
+                    required
+                  />
+ </div>
+ </div>
+                <div className="flex justify-start gap-3 mx-2 pt-2 w-49/50">
                   <BookingFormInput
-                    label="Symptoms"
+                    label="อาการที่เป็นอยู่"
                     name="symptoms"
                     value={patientForm.symptoms}
                     onChange={(e) => setField("symptoms", e.target.value)}
@@ -307,9 +376,12 @@ const handleSubmit = async () => {
                 </form>
              </div>
            </div>
-           <div className=" h-1/10 m-6 flex justify-between items-center px-5">
-             <button onClick={() => navigate("/bookingdatetime")} className="btn btn-error">{"< "} Back</button>
-             <button onClick={handleSubmit} className="btn btn-primary">Select Payment {" >"}</button>
+           <div className="flex px-8 justify-between items-center">
+          <BookingNavButtons
+        onBack={handlePrevious}
+        onNext={handleSubmit}
+        title='เลือกชำระเงิน'
+      />
            </div>
          </div>
        </div>
