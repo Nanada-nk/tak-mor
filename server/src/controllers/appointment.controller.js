@@ -90,7 +90,8 @@ export const getDailyAppointments = async (req, res) => {
     return res
       .status(500)
       .json({ error: "Failed to fetch daily appointments." });
-
+  }
+};
 // Get all appointments for a patient (with doctor and patient info)
 export const getAppointmentsByPatient = async (req, res) => {
   try {
