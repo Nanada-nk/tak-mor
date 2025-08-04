@@ -6,7 +6,7 @@ const newsList = [
     date: "30 ก.ค 2025",
     title: "เคล็ดลับสุขภาพหัวใจ",
     description: "วิธีการดูแลหัวใจของคุณให้แข็งแรงและมีความสุขในทุกๆ วัน",
-    image: "/images/heart-health.jpg",
+    image: "https://static.naewna.com/uploads/news/source/786515.jpg",
   },
   {
     id: 2,
@@ -14,7 +14,7 @@ const newsList = [
     date: "28 ก.ค 2025",
     title: "ออกกำลังกายให้ปลอดภัย",
     description: "เรียนรู้วิธีออกกำลังกายที่ถูกต้องสำหรับทุกเพศทุกวัย",
-    image: "/images/exercise.jpg",
+    image: "https://oneandallthailand.com/wp-content/uploads/2021/12/Exercise02-1024x683.jpg",
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ const newsList = [
     date: "25 ก.ค 2025",
     title: "การนอนหลับกับสุขภาพจิต",
     description: "สำรวจความสัมพันธ์ของการนอนหลับและอารมณ์ในแต่ละวัน",
-    image: "/images/sleep-mental.jpg",
+    image: "https://www.stkc.go.th/sites/default/files/infographic/1602645916.png",
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ const newsList = [
     title: "การดูแลสุขภาพผู้สูงอายุในบ้าน",
     description:
       "แนวทางการดูแลผู้สูงอายุให้มีคุณภาพชีวิตที่ดีภายในบ้านและครอบครัว",
-    image: "/images/elderly-care.jpg",
+    image: "https://modernformhealthcare.co.th/wp-content/uploads/2024/02/%E0%B8%81%E0%B8%B2%E0%B8%A3%E0%B8%94%E0%B8%B9%E0%B9%81%E0%B8%A5%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%AA%E0%B8%B9%E0%B8%87%E0%B8%AD%E0%B8%B2%E0%B8%A2%E0%B8%B8-%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%A7%E0%B8%B4%E0%B8%98%E0%B8%B5%E0%B8%94%E0%B8%B9%E0%B9%81%E0%B8%A5%E0%B8%9C%E0%B8%B9%E0%B9%89%E0%B8%AA%E0%B8%B9%E0%B8%87%E0%B8%AD%E0%B8%B2%E0%B8%A2%E0%B8%B8-%E0%B9%83%E0%B8%AB%E0%B9%89%E0%B8%AA%E0%B8%B8%E0%B8%82%E0%B8%A0%E0%B8%B2%E0%B8%9E%E0%B9%81%E0%B8%82%E0%B9%87%E0%B8%87%E0%B9%81%E0%B8%A3%E0%B8%87%E0%B8%97%E0%B8%B1%E0%B9%89%E0%B8%87%E0%B8%A3%E0%B9%88%E0%B8%B2%E0%B8%87%E0%B8%81%E0%B8%B2%E0%B8%A2%E0%B9%81%E0%B8%A5%E0%B8%B0%E0%B8%88%E0%B8%B4%E0%B8%95%E0%B9%83%E0%B8%88-.webp",
   },
 ];
 function NewSection() {
