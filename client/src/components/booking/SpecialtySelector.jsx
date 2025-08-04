@@ -3,7 +3,7 @@ import React from "react";
 function SpecialtySelector({ specialties, selected, onSelect }) {
   return (
     <div className="flex flex-col gap-1 items-start border-b border-gray-200 pb-2 mb-2 w-full">
-      <h1>Select Specialty</h1>
+      {/* <h1>Select Specialty</h1> */}
       <div className="flex flex-row gap-2 mt-2 w-full flex-wrap justify-start">
         {specialties.map((spec) => (
           <button

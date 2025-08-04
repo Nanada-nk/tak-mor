@@ -14,6 +14,14 @@ function PatientProfile({
   handleInputKey,
   onProfilePictureClick
 }) {
+  // Cache-busting for profile picture
+  // If profile.profilePictureUrl exists, append a timestamp to force reload after update
+  const [imgCacheBust, setImgCacheBust] = useState(Date.now());
+  const profilePictureUrl = profile && profile.profilePictureUrl;
+  useEffect(() => {
+    setImgCacheBust(Date.now());
+  }, [profilePictureUrl]);
+
   const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
   const navigate = useNavigate();
   // Helper to get value for a field from editValue or profile
@@ -89,7 +97,9 @@ function PatientProfile({
             >
               {profile?.profilePictureUrl ? (
                 <img
-                  src={profile.profilePictureUrl}
+                  src={profile.profilePictureUrl
+                    ? `${profile.profilePictureUrl}${profile.profilePictureUrl.includes('?') ? '&' : '?'}cb=${imgCacheBust}`
+                    : undefined}
                   alt="Patient Avatar"
                   className="h-full w-full object-cover"
                 />
