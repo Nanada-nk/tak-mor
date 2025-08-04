@@ -1,7 +1,4 @@
-
-
-import React from "react";
-import { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import SpecialtySelector from "./SpecialtySelector";
 
@@ -18,6 +15,14 @@ function DoctorProfile({
   onSpecialtiesSave,
   onProfilePictureClick // Add this line
 }) {
+  // Cache-busting for profile picture
+  // If profile.profilePictureUrl exists, append a timestamp to force reload after update
+  const [imgCacheBust, setImgCacheBust] = useState(Date.now());
+  const profilePictureUrl = profile && profile.profilePictureUrl;
+  useEffect(() => {
+    setImgCacheBust(Date.now());
+  }, [profilePictureUrl]);
+
   // Determine if the profile is in display-only mode (no edit props passed)
   const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
   const navigate = useNavigate();
@@ -96,7 +101,9 @@ function DoctorProfile({
               title={!isDisplayOnly ? 'Change Profile Picture' : undefined}
             >
               <img
-                src={profile.profilePictureUrl ? profile.profilePictureUrl : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=3b82f6&color=fff&size=160`}
+                src={profile.profilePictureUrl
+                  ? `${profile.profilePictureUrl}${profile.profilePictureUrl.includes('?') ? '&' : '?'}cb=${imgCacheBust}`
+                  : `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=3b82f6&color=fff&size=160`}
                 alt="Doctor Avatar"
                 className="h-full w-full object-cover"
               />
