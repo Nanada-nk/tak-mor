@@ -1,5 +1,17 @@
 import prisma from '../config/prisma.config.js';
 
+export const getAllPatients = async (req, res, next) => {
+  try {
+    const patients = await prisma.patient.findMany({
+      include: {
+        Account: true,      // include account info (email, phone, etc.)
+      }
+    });
+    res.status(200).json(patients);
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const createProfile = async (req, res) => {
   const  patientId  = Number(req.params.patientId);
@@ -113,5 +125,42 @@ export const updatePatientInfo = async (req, res) => {
     res.json({ message: 'Patient info updated', patient: updated });
   } catch (err) {
     res.status(500).json({ error: 'Failed to update patient info' });
+  }
+};
+export const updatePatient = async (req, res) => {
+  const patientId = parseInt(req.params.id);
+  const {
+    firstName,
+    lastName,
+    address,
+    phone,
+    email,
+    role,
+  } = req.body;
+
+  try {
+    const updatedPatient = await prisma.patient.update({
+      where: { id: patientId },
+      data: {
+        firstName,
+        lastName,
+        address,
+        Account: {
+          update: {
+            phone,
+            email,
+            role,
+          },
+        },
+      },
+      include: {
+        Account: true,
+      },
+    });
+
+    res.json(updatedPatient);
+  } catch (error) {
+    console.error("Update patient error:", error);
+    res.status(500).json({ message: 'Failed to update patient' });
   }
 };

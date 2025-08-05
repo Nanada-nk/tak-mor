@@ -59,7 +59,7 @@ const doctors = [
 
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
-  // const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
@@ -72,42 +72,7 @@ function DoctorAvailabilityPage() {
       .catch((err) => console.error("Failed to fetch doctors:", err));
   }, []);
 
-  // Fetch slots and fixed availability for each doctor when their date changes
-  // useEffect(() => {
-  //   if (doctors.length === 0) return;
-  //   Promise.all(
-  //     doctors.map(doc => {
-  //       const dateObj = selectedDates[doc.id] || new Date();
-  //       const d = dateObj.toISOString().split('T')[0];
-  //       const dayOfWeek = dateObj.getDay(); // 0 = Sunday, 1 = Monday, etc.
 
-  //       // Fetch slots for the selected date
-  //       const slotsPromise = axiosInstance.get(`/doctor/${doc.id}/slots?date=${d}`)
-  //         .then(res => Array.isArray(res.data) ? res.data : [])
-  //         .catch(() => []);
-
-  //       // Fetch fixed availability for the selected day of week
-  //       const fixedPromise = axiosInstance.get(`/doctor/${doc.id}/availability?dayOfWeek=${dayOfWeek}`)
-  //         .then(res => Array.isArray(res.data) ? res.data : [])
-  //         .catch(() => []);
-
-  //       return Promise.all([slotsPromise, fixedPromise]).then(([slots, fixed]) => ({
-  //         doctorId: doc.id,
-  //         slots,
-  //         fixed
-  //       }));
-  //     })
-  //   ).then(results => {
-  //     const slotsObj = {};
-  //     const fixedObj = {};
-  //     results.forEach(({ doctorId, slots, fixed }) => {
-  //       slotsObj[doctorId] = slots;
-  //       fixedObj[doctorId] = fixed;
-  //     });
-  //     setSlotsByDoctor(slotsObj);
-  //     setFixedByDoctor(fixedObj);
-  //   });
-  // }, [doctors, selectedDates]);
 
   const fetchSlotsAndAvailability = useRef(
     debounce((doctors, selectedDates, setSlotsByDoctor, setFixedByDoctor) => {
@@ -157,65 +122,20 @@ function DoctorAvailabilityPage() {
 
   return (
     <div>
+
       <div>
-        <div>
-          <Brandner title="Doctor Calendars" />
+        <div className="mb-4">
+          <Brandner title="ตารางจองนัดหมาย แพทย์" />
+
         </div>
 
-        <div className="relative bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10">
-          {" "}
-          {/* -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
-          <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
-            {/* Search for Doctors, Hospitals, Clinics */}
-            <div className="flex items-center flex-grow w-full sm:w-auto">
-              <Search />
-              <input
-                type="text"
-                placeholder="Search for Doctors"
-                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-              />
-            </div>
-
-            {/* Vertical Divider for larger screens */}
-            <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
-
-            {/* Location */}
-            <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
-              <MapPin />
-              <input
-                type="text"
-                placeholder="Location"
-                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-              />
-            </div>
-
-            {/* Vertical Divider for larger screens */}
-            <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
-
-            {/* Date */}
-            <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
-              <Calendar />
-              <input
-                type="text"
-                placeholder="Date"
-                onFocus={(e) => (e.target.type = "date")} // เปลี่ยนเป็น type date เมื่อ focus
-                onBlur={(e) => (e.target.type = "text")} // เปลี่ยนกลับเป็น type text เมื่อ blur
-                className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-              />
-            </div>
-
-            {/* Search Button */}
-            <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">
-              Search
-            </button>
-          </div>
-        </div>
+       
 
 
 
 
-        <div className="flex  justify-between px-25">
-          <h2>Found 06 Doctors For You</h2>
+        {/* <div className="flex  justify-between px-25">
+          
           <div className="flex justify-between items-center">
             <div className="dropdown">
               <div tabIndex={0} role="button" className="btn m-1 bg-base-100 w-80 ">fornmatlayout<ChevronDown /></div>
@@ -234,14 +154,14 @@ function DoctorAvailabilityPage() {
               <MapPin />
             </button>
           </div>
-        </div>
+        </div> */}
 
 
 
         <div className="flex gap-5 px-25" >
 
-          <div className=' w-2/3'>
-            <div className="flex items-center justify-between">
+          <div className=' w-2/3 '>
+            {/* <div className="flex items-center justify-between">
               <div className="dropdown">
                 <div tabIndex={0} role="button" className="btn m-1 bg-base-100 w-80 ">spaecialities<ChevronDown /></div>
                 <ul tabIndex={0} className="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
@@ -266,8 +186,8 @@ function DoctorAvailabilityPage() {
               <div>
                 <a href="#" className="text-purple-600 font-semibold underline underline-offset-4 decoration-2 hover:text-purple-700 transition">Clear All</a>
               </div>
-            </div>
-            <div className="flex justify-between">
+            </div> */}
+            {/* <div className="flex justify-between">
               <div className="flex">
                 <div>
                   Avaliation
@@ -282,100 +202,94 @@ function DoctorAvailabilityPage() {
                   <LayoutTemplate />
                 </button>
               </div>
-            </div>
+            </div> */}
 
-            <div className="font-prompt">
-              {doctors.map(doctor => (
-                <div key={doctor.id} className=" mb-8 border rounded-xl p-4 ">
+            <div className="font-prompt space-y-8">
+  {doctors.map((doctor) => (
+    <div key={doctor.id} className="border border-gray-300 rounded-xl p-6 shadow-sm bg-white">
+      {/* Doctor Header */}
+      <h2 className="text-xl font-semibold bg-slate-100 p-3 rounded-lg mb-4">
+        {'Dr. ' + doctor.firstName} {doctor.lastName} 
+      </h2>
 
-                  <h2 className="text-xl font-semibold mb-2">
-                    {doctor.firstName} {doctor.lastName} ({doctor.specialty?.name || "General"})
-                  </h2>
-                  <div >
-                    <div className="flex justify-between items-center">
-                      <div className="w-1/3">
-                        <DoctorCardList
-                          key={doctor.id}
-                          showButton={false}
-                          name={doctor.name}
-                          specialty={doctor.specialty}
-                          rating={doctor.rating}
-                          reviews={doctor.reviews}
-                          hospital={doctor.hospital}
-                          status={doctor.status}
-                          price={doctor.price}
-                          imgSrc={doctor.imgSrc}
-                          linkPath={`/doctor/${doctor.id}`}
-                        />
-                      </div>
-                      {/* Calendar for each doctor */}
-                      <div className="w-1/3 items-center flex justify-center p-4" >
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+        {/* Doctor Card */}
+        <DoctorCardList
+          showButton={false}
+          name={`Dr. ${doctor.firstName} ${doctor.lastName}`}
+          specialty={doctor.specialty}
+          rating={Math.floor(Math.random() * (5 - 3 + 1)) + 3}
+          reviews={Math.floor(Math.random() * 500)}
+          hospital={doctor.address}
+          imgSrc={doctor.Account?.profilePictureUrl || "/default-doctor.jpg"}
+          linkPath={'#'}
+          doctorId={doctor.id}
+        />
 
-                        <DatePicker
-                          inline
-                          selected={selectedDates[doctor.id] || new Date()}
-                          onChange={date =>
-                            setSelectedDates(prev => ({
-                              ...prev,
-                              [doctor.id]: date
-                            }))
-                          }
-                          dateFormat="yyyy-MM-dd"
-                          minDate={new Date()}
-                        />
-                      </div>
-                      {/* Slots for each doctor */}
-                      <div className="mt-4 w-1/3 p-4">
-                        <h3 className="font-bold mb-2">Available Slots</h3>
-                        {/* Show DoctorAvailableSlot */}
-                        {slotsByDoctor[doctor.id] && slotsByDoctor[doctor.id].length > 0 && (
-                          <div>
-                            <div className="font-semibold text-blue-700 mb-1">Manual/Generated Slots</div>
-                            <div className="flex flex-wrap gap-2 mb-2">
-                              {slotsByDoctor[doctor.id].map(slot => (
-                                <span key={slot.startTime + slot.endTime} className="px-3 py-1 rounded bg-blue-100 border border-blue-300">
-                                  {slot.startTime} - {slot.endTime}
-                                </span>
-                              ))}
-                            </div>
+        {/* Date Picker */}
+        <div className="bg-gray-50 p-4 w-fit rounded-lg border">
+          <h3 className="text-sm font-medium mb-2 text-gray-700">เลือกวันที่</h3>
+          <DatePicker
+            inline
+            selected={selectedDates[doctor.id] || new Date()}
+            onChange={(date) =>
+              setSelectedDates((prev) => ({
+                ...prev,
+                [doctor.id]: date,
+              }))
+            }
+            dateFormat="yyyy-MM-dd"
+            minDate={new Date()}
+          />
+        </div>
 
-                          </div>
-                        )}
+        {/* Slots & Booking */}
+        <div className="bg-gray-50 ml-4 p-4 rounded-lg border border-gray-200">
+          <h3 className="font-bold text-sm mb-2 text-gray-700">ช่วงเวลาที่สามารถจองได้</h3>
 
-                        {/* Show DoctorAvailability */}
-                        {/* {fixedByDoctor[doctor.id] && fixedByDoctor[doctor.id].length > 0 && (
-              <>
-              <div className="font-semibold text-green-700 mb-1">Fixed Weekly Slots</div>
-              <div className="flex flex-wrap gap-2 mb-2">
-              {fixedByDoctor[doctor.id].map(avail => (
-                <span key={avail.startTime + avail.endTime} className="px-3 py-1 rounded bg-green-100 border border-green-300">
-                {avail.startTime} - {avail.endTime}
-                </span>
+          {/* Manual/Generated Slots */}
+          {slotsByDoctor[doctor.id]?.length > 0 ? (
+            <>
+             {selectedDates[doctor.id] && (
+  <p className="text-sm text-blue-700 font-medium mb-2">
+    วันที่เลือก: {selectedDates[doctor.id].toLocaleDateString("th-TH", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })}
+  </p>
+)}
+              <div className="flex flex-wrap gap-2 mb-4">
+                {slotsByDoctor[doctor.id].map((slot) => (
+                  <span
+                    key={slot.startTime + slot.endTime}
+                    className="px-3 py-1 rounded bg-blue-100 border border-blue-300 text-sm"
+                  >
+                    {slot.startTime} - {slot.endTime}
+                  </span>
                 ))}
-                </div>
-                </>
-                )} */}
-                        {/* If no slots at all */}
-                        {(!slotsByDoctor[doctor.id] || slotsByDoctor[doctor.id].length === 0) &&
-                          //  (!fixedByDoctor[doctor.id] || fixedByDoctor[doctor.id].length === 0) && 
-                          (
-                            <p className="text-gray-400">No slots available</p>
-                          )}
-                        <button
-                          onClick={() => { navigate("/appointment"), setDoctorId(doctor.id); }}
-                          className="btn btn-info text-white"
-                        >
-                          จองเลย
-                        </button>
-                      </div>
-                    </div>
+              </div>
+            </>
+          ) : (
+            <p className="text-sm text-gray-400 mb-4">ยังไม่มีช่วงเวลาให้บริการ</p>
+          )}
 
+          <button
+            onClick={() => {
+              navigate("/appointment");
+              setDoctorId(doctor.id);
+            }}
+            className="w-full md:w-auto bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition"
+          >
+            จองเลย
+          </button>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
 
-                  </div>
-                </div>
-
-              ))}
-            </div>
             <div className="flex items-center justify-center">
 
               <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">

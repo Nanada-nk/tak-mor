@@ -120,7 +120,6 @@ function AppRouter() {
           <Route path="rolepick" element={<SignupRolePick />} />
           <Route path="auth/callback" element={<AuthCallbackPage />} />
 
-
           <Route path="faq" element={<FaqPage />} />
           <Route path="termsOfService" element={<TermOfService />} />
           <Route path="privacyPolicy" element={<PrivacyPolicy />} />
@@ -201,17 +200,6 @@ function AppRouter() {
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
           <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
           <Route path="telemanagement" element={<AdminTelePage />} />
-        </Route>
-        {/* </Route> */}
-
-        {/* <Route element={<AdminRoute />}> */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminStatisticalData />} />
-          <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
-          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
-          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
-          <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
-
         </Route>
         {/* </Route> */}
 
