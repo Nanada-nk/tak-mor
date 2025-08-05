@@ -1,10 +1,14 @@
-import React from "react";
+import React, { use } from "react";
 import doctorApi from "/src/api/doctorApi.js";
 import authStore from "/src/stores/authStore.js";
 import Modal from "/src/components/Modal.jsx";
+import ModalDiagnosis from "/src/components/ModalDiagnosis.jsx";
+import DiagnosisForm from "../../../components/DiagnosisForm";
+import useBookingStore from "../../../stores/bookingStore";
 
 function DoctorAppointmentsPage() {
   const [showDetail, setShowDetail] = React.useState(null);
+  const [diagnosisModalAppointment, setDiagnosisModalAppointment] = React.useState(null);
   const [appointments, setAppointments] = React.useState([]);
   const { user } = authStore();
 
@@ -21,11 +25,15 @@ function DoctorAppointmentsPage() {
     };
     fetchAppointments();
   }, [user]);
+
+  console.log('user', user)
+  console.log('appointments', appointments);
   return (
-    <div className="max-w-5xl mx-auto py-8 px-2 sm:px-6 lg:px-8">
+    
+    <div className="max-w-5xl h-full mx-40 py-8 px-2 sm:px-6 lg:px-8 ">
       <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-6">My Appointments</h1>
-      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 min-h-[480px] min-w-[900px]">
-        <div className="bg-white shadow-md">
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 h-full w-270">
+        <div className="bg-white shadow-md w-full">
           <div className="flex justify-between">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
@@ -37,6 +45,7 @@ function DoctorAppointmentsPage() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medical Diagnosis</th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
@@ -52,6 +61,10 @@ function DoctorAppointmentsPage() {
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{appointment.status}</td>
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <button className="text-blue-600 hover:text-blue-900" onClick={() => setShowDetail(appointment)}>View</button>
+                     
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button className="text-blue-600 hover:text-blue-900"  onClick={() => setDiagnosisModalAppointment(appointment)}>View</button> | <button className="text-blue-600 hover:text-blue-900"  onClick={() => setDiagnosisModalAppointment(appointment)}>Edit</button>
                     </td>
                   </tr>
                 ))}
@@ -110,6 +123,26 @@ function DoctorAppointmentsPage() {
             </>
           )}
         </Modal>
+
+        {/* Modal for diagnosis form */}
+<ModalDiagnosis
+  isOpen={!!diagnosisModalAppointment}
+  onClose={() => setDiagnosisModalAppointment(null)}
+  title="Medical Diagnosis"
+
+>
+ 
+  <DiagnosisForm
+   appointment={diagnosisModalAppointment}
+   name={diagnosisModalAppointment?.Patient?.firstName + ' ' + diagnosisModalAppointment?.Patient?.lastName}
+   phone={diagnosisModalAppointment?.Patient?.Account?.phone}
+   email={diagnosisModalAppointment?.Patient?.Account?.email}
+
+   doctorname={diagnosisModalAppointment?.Doctor?.firstName + ' ' + diagnosisModalAppointment?.Doctor?.lastName}
+    />
+
+</ModalDiagnosis>
+
       </div>
     </div>
   );

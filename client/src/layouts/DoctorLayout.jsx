@@ -31,9 +31,9 @@ function DoctorLayout() {
 
 
   return (
-    <div className="flex h-[90vh] bg-blue-100">
+    <div className="flex h-fit bg-blue-100">
       <DoctorSidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col ">
         
           <Outlet />
         

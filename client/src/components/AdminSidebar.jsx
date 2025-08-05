@@ -19,10 +19,10 @@ const adminNavLinks = [
 function AdminSidebar() {
   const location = useLocation();
   const navigate = useNavigate();
-  const actionLogout = authStore((state) => state.actionLogout);
+  const logout = authStore((state) => state.logout);
 
   const handleLogout = () => {
-    actionLogout();
+    logout();
     toast.success("Logged out successfully!");
     navigate("/login");
   };
