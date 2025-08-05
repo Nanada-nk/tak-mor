@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import useBookingStore from "../../stores/bookingStore.js";
 import { PinIcon, StarIcon } from "../../components/icons/index.jsx";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {BookingFormInput} from "../../components/FormInput.jsx";
 import authStore from "../../stores/authStore.js";
 import usePatientFormStore from "../../stores/usePatientFormStore.js";
@@ -9,11 +9,35 @@ import axios from "axios";
 import BookingNavButtons from "../../components/booking/BookingNavButtons.jsx";
 
 function PatientInfoPage() {
+
   const user = authStore((state) => state.user)
   const doctor = useBookingStore((state) => state.doctorDetails);
   const navigate = useNavigate();
 
-const { patientForm, setField } = usePatientFormStore();
+  const { patientForm, setField } = usePatientFormStore();
+
+  // Initialize patientForm fields from user profile if patientForm is empty
+  useEffect(() => {
+    // Check if all patientForm values are empty
+    const allEmpty = Object.values(patientForm).every(v => !v);
+    if (user?.Patient && allEmpty) {
+      setField("address", user.Patient.address || "");
+      setField("height", user.Patient.PatientMedicalProfile?.height || "");
+      setField("weight", user.Patient.PatientMedicalProfile?.weight || "");
+      setField("bloodtype", user.Patient.PatientMedicalProfile?.bloodType || "");
+      setField("birthDate", user.Patient.birthDate || "");
+      setField("gender", user.Patient.gender || "");
+      setField("nationalId", user.Patient.nationalId || "");
+      setField("congenital", user.Patient.PatientMedicalProfile?.congenital || "");
+      setField("allergies", user.Patient.PatientMedicalProfile?.allergies || "");
+      setField("surgeries", user.Patient.PatientMedicalProfile?.surgeries || "");
+      setField("medications", user.Patient.PatientMedicalProfile?.medications || "");
+      setField("emergencyContactName", user.Patient.emergencyContactName || "");
+      setField("emergencyContactPhone", user.Patient.emergencyContactPhone || "");
+      setField("emergencyContactRelation", user.Patient.emergencyContactRelation || "");
+      setField("symptoms", user.Patient.symptoms || "");
+    }
+  }, [user, patientForm, setField]);
 
 
 

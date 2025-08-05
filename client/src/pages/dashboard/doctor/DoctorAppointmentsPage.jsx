@@ -7,24 +7,74 @@ function DoctorAppointmentsPage() {
   const [showDetail, setShowDetail] = React.useState(null);
   const [appointments, setAppointments] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
+  const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' });
   const { user } = authStore();
 
-  React.useEffect(() => {
+  const fetchAppointments = async () => {
     if (!user?.Doctor?.id) return;
-    const fetchAppointments = async () => {
-      setLoading(true);
-      try {
-        const resp = await doctorApi.getAppointments(user.Doctor.id);
-        setAppointments(resp.data);
-      } catch (err) {
-        setAppointments([]);
-        console.error("Failed to fetch appointments:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+    setLoading(true);
+    try {
+      const resp = await doctorApi.getAppointments(user.Doctor.id);
+      setAppointments(resp.data);
+    } catch (err) {
+      setAppointments([]);
+      console.error("Failed to fetch appointments:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  React.useEffect(() => {
     fetchAppointments();
+    // eslint-disable-next-line
   }, [user?.Doctor?.id]);
+
+  // Sorting logic
+  const sortedAppointments = React.useMemo(() => {
+    if (!sortConfig.key) return appointments;
+    const sorted = [...appointments];
+    sorted.sort((a, b) => {
+      let aValue, bValue;
+      switch (sortConfig.key) {
+        case 'date':
+          aValue = a.date || '';
+          bValue = b.date || '';
+          break;
+        case 'startTime':
+          aValue = a.startTime || '';
+          bValue = b.startTime || '';
+          break;
+        case 'patient':
+          aValue = (a.Patient?.firstName || '') + (a.Patient?.lastName || '');
+          bValue = (b.Patient?.firstName || '') + (b.Patient?.lastName || '');
+          break;
+        case 'symptoms':
+          aValue = a.symptoms || '';
+          bValue = b.symptoms || '';
+          break;
+        case 'status':
+          aValue = a.status || '';
+          bValue = b.status || '';
+          break;
+        default:
+          aValue = '';
+          bValue = '';
+      }
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+    return sorted;
+  }, [appointments, sortConfig]);
+
+  const handleSort = (key) => {
+    setSortConfig((prev) => {
+      if (prev.key === key) {
+        return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+      }
+      return { key, direction: 'asc' };
+    });
+  };
   // Status badge color helper
   const statusColor = status => {
     switch (status) {
@@ -40,7 +90,18 @@ function DoctorAppointmentsPage() {
 
   return (
     <div className="py-8 px-2 sm:px-6 lg:px-8">
-      <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-6">การนัดหมายของฉัน</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-blue-900">การนัดหมายของฉัน</h1>
+        <button
+          className="flex items-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-700 text-white rounded shadow text-sm"
+          onClick={fetchAppointments}
+          disabled={loading}
+          title="รีเฟรชข้อมูล"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582M19.418 19A9 9 0 115 5.582" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 20v-5h-.581" /></svg>
+          รีเฟรช
+        </button>
+      </div>
       {loading ? (
         <div className="flex flex-col items-center justify-center min-h-[300px] text-blue-800 gap-2">
           <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
@@ -53,20 +114,30 @@ function DoctorAppointmentsPage() {
         </div>
       ) : (
         <div className="overflow-x-auto w-full">
-          <table className="w-full min-w-[900px] divide-y divide-gray-200 bg-white rounded-xl shadow">
+          <table className="w-full min-w-[900px] bg-white rounded-xl shadow">
             <thead className="bg-blue-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">วันที่</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">เวลา</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">ชื่อผู้ป่วย</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">อาการ/บริการ</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200" tabIndex={0} onClick={() => handleSort('date')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('date'); }}>
+                  วันที่ {sortConfig.key === 'date' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200" tabIndex={0} onClick={() => handleSort('startTime')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('startTime'); }}>
+                  เวลา {sortConfig.key === 'startTime' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200" tabIndex={0} onClick={() => handleSort('patient')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('patient'); }}>
+                  ชื่อผู้ป่วย {sortConfig.key === 'patient' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200" tabIndex={0} onClick={() => handleSort('symptoms')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('symptoms'); }}>
+                  อาการ/บริการ {sortConfig.key === 'symptoms' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">ประเภท</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">สถานะ</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200" tabIndex={0} onClick={() => handleSort('status')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('status'); }}>
+                  สถานะ {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">รายละเอียด</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
-              {appointments.map((appointment) => (
+            <tbody>
+              {sortedAppointments.map((appointment) => (
                 <tr key={appointment.id} className="hover:bg-blue-50 transition-colors">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium">{appointment.date ? (() => { const d = new Date(appointment.date); return d.toLocaleDateString('th-TH'); })() : '-'}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{appointment.startTime} - {appointment.endTime}</td>

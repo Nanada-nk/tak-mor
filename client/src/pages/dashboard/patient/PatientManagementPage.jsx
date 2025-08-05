@@ -11,23 +11,77 @@ function PatientManagementPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDetail, setShowDetail] = useState(null);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+
+
+const fetchAppointments = async () => {
+  if (!user?.Patient?.id) return;
+  setLoading(true);
+  setError(null);
+  try {
+    const resp = await patientApi.getAppointments(user.Patient.id);
+    setAppointments(resp.data);
+  } catch (err) {
+    setError('ดึงข้อมูลการนัดหมายไม่สำเร็จ');
+    console.error('Error fetching appointments:', err);
+  } finally {
+    setLoading(false);
+  }
+};
 
 useEffect(() => {
-  if (!user?.Patient?.id) return;
-  const fetchAppointments = async () => {
-    setLoading(true);
-    try {
-      const resp = await patientApi.getAppointments(user.Patient.id);
-      setAppointments(resp.data);
-    } catch (err) {
-      setError('ดึงข้อมูลการนัดหมายไม่สำเร็จ');
-      console.error('Error fetching appointments:', err);
-    } finally {
-      setLoading(false);
-    }
-  };
   fetchAppointments();
 }, [user?.Patient?.id]);
+// Sorting logic
+const sortedAppointments = React.useMemo(() => {
+  if (!sortConfig.key) return appointments;
+  const sorted = [...appointments];
+  sorted.sort((a, b) => {
+    let aValue, bValue;
+    switch (sortConfig.key) {
+      case 'date':
+        aValue = a.date || '';
+        bValue = b.date || '';
+        break;
+      case 'startTime':
+        aValue = a.startTime || '';
+        bValue = b.startTime || '';
+        break;
+      case 'doctor':
+        aValue = (a.Doctor?.firstName || '') + (a.Doctor?.lastName || '');
+        bValue = (b.Doctor?.firstName || '') + (b.Doctor?.lastName || '');
+        break;
+      case 'symptoms':
+        aValue = a.symptoms || '';
+        bValue = b.symptoms || '';
+        break;
+      case 'type':
+        aValue = a.type || '';
+        bValue = b.type || '';
+        break;
+      case 'status':
+        aValue = a.status || '';
+        bValue = b.status || '';
+        break;
+      default:
+        aValue = '';
+        bValue = '';
+    }
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
+  });
+  return sorted;
+}, [appointments, sortConfig]);
+
+const handleSort = (key) => {
+  setSortConfig((prev) => {
+    if (prev.key === key) {
+      return { key, direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+    }
+    return { key, direction: 'asc' };
+  });
+};
 
 
 const statusColor = status => {
@@ -51,7 +105,18 @@ if (error) return <div className="flex items-center justify-center min-h-screen 
 
   return (
     <div className="w-full max-w-full py-8 px-2 sm:px-6 lg:px-8">
-      <h1 className="text-2xl font-bold mb-6 text-blue-900">การนัดหมายของฉัน</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-blue-900">การนัดหมายของฉัน</h1>
+        <button
+          className="flex items-center gap-1 px-3 py-1 bg-blue-500 hover:bg-blue-700 text-white rounded shadow text-sm"
+          onClick={fetchAppointments}
+          disabled={loading}
+          title="รีเฟรชข้อมูล"
+        >
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h5" /><path strokeLinecap="round" strokeLinejoin="round" d="M21 12A9 9 0 1 0 6 19" /></svg>
+          รีเฟรช
+        </button>
+      </div>
       {appointments.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-gray-400 gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
@@ -59,20 +124,32 @@ if (error) return <div className="flex items-center justify-center min-h-screen 
         </div>
       ) : (
         <div className="overflow-x-auto w-full">
-          <table className="w-full min-w-[900px] divide-y divide-gray-200 bg-white rounded-xl shadow">
+          <table className="w-full min-w-[900px] bg-white rounded-xl shadow border-collapse">
             <thead className="bg-blue-50">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">วันที่</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">เวลา</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">แพทย์</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">อาการ/บริการ</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">ประเภท</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">สถานะ</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('date')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('date'); }}>
+                  วันที่ {sortConfig.key === 'date' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('startTime')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('startTime'); }}>
+                  เวลา {sortConfig.key === 'startTime' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('doctor')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('doctor'); }}>
+                  แพทย์ {sortConfig.key === 'doctor' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('symptoms')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('symptoms'); }}>
+                  อาการ/บริการ {sortConfig.key === 'symptoms' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('type')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('type'); }}>
+                  ประเภท {sortConfig.key === 'type' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider cursor-pointer select-none transition-colors duration-150 hover:bg-blue-100 focus:bg-blue-200 outline-none ring-0 focus:outline-none focus:ring-0 focus-visible:outline-none focus-visible:ring-0" onMouseDown={e => e.preventDefault()} tabIndex={0} onClick={() => handleSort('status')} onKeyPress={e => { if (e.key === 'Enter' || e.key === ' ') handleSort('status'); }}>
+                  สถานะ {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">รายละเอียด</th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-100">
-              {appointments.map((appt) => (
+            <tbody className="bg-white">
+              {sortedAppointments.map((appt) => (
                 <tr key={appt.id} className="hover:bg-blue-50 transition-colors">
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-900 font-medium">{appt.date ? (() => { const d = new Date(appt.date); return d.toLocaleDateString('th-TH'); })() : '-'}</td>
                   <td className="px-4 py-3 whitespace-nowrap text-sm text-gray-700">{appt.startTime} - {appt.endTime}</td>
