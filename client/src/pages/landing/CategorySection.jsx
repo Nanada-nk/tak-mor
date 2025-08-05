@@ -7,42 +7,42 @@ function CategorySection() {
   const specialties = [
     {
       title: "หัวใจและหลอดเลือด",
-      iconSrc: "../../public/cate1.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362013/cate1_mzfcrs.svg",
       path: "/internalmedicine",
     },
     {
       title: "ระบบประสาทและสมอง",
-      iconSrc: "../../public/cate2.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362014/cate2_xk6rww.svg",
       path: "/internalmedicine",
     },
     {
       title: "ระบบทางเดินปัสสาวะ",
-      iconSrc: "../../public/cate3.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362015/cate3_zgrnwr.svg",
       path: "/internalmedicine",
     },
     {
       title: "ระบบกระดูกและข้อต่อ",
-      iconSrc: "../../public/cate4.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362014/cate4_fhxxhv.svg",
       path: "/internalmedicine",
     },
     {
       title: "ทันตกรรม",
-      iconSrc: "../../public/cate5.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362015/cate5_blrgze.svg",
       path: "/internalmedicine",
     },
     {
       title: "จักษุวิทยา",
-      iconSrc: "../../public/cate6.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362016/cate6_ecfclq.svg",
       path: "/internalmedicine",
     },
     {
       title: "อายุรกรรม",
-      iconSrc: "../../public/cate6.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362909/cate7_kt4fgt.png",
       path: "/internalmedicine",
     },
     {
       title: "กุมารเวช",
-      iconSrc: "../../public/cate6.svg",
+      iconSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362993/2368923_xsdvh9.png",
       path: "/internalmedicine",
     },
   ];

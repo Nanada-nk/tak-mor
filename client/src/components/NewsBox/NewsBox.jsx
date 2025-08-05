@@ -8,7 +8,7 @@ function NewsBox() {
             <div className="relative">
                 <div className='m-3 h-48 overflow-hidden rounded-md'> 
                     <img
-                        src="https://placehold.co/600x400/E0F2F7/0E82FD?text=News+Image" 
+                        src="https://www.aha.org/sites/default/files/styles/900x400/public/2021-09/in-the-news-900x400.jpg?itok=-GlPej7P" 
                         alt="News Thumbnail"
                         className="w-full h-full object-cover" 
                     />
