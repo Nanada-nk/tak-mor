@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from 'react';
 import PasswordStrengthGauge from '../../../components/PasswordStrengthGauge';
 import { Eye, EyeOff, KeyRound } from 'lucide-react';
 import accountApi from '../../../api/accountApi';
 
-function ChangePasswordPage() {
+function DoctorChangePasswordPage() {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -14,6 +13,7 @@ function ChangePasswordPage() {
   const [showCurrent, setShowCurrent] = useState(false);
   const [showNew, setShowNew] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+ 
 
   // Password strength meter now in PasswordStrengthGauge component
 
@@ -102,8 +102,6 @@ function ChangePasswordPage() {
               className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 hover:border-blue-400 pr-10 transition-all"
               value={newPassword}
               onChange={clearSuccessOnInput(setNewPassword)}
-              onFocus={() => setShowStrength(true)}
-              onBlur={() => setTimeout(() => setShowStrength(false), 200)}
               autoComplete="new-password"
               required
             />
@@ -169,4 +167,4 @@ function ChangePasswordPage() {
   );
 }
 
-export default ChangePasswordPage;
+export default DoctorChangePasswordPage;

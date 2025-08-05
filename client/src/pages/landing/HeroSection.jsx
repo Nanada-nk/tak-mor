@@ -1,9 +1,10 @@
 import { Check } from "lucide-react";
-
+import { useNavigate } from "react-router";
 
 import SearchBar from "../../components/SearchBar.jsx";
 
 function HeroSection() {
+  const navigate = useNavigate();
   return (
     <div className="relative flex flex-col lg:flex-row items-center justify-center bg-gradient-to-t from-white to-[#A2C8E5] w-full py-10 lg:py-20 px-4 sm:px-6 lg:px-8 gap-8 lg:gap-20 overflow-hidden">
       
@@ -64,9 +65,9 @@ function HeroSection() {
               className="w-full h-full object-contain"
             />
           </div>
-          <p className="text-center pt-2 text-sm font-semibold">จอร์น โด</p>
+          <p className="text-center pt-2 text-sm font-semibold">วิทยา สุขเกษม</p>
           <p className="text-center text-xs text-gray-500">แพทย์</p>
-          <button className="btn bg-gray-300 w-fit h-fit text-[8px] rounded-full mt-2.5 px-3 py-1 font-thin hover:bg-[#0E82FD] hover:text-white transition-colors">
+          <button onClick={()=>navigate('/doctoravailability')} className="btn bg-gray-300 w-fit h-fit text-[8px] rounded-full mt-2.5 px-3 py-1 font-thin hover:bg-[#0E82FD] hover:text-white transition-colors">
             จองเลย
           </button>
         </div>

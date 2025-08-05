@@ -47,6 +47,7 @@ import PatientProfilePage from "../pages/dashboard/patient/PatientProfilePage.js
 import PatientManagementPage from "../pages/dashboard/patient/PatientManagementPage.jsx"
 import EditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
+import DoctorChangePasswordPage from "../pages/dashboard/doctor/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
 import DoctorManagementPage from "../components/DoctorManagement.jsx";
@@ -119,7 +120,6 @@ function AppRouter() {
           <Route path="rolepick" element={<SignupRolePick />} />
           <Route path="auth/callback" element={<AuthCallbackPage />} />
 
-
           <Route path="faq" element={<FaqPage />} />
           <Route path="termsOfService" element={<TermOfService />} />
           <Route path="privacyPolicy" element={<PrivacyPolicy />} />
@@ -178,6 +178,7 @@ function AppRouter() {
             <Route path="profile" element={<DoctorProfilePage />} />
             <Route path="profile/edit" element={<DoctorProfileEditPage />} />
             <Route path="appointments" element={<DoctorAppointmentsPage />} />
+            <Route path="change-password" element={<DoctorChangePasswordPage />} />
           </Route>
           {/* Patient Profile (Dashboard) */}
           <Route path="/dashboard/patient" element={<PatientLayout />}>
@@ -199,17 +200,6 @@ function AppRouter() {
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
           <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
           <Route path="telemanagement" element={<AdminTelePage />} />
-        </Route>
-        {/* </Route> */}
-
-        {/* <Route element={<AdminRoute />}> */}
-        <Route path="/admin" element={<AdminLayout />}>
-          <Route index element={<AdminStatisticalData />} />
-          <Route path="patientdashboard" element={<AdminPatientDashboardManagementPage />} />
-          <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
-          <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
-          <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
-
         </Route>
         {/* </Route> */}
 
