@@ -31,7 +31,7 @@ const adminStore = create(
 
           set({
             [key]: fetchedData,
-            pagination: { ...newPagination, currentPage: finalPage }, // อัปเดต pagination ด้วย finalPage
+            pagination: { ...newPagination, currentPage: finalPage }, 
             isLoading: false,
           });
 

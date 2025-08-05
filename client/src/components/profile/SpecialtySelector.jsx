@@ -15,10 +15,10 @@ function SpecialtySelector({ selected, onChange, disabled }) {
     });
   }, []);
 
-  // Defensive: Remove duplicates from selected
+
   const uniqueSelected = selected.filter((s, idx, arr) => arr.findIndex(x => x.id === s.id) === idx);
 
-  // Only show specialties not already selected, order by name, and limit to 5
+  
   const filtered = allSpecialties
     .filter(s =>
       s.name.toLowerCase().includes(search.toLowerCase()) &&

@@ -26,7 +26,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
 
     const connectToRoom = async () => {
       try {
-        // 1. สร้าง Local Tracks (กล้องและไมโครโฟน)
+   
         setStatusMessage('กำลังเข้าถึงกล้องและไมโครโฟน...');
         const tracks = await createLocalTracks({
           audio: true,
@@ -39,7 +39,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
           return;
         }
 
-        // เก็บ tracks ไว้ใน ref
+   
         localTracksRef.current = tracks;
 
         tracks.forEach(track => {
@@ -50,7 +50,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
           console.log('trackElement', trackElement)
         });
 
-        // 2. เชื่อมต่อกับ Twilio Room โดยใช้ Twilio Token ที่ได้รับมา
+       
         setStatusMessage(`กำลังเข้าร่วมห้อง ${roomId}...`);
         const room = await connect(twilioToken, {
           name: roomId,
@@ -84,7 +84,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
           });
         });
 
-        // 3. จัดการเหตุการณ์เมื่อมีผู้เข้าร่วมใหม่
+     
         room.on('participantConnected', participant => {
           console.log(`ผู้ใช้ "${participant.identity}" เข้าร่วมค่ะ`);
           setStatusMessage(`ผู้ใช้ "${participant.identity}" เข้าร่วมแล้วค่ะ`);
@@ -106,7 +106,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
           });
         });
 
-        // 4. จัดการเหตุการณ์เมื่อผู้เข้าร่วมออก
+        
         room.on('participantDisconnected', participant => {
           console.log(`ผู้ใช้ "${participant.identity}" ออกจากห้องค่ะ`);
           setStatusMessage(`ผู้ใช้ "${participant.identity}" ออกจากห้องแล้วค่ะ`);
@@ -118,7 +118,7 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
           });
         });
 
-        // 5. จัดการเมื่อเราออกจากห้อง
+       
         room.on('disconnected', (room, error) => {
           console.log('ออกจากห้องแล้วค่ะ', error);
           if (error) {
@@ -145,10 +145,10 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
       }
     };
 
-    // เริ่มการเชื่อมต่อเมื่อ twilioToken พร้อมใช้งานเท่านั้น
+    
     connectToRoom();
 
-    // Cleanup function: เมื่อคอมโพเนนต์ถูก unmount
+    
     return () => {
       isMounted = false;
       if (currentRoom) {
@@ -202,22 +202,22 @@ const VideoCallTwilio = ({ roomId, appointmentData, twilioToken }) => {
 
   return (
     <div className="flex flex-col items-center p-4">
-      {/* <h1 className="text-2xl font-bold mb-4">การโทรด้วยวีดีโอ</h1> */}
+      
       <p className="text-sm text-gray-600 mb-4">{statusMessage}</p>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Local Video Stream */}
+       
         <div className="relative w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video">
           <div ref={localVideoRef} className="relative w-full h-full"></div>
           <span className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 p-1 px-2 rounded-md z-20">คุณ</span>
         </div>
-        {/* Remote Video Stream */}
+        
         <div className="relative w-full bg-gray-800 rounded-lg overflow-hidden shadow-lg aspect-video">
           <div ref={remoteVideoRef} className="relative w-full h-full"></div>
           <span className="absolute bottom-2 left-2 text-white bg-black bg-opacity-50 p-1 px-2 rounded-md z-20">คู่สนทนา</span>
         </div>
       </div>
 
-      {/* Controls */}
+    
       <div className="flex justify-center items-center p-4 space-x-4 mt-4 ">
         <button
           onClick={onToggleCamera}

@@ -2,7 +2,7 @@ import axiosInstance from "../config/axios.js"
 
 const teleApi = {};
 
-// --- Twilio Token APIs ---
+
 teleApi.getTwilioVideoToken = async (userId, roomId) => {
   console.log('teleApi.getTwilioVideoToken')
   try {
@@ -27,7 +27,7 @@ teleApi.getTwilioVoiceToken = async (userId) => {
   }
 }
 
-// --- Chat Message APIs ---
+
 teleApi.sendChatMessage = async (messageData) => {
   console.log('teleApi.sendChatMessage')
   try {
@@ -67,7 +67,7 @@ teleApi.markChatMessageAsRead = async (messageId) => {
 }
 
 
-// --- Call Log APIs ---
+
 teleApi.logCall = async (callData) => {
   console.log('teleApi.logCall')
   try {
@@ -107,7 +107,7 @@ teleApi.getCallLogsByAppointment = async (appointmentId) => {
 }
 
 
-// --- Notification APIs ---
+
 teleApi.getNotificationsByUser = async () => {
   console.log('teleApi.getNotificationsByUser')
   try {

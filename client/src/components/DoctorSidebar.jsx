@@ -19,7 +19,7 @@ const location = useLocation();
       <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">Doctor Portal</div>
       <nav className="flex-grow">
         <ul>
-          {/* My Profile and Edit Profile on the same line, Edit styled as before */}
+        
           <li className="mb-2">
             <div className="flex items-center">
               <Link

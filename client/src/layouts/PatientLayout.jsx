@@ -27,7 +27,6 @@ function PatientLayout() {
 
   useEffect(() => {
     handleAccessControl();
-    // eslint-disable-next-line
   }, []);
 
   // if (isLoading || !user) {

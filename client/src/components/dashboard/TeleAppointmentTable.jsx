@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router';
 function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAppointment, onDeleteAppointment }) {
   const navigate = useNavigate();
 
-  // Function สำหรับสร้าง Page Number Buttons
+  
   const renderPageNumbers = () => {
     const pageNumbers = [];
-    // สร้างปุ่ม Page Number ทั้งหมด
+   
     for (let i = 1; i <= pagination.totalPages; i++) {
       pageNumbers.push(
         <li key={i}>
@@ -15,7 +15,7 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
             onClick={() => onPageChange(i)}
             className={`px-4 py-2 rounded-full border border-gray-300 ${i === pagination.currentPage ? 'bg-blue-500 text-white' : 'text-gray-700 hover:bg-gray-100'
               }`}
-            aria-label={`Go to page ${i}`} // เพิ่ม Accessibility
+            aria-label={`Go to page ${i}`} 
           >
             {i}
           </button>
@@ -68,9 +68,9 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
                     {appt.createdAt ? new Date(appt.createdAt).toLocaleDateString() : 'N/A'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    {/* Edit Button */}
+                  
                     <button
-                      onClick={() => onEditAppointment && onEditAppointment(appt.id)} // เรียก prop function
+                      onClick={() => onEditAppointment && onEditAppointment(appt.id)} 
                       className="text-blue-600 hover:text-blue-900 mr-2"
                       aria-label="Edit Appointment"
                     >
@@ -78,7 +78,7 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                       </svg>
                     </button>
-                    {/* Delete Button */}
+                  
                     <button
                       onClick={() => onDeleteAppointment && onDeleteAppointment(appt.id)} // เรียก prop function
                       className="text-red-600 hover:text-red-900 mr-2"
@@ -88,7 +88,7 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
                         <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                       </svg>
                     </button>
-                    {/* ปุ่ม Join Call (ถ้าสถานะเหมาะสม) */}
+                  
                     {appt.status === 'CONFIRMED' && (
                       <button
                         onClick={() => navigate(`/video/${appt.appointmentId}`)}
@@ -112,14 +112,14 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
         </table>
       </div>
 
-      {/* Pagination Controls */}
+    
       <div className="flex justify-center my-5">
         <nav aria-label="Pagination" className="flex justify-center items-center space-x-2">
           <button
             onClick={() => onPageChange(pagination.currentPage - 1)}
             disabled={pagination.currentPage === 1}
             className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            aria-label="Previous page" // เพิ่ม Accessibility
+            aria-label="Previous page" 
           >
             Prev
           </button>
@@ -132,7 +132,7 @@ function TeleAppointmentTable({ appointments, pagination, onPageChange, onEditAp
             onClick={() => onPageChange(pagination.currentPage + 1)}
             disabled={pagination.currentPage === pagination.totalPages}
             className="px-4 py-2 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-100 disabled:opacity-50"
-            aria-label="Next page" // เพิ่ม Accessibility
+            aria-label="Next page" 
           >
             Next
           </button>

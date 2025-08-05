@@ -27,7 +27,7 @@ function PatientSidebar() {
       <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">Patient Portal</div>
       <nav className="flex-grow">
         <ul>
-          {/* My Profile and Edit Profile on the same line */}
+          
           <li className="mb-2">
             <div className="flex items-center">
               <Link
@@ -57,7 +57,7 @@ function PatientSidebar() {
               </Link>
             </div>
           </li>
-          {/* Other nav links */}
+         
           {patientNavLinks.slice(1).map((linker) => (
             <li key={linker.path} className="mb-2">
               <Link

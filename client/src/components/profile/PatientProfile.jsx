@@ -18,7 +18,7 @@ function PatientProfile({
 }) {
   const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
   const navigate = useNavigate();
-  // Helper to get value for a field from editValue or profile
+
   const getFieldValue = (field) => {
     let val = '';
     if (editField && typeof editValue === 'object' && editValue !== null && field in editValue) {
@@ -26,7 +26,7 @@ function PatientProfile({
     } else if (profile?.[field] !== undefined && profile?.[field] !== null) {
       val = profile[field];
     }
-    // Always return a string for input value
+   
     return val === undefined || val === null ? '' : String(val);
   };
   const [tab, setTab] = useState("personal");
@@ -61,7 +61,7 @@ function PatientProfile({
   return (
     <div className="min-h-screen bg-gray-50 py-10">
       <div className="max-w-4xl mx-auto relative">
-        {/* Edit/Done button top right */}
+
         {isDisplayOnly ? (
           <button
             className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded shadow hover:bg-blue-800 transition-colors z-20"
@@ -80,9 +80,9 @@ function PatientProfile({
             Done
           </button>
         )}
-        {/* Profile Pic + Name Row */}
+        
         <div className="flex flex-col items-center md:flex-row md:items-center gap-6 mb-8">
-          {/* Profile Picture */}
+          
           <div className="relative">
             <div 
               className={`h-36 w-36 md:h-40 md:w-40 rounded-full bg-gradient-to-br from-blue-200 to-blue-400 border-4 border-blue-200 shadow flex items-center justify-center overflow-hidden select-none ${!isDisplayOnly ? 'cursor-pointer hover:ring-4 hover:ring-blue-300' : ''}`}
@@ -156,9 +156,9 @@ function PatientProfile({
           </div>
         </div>
 
-          {/* Tabs and Content */}
+      
           <div className="flex-1">
-            {/* Tabs */}
+         
             <div className="flex w-full mb-6 border-b">
               <button
                 className={`group flex-1 px-4 py-1 font-semibold rounded-t flex items-center justify-center gap-1 ${tab === 'personal' ? 'bg-blue-100 text-blue-700 border-b-2 border-blue-500' : 'text-gray-500 hover:text-blue-700'}`}
@@ -198,7 +198,7 @@ function PatientProfile({
               </button>
             </div>
 
-            {/* Tab Content */}
+       
             {tab === 'personal' && (
               <div className="bg-white rounded-lg shadow p-6 border-t-4 border-blue-400">
                 <h2 className="text-lg font-semibold mb-4 text-blue-700 flex items-center gap-2">
@@ -206,7 +206,7 @@ function PatientProfile({
                   Personal Information
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* Name field removed, now editable beside profile picture */}
+                 
                   <div>
                     <label className="block text-xs font-medium text-gray-500">HN</label>
                     <span className="text-gray-900 mt-1 font-medium">{profile?.hn || '-'}</span>

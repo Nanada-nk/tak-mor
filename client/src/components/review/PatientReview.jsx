@@ -13,7 +13,7 @@ function PatientReview({ id, imageSrc, name, location, review }) {
 
       <div className="p-4 flex flex-col items-center lg:items-start w-full lg:w-2/3 max-w-xl">
         <div className="flex items-center gap-2 mb-4 text-gray-600 text-sm"></div>{" "}
-        {/* ส่วนนี้ว่างเปล่าอยู่แล้ว */}
+       
         <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
           รีวิวจากคนไข้ของเรา
         </h3>

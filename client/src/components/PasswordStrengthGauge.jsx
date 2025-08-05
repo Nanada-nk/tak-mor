@@ -12,11 +12,11 @@ function getStrength(pwd) {
 
 const strengthLabels = [
   '',
-  'ความปลอดภัยต่ำมาก',    // Very Weak
-  'ความปลอดภัยต่ำ',        // Weak
-  'ปานกลาง',              // Medium
-  'ปลอดภัย',              // Strong
-  'ปลอดภัยสูง',           // Very Strong
+  'ความปลอดภัยต่ำมาก',    
+  'ความปลอดภัยต่ำ',        
+  'ปานกลาง',              
+  'ปลอดภัย',              
+  'ปลอดภัยสูง',           
 ];
 
 export default function PasswordStrengthGauge({ password }) {
