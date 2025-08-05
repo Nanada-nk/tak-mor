@@ -20,6 +20,9 @@ function ChatPage() {
   const messagesEndRef = useRef(null);
   const socketRef = useRef(null);
 
+  const [selectedImage, setSelectedImage] = useState(null);
+  const fileInputRef = useRef(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -30,7 +33,6 @@ function ChatPage() {
       setLocalError("Missing appointment ID or user information.");
       return;
     }
-
 
     setChatMessages([]);
     setLoading(false);
@@ -48,8 +50,12 @@ function ChatPage() {
 
     socketRef.current.on('receive_message', (message) => {
       console.log('Received real-time message:', message);
-      if (message.roomId === appointmentId || message.appointmentId === parseInt(appointmentId)) {
-        addChatMessage(message); // เพิ่มข้อความลง teleStore
+      // *** จุดที่แก้ไข ***
+      // ตรวจสอบว่าข้อความที่ได้รับไม่ใช่ข้อความที่เราส่งไปเอง
+      if (message.senderId !== currentUser.id) {
+        if (message.roomId === appointmentId || message.appointmentId === parseInt(appointmentId)) {
+          addChatMessage(message); // เพิ่มข้อความลง teleStore
+        }
       }
     });
 
@@ -88,10 +94,14 @@ function ChatPage() {
     };
 
     try {
-      // *** ส่งข้อความผ่าน Socket.IO โดยตรง ไม่เรียก API เพื่อบันทึกลง DB ***
       if (socketRef.current && socketRef.current.connected) {
-        socketRef.current.emit('chatMessage', messageData); // Emit 'chatMessage' event
+        socketRef.current.emit('chatMessage', messageData);
         setNewMessageContent('');
+
+        // *** จุดที่แก้ไข ***
+        // เพิ่มข้อความลงใน state ของเราทันที เพื่อให้แสดงผลเลย (Optimistic UI)
+        addChatMessage({ ...messageData, id: Date.now() }); 
+
       } else {
         setLocalError("Socket not connected. Cannot send message.");
       }
@@ -99,6 +109,45 @@ function ChatPage() {
       console.error("Failed to send message via socket:", err);
       setLocalError("Failed to send message.");
     }
+  };
+
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+    }
+  };
+
+  const handleSendImage = () => {
+    if (!selectedImage) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const messageData = {
+        roomId: appointmentId,
+        senderId: currentUser.id,
+        senderName: currentUser.firstName || currentUser.email,
+        message: reader.result,
+        messageType: 'IMAGE',
+        timestamp: new Date().toISOString(),
+        isRead: false,
+      };
+
+      if (socketRef.current && socketRef.current.connected) {
+        socketRef.current.emit('chatMessage', messageData);
+        
+        // *** จุดที่แก้ไข ***
+        // เพิ่มข้อความ (รูปภาพ) ลงใน chatMessages ของตัวเองทันที
+        addChatMessage({ ...messageData, id: Date.now() });
+
+        setSelectedImage(null);
+        fileInputRef.current.value = '';
+      } else {
+        setLocalError("Socket not connected. Cannot send image.");
+      }
+    };
+    reader.readAsDataURL(selectedImage);
   };
 
   if (!currentUser) {
@@ -112,7 +161,6 @@ function ChatPage() {
         <p className="mt-4 text-2xl font-bold text-gray-700">Loading chat...</p>
       </div>
     )
-
   }
 
   if (localError) {
@@ -124,7 +172,7 @@ function ChatPage() {
     )
   }
 
- 
+  
   return (
     <div className="font-prompt flex flex-col container mx-auto sm:max-w-lg md:max-w-2xl lg:max-w-4xl xl:max-w-6xl h-[840px] shadow-lg rounded-lg overflow-hidden bg-[#d9e6f7] my-2">
       {/* Chat Header */}
@@ -139,7 +187,6 @@ function ChatPage() {
           <div className="text-center text-gray-500 mt-10">No messages yet. Start a conversation!</div>
         ) : (
           chatMessages.map((msg, index) => {
-            // เตรียม URL รูปภาพสำหรับผู้ส่งแต่ละคน และสำหรับ currentUser
             const senderAvatarSrc = msg.senderProfileImageUrl || 'https://res.cloudinary.com/dhoyopcr7/image/upload/v1754248709/user-hands-svgrepo-com_puf9vw.svg';
             const currentUserAvatarSrc = currentUser?.profilePictureUrl || 'https://res.cloudinary.com/dhoyopcr7/image/upload/v1754248709/user-hands-svgrepo-com_puf9vw.svg'; 
 
@@ -148,7 +195,6 @@ function ChatPage() {
                 key={msg.id || index}
                 className={`flex ${msg.senderId === currentUser?.id ? 'justify-end' : 'justify-start'} items-end`}
               >
-                {/* รูปโปรไฟล์ของคู่สนทนา (เมื่อไม่ใช่ข้อความของเรา) */}
                 {msg.senderId !== currentUser?.id && ( 
                   <img
                     src={senderAvatarSrc}
@@ -166,13 +212,21 @@ function ChatPage() {
                   <p className="font-semibold text-xs mb-1">
                     {msg.senderId === currentUser?.id ? 'You' : msg.senderName || 'Unknown User'}
                   </p>
-                  <p className="text-sm">{msg.message}</p>
+                  {msg.messageType === 'IMAGE' ? (
+                    <img 
+                      src={msg.message}
+                      alt="Uploaded" 
+                      className="w-full h-auto max-w-[200px] rounded-md cursor-pointer" 
+                      onClick={() => window.open(msg.message, '_blank')}
+                    />
+                  ) : (
+                    <p className="text-sm">{msg.message}</p>
+                  )}
                   <span className="block text-right text-xs opacity-70 mt-0.5">
                     {new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                   </span>
                 </div>
 
-                {/* รูปโปรไฟล์ของเรา (เมื่อเป็นข้อความของเรา) */}
                 {msg.senderId === currentUser?.id && ( 
                   <img
                     src={currentUserAvatarSrc}
@@ -189,26 +243,73 @@ function ChatPage() {
 
       {/* Message Input */}
       <div className="bg-white p-4 border-t border-gray-200">
-        <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-          <input
-            type="text"
-            value={newMessageContent}
-            onChange={(e) => setNewMessageContent(e.target.value)}
-            placeholder="Type your message..."
-            className="flex-1 border border-blue-50 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm"
-          />
-          <button
-            type="submit"
-            className="btn btn-primary rounded-full px-7 py-2 text-sm"
-            disabled={!newMessageContent.trim()}
-          >
-            Send
-          </button>
-        </form>
+        <div className="flex flex-col gap-2">
+          {selectedImage && (
+            <div className="flex items-center gap-2 p-2 bg-gray-100 rounded-md">
+              <img 
+                src={URL.createObjectURL(selectedImage)} 
+                alt="Preview" 
+                className="w-12 h-12 object-cover rounded-md" 
+              />
+              <p className="flex-1 text-sm text-gray-700">{selectedImage.name}</p>
+              <button 
+                onClick={() => {
+                  setSelectedImage(null); 
+                  fileInputRef.current.value = '';
+                }}
+                className="btn btn-ghost btn-sm"
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={handleSendMessage} className="flex items-center gap-2">
+            <label htmlFor="image-upload" className="btn btn-ghost btn-circle">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+              </svg>
+            </label>
+            <input 
+              type="file" 
+              id="image-upload" 
+              accept="image/*" 
+              className="hidden" 
+              onChange={handleImageSelect}
+              ref={fileInputRef}
+            />
+
+            <input
+              type="text"
+              value={newMessageContent}
+              onChange={(e) => setNewMessageContent(e.target.value)}
+              placeholder="Type your message..."
+              className="flex-1 border border-blue-50 rounded-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm"
+              disabled={selectedImage}
+            />
+            
+            {selectedImage ? (
+              <button
+                type="button"
+                onClick={handleSendImage}
+                className="btn btn-primary rounded-full px-7 py-2 text-sm"
+              >
+                Send Image
+              </button>
+            ) : (
+              <button
+                type="submit"
+                className="btn btn-primary rounded-full px-7 py-2 text-sm"
+                disabled={!newMessageContent.trim()}
+              >
+                Send
+              </button>
+            )}
+          </form>
+        </div>
       </div>
     </div>
   );
-
 }
 
 export default ChatPage;
