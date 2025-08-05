@@ -95,7 +95,6 @@ function AppRouter() {
           <Route path="faq" element={<FaqPage/>}/>
           <Route path="termsOfService" element={<TermOfService/>} />
           <Route path="privacyPolicy" element={<PrivacyPolicy/>} />
-          <Route path="alldoctor" element={<AllDoctorList/>}/>
           
           {/* Public */}
           <Route path="news" element={<NewsPage />} />
@@ -106,7 +105,8 @@ function AppRouter() {
           <Route path="aboutus" element={<AboutUsPage />} />
           <Route path="categoryspecialties" element={<CategorySpecialtiesPage />} />
         {/* Doctor public pages */}
-        <Route path="doctorlist" element={<DoctorListPage />} />
+          <Route path="alldoctor" element={<AllDoctorList/>}/>
+        {/* <Route path="doctorlist" element={<DoctorListPage />} /> */}
         <Route path="doctoravailability" element={<DoctorAvailabilityPage />} />
         {/* Doctor dashboard (protected) */}
       

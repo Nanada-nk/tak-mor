@@ -1,11 +1,22 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Brandner from '../../components/Brandner'
 import { Search, MapPin, Calendar, ChevronDown } from 'lucide-react'
 import PricingFilter from '../../components/DoctorList/PricingFilter';
 import DoctorCardList from '../../components/DoctorList/DoctorCardList';
 import Pagination from '../../components/Pagination';
+import axiosInstance from '../../config/axios.js';
 
 function DoctorList() {
+
+
+ const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/api/doctor")
+      .then((res) => setDoctors(res.data))
+      .catch((err) => console.error("Failed to fetch doctors:", err));
+  }, []);
 
     const totalNewsItems = 50;
     const itemsPerPage = 8;
@@ -92,10 +103,6 @@ function DoctorList() {
     const [isExpandedLanguages, setIsExpandedLanguages] = useState(false);
     const [isExpandedRatings, setIsExpandedRatings] = useState(false);
 
-
-
-
-
     // จำนวนรายการที่จะแสดงตอนแรก
     const visibleSpecialtiesCount = 9;
     const specialtiesToShow = showAll ? specialties : specialties.slice(0, visibleSpecialtiesCount);
@@ -142,39 +149,39 @@ function DoctorList() {
         <div>
             <div>
                 <div>
-                    <Brandner title='All Doctor' />
+                    <Brandner title='รายชื่อแพทย์ทั้งหมด' />
                 </div>
 
-                <div className="relative bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10"> {/* -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4">
+                {/* <div className="relative mb-4 bg-white p-4 sm:p-3 rounded-full shadow-lg border border-blue-200 mx-auto max-w-4xl -mt-10 z-10"> -mt-16 จำลองการเลื่อนขึ้นมาทับส่วนบน */}
+                    {/* <div className="flex flex-col sm:flex-row items-center justify-between space-y-4 sm:space-y-0 sm:space-x-4"> */}
                         {/* Search for Doctors, Hospitals, Clinics */}
-                        <div className="flex items-center flex-grow w-full sm:w-auto">
+                        {/* <div className="flex items-center flex-grow w-full sm:w-auto">
                             <Search />
                             <input
                                 type="text"
                                 placeholder="Search for Doctors"
                                 className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
                             />
-                        </div>
+                        </div> */}
 
                         {/* Vertical Divider for larger screens */}
-                        <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
+                        {/* <div className="hidden sm:block w-px bg-gray-200 h-8"></div> */}
 
                         {/* Location */}
-                        <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
+                        {/* <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
                             <MapPin />
                             <input
                                 type="text"
                                 placeholder="Location"
                                 className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-                            />
-                        </div>
+                            /> */}
+                        {/* </div> */}
 
                         {/* Vertical Divider for larger screens */}
-                        <div className="hidden sm:block w-px bg-gray-200 h-8"></div>
+                        {/* <div className="hidden sm:block w-px bg-gray-200 h-8"></div> */}
 
                         {/* Date */}
-                        <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
+                        {/* <div className="flex items-center flex-grow w-full sm:w-auto sm:justify-center">
                             <Calendar />
                             <input
                                 type="text"
@@ -182,19 +189,21 @@ function DoctorList() {
                                 onFocus={(e) => (e.target.type = "date")} // เปลี่ยนเป็น type date เมื่อ focus
                                 onBlur={(e) => (e.target.type = "text")} // เปลี่ยนกลับเป็น type text เมื่อ blur
                                 className="flex-grow focus:outline-none text-gray-700 placeholder-gray-400 text-sm sm:text-base"
-                            />
-                        </div>
+                            /> */}
+                        {/* </div> */}
 
                         {/* Search Button */}
-                        <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">
+                        {/* <button className="flex-shrink-0 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md hover:from-blue-600 hover:to-blue-700 transition duration-300 ease-in-out w-full sm:w-auto">
 
                             Search
                         </button>
                     </div>
-                </div>
+                </div> */}
+
+
             </div>
 
-            <div className='flex justify-between px-15 '>
+            <div className='flex justify-between px-15 p-4 bg-white shadow-md rounded-lg my-4'>
                 <div className='w-1/4'>
                     <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 ">
                         <h2 class="text-2xl font-bold text-gray-800 mb-4">ค้นหา</h2>
@@ -486,29 +495,26 @@ function DoctorList() {
 
                 </div>
 
-                <div className='w-3/4'>
-                    <div className='flex'>
-                        <div>
-                            <h2>Showing 450 Doctor For Yor</h2>
-                        </div>
-                        <div className='flex'>
-                            <h1>Availability</h1>
-                            <input type="checkbox" defaultChecked className="toggle" />
-
-                        </div>
-                    </div>
-                    <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 '>
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-                        <DoctorCardList showButton="true" />
-
-                    </div>
+                <div className='w-3/4 px-8'>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      {doctors.map((doctor) => (
+        <DoctorCardList
+          key={doctor.id}
+          name={`Dr. ${doctor.firstName} ${doctor.lastName}`}
+          specialty={doctor.specialty || "ทั่วไป"}
+          rating={Math.floor(Math.random() * (5 - 3 + 1)) + 3}
+          reviews={Math.floor(Math.random() * (500 - 1 + 1))}
+          hospital={doctor.hospital || "โรงพยาบาลกลาง"}
+          status={doctor.status || "ว่าง"}
+          price={doctor.price || 500}
+          imgSrc={doctor.Account?.profilePictureUrl || "/default-doctor.jpg"}
+          linkPath={`/doctor/${doctor.id}`}
+          showButton={true}
+          doctorId={doctor.id}
+        />
+      ))}
+    </div>
                     <div className="flex justify-center my-8">
                         <Pagination totalItems={totalNewsItems} itemsPerPage={itemsPerPage} currentPage={currentPage} onPageChange={handlePageChange} />
                     </div>
