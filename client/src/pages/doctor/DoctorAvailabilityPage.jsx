@@ -157,7 +157,7 @@ function DoctorAvailabilityPage() {
 
   return (
     <div>
-      <div>
+      <div className="mb-6">
         <div>
           <Brandner title="Doctor Calendars" />
         </div>

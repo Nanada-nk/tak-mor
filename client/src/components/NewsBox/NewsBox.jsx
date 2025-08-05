@@ -11,79 +11,61 @@ const NewContent = [
     { id: 7, tag: "วิจัยทางการแพทย์", ownerPost: "นายสมแฮม ทองจ๊อบ", date: "25 ก.ค. 2568", head: "กรมการแพทย์ขับเคลื่อนนโยบายคนไทยห่างไกลโรค NCDs Heart, DM, HT เป็นวาระแห่งชาติ Rajavithi Model :Cardio-Renal-Metabolic Center พร้อมขานรับจัดทำโครงการนำร่อง “มินิคลินิกเทเลเมดิซีน”", title: "นายแพทย์ทวีศิลป์ วิษณุโยธิน อธิบดีกรมการแพทย์ กล่าวว่า ปัจจุบันกลุ่มโรคไม่ติดต่อ หรือ โรค NCDs (Noncommunicable Diseases) เป็นปัญหาสุขภาพอันดับ 1 ของโลก และประเทศไทย โดยเป็นสาเหตุของการเสียชีวิตมากกว่า 70% ", img: "https://www.dms.go.th/backend//Content//Content_File/Hot_News/Img/25680725104359AM_1753409474871.jpg" },
     { id: 8, tag: "โรคระบาดและการควบคุมโรค", ownerPost: "นายสมเจ ทองทน", date: "23 ก.ค. 2568", head: "สมศักดิ์ ประกาศ 5 ความสำเร็จ กรมการแพทย์ ๑๐+ หัวใจที่รอคอย ๑๐๐+ คืนลมหายใจ ๑,๐๐๐+ สมองฟื้น ๑๐,๐๐๐+ แสวงบุญบนเส้นทางศรัทธา", title: "รัฐมนตรีว่าการกระทรวงสาธารณสุข ประกาศ 5 ความสำเร็จ กรมการแพทย์ ใช้เทคโนโลยีการแพทย์ขั้นสูงและศรัทธา ดูแลผู้ป่วยโรคซับซ้อนรุนแรง ช่วยเพิ่มการเข้าถึงบริการ เพิ่มโอกาสรอดชีวิตและลดความพิการ ทั้งกรอหินปูนเกาะหลอดเลือดหัวใจ 10 ราย เปลี่ยนลิ้นหัวใจโดยสายสวน ", img: "https://www.dms.go.th/backend//Content//Content_File/Hot_News/Img/25680724222607PM_S__150380563.jpg" },
 ]
-function NewsBox({className="", limit=8}) {
+function NewsBox({ className = "", limit = 8 }) {
     return (
-      
-<<<<<<< HEAD
-        <div className={`${className}`}>
-            {NewContent.slice(0,limit).map((content) => (
+
+        <div className= {className} limit={limit}>
+            {NewContent.slice(0,limit).map((content) =>
+                <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 w-full transition-transform duration-200 hover:scale-[1.02]">
+
+                    <div className="relative">
+                        <div className='m-3 h-48 overflow-hidden rounded-md'>
+                            <img
+                                src={content.img}
+                                alt="News Thumbnail"
+                                className="w-full h-full object-cover"
+                            />
+                        </div>
+                        <span className="absolute top-6 left-6 bg-[#3B80F5] text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
+                            {content.tag}
+                        </span>
+                    </div>
 
 
-                    <Link to={`${content.id}`}>
-                        <div className="bg-white rounded-lg shadow-lg overflow-hidden border border-gray-200 w-full transition-transform duration-200 hover:scale-[1.02]">
+                    <div className="p-4 sm:p-6 flex flex-col">
 
-                            <div className="relative">
-                                <div className='m-3 h-48 overflow-hidden rounded-md'>
-                                    <img
-                                        src={content.img}
-                                        alt="News Thumbnail"
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <span className="absolute top-6 left-6 bg-[#3B80F5] text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md">
-                                    {content.tag}
-                                </span>
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 text-gray-600 text-sm">
+                            <div className="flex items-center mb-2 sm:mb-0">
+                                <img
+                                    src="https://placehold.co/32x32/E2EDFF/0E82FD?text=GJ"
+                                    alt="Gregory Johnson"
+                                    className="w-8 h-8 rounded-full mr-2 object-cover"
+                                />
+                                <span className="text-sm">{content.ownerPost}</span>
                             </div>
-
-
-                            <div className="p-4 sm:p-6 flex flex-col">
-
-                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 text-gray-600 text-sm">
-                                    <div className="flex items-center mb-2 sm:mb-0">
-                                        <img
-                                            src="https://placehold.co/32x32/E2EDFF/0E82FD?text=AA"
-                                            alt="Gregory Johnson"
-                                            className="w-8 h-8 rounded-full mr-2 object-cover"
-                                        />
-                                        <span className="text-sm">{content.ownerPost}</span>
-                                    </div>
-                                    <div className="flex items-center">
-                                        <Calendar className="h-4 w-4 mr-1 text-gray-500" />
-                                        <span className="text-sm">{content.date}</span>
-                                    </div>
-                                </div>
-
-
-                                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
-                                    {content.head}
-                                </h3>
-
-
-                                <p className="text-gray-700 text-sm sm:text-base line-clamp-3">
-                                    {content.title}
-                                </p>
+                            <div className="flex items-center">
+                                <Calendar className="h-4 w-4 mr-1 text-gray-500" />
+                                <span className="text-sm">{content.date}</span>
                             </div>
                         </div>
-                    </Link>
-            ))}
-=======
-            <div className="relative">
-                <div className='m-3 h-48 overflow-hidden rounded-md'> 
-                    <img
-                        src="https://www.aha.org/sites/default/files/styles/900x400/public/2021-09/in-the-news-900x400.jpg?itok=-GlPej7P" 
-                        alt="News Thumbnail"
-                        className="w-full h-full object-cover" 
-                    />
+
+
+                        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 line-clamp-2">
+                            {content.head}
+                        </h3>
+
+
+                        <p className="text-gray-700 text-sm sm:text-base line-clamp-3">
+                            {content.title}
+                        </p>
+                    </div>
                 </div>
-                <span className="absolute top-6 left-6 bg-[#3B80F5] text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md"> 
-                    Wellness
-                </span>
->>>>>>> origin
-            </div>
+            )}
+        </div>
 
 
 
-     
+
     )
 }
 
