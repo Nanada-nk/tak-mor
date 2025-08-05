@@ -22,7 +22,7 @@ function PromotionCard({
           <p className="text-base font-semibold">{title}</p>
         </div>
 
-        <p className="text-3xl font-bold px-4">${price}</p>
+        <p className="text-3xl font-bold px-4"> {price} ฿</p>
         <p className="text-xs font-thin px-4 pt-2 text-gray-600">สิ่งที่ได้</p>
 
         <div className="flex flex-col gap-2 mt-4 flex-grow">
