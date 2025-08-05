@@ -1,4 +1,4 @@
-import prisma from "../config/prisma.config.js"
+import prisma from "../config/prisma.config.js";
 
 
 const slotLength = 30; // 30-minute windows

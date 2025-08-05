@@ -39,7 +39,7 @@ function HeaderNavBar() {
       
         <a onClick={navigateHome} className="hover:cursor-pointer">
           <img
-            src="../../public/takmor.svg"
+            src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362019/takmor_evdyyp.svg"
             alt="web-logo"
             className="h-full w-auto object-contain mr-5" 
           />

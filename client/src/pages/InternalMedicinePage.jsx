@@ -1,4 +1,4 @@
-import DocListInternal from "./internalMedicine/DocListInternal";
+import DocListInternal from "./internalMedicine/DoclistInternal"
 import InternalHeroSection from "./internalMedicine/InternalHeroSection";
 import NewBlogInternal from "./internalMedicine/NewBlogInternal";
 import ServiceInternalSection from "./internalMedicine/ServiceInternalSection";

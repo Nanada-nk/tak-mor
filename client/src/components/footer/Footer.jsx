@@ -11,7 +11,7 @@ function Footer() {
            
                 <nav className="flex flex-col items-start gap-4">
                     <div>
-                        <img src="../../../public/takmor.svg" alt='logo' className="h-12 w-auto object-contain" /> 
+                        <img src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362019/takmor_evdyyp.svg" alt='logo' className="h-12 w-auto object-contain" /> 
                     </div>
           
                     <div className='w-full max-w-xs text-sm text-gray-700 leading-relaxed'>

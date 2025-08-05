@@ -119,7 +119,8 @@ const handleSubmit = async () => {
   const { specialty, appointmentType, hospital, service, selectedDate, selectedTime } = useBookingStore();
  const dateObj = selectedDate ? new Date(selectedDate) : null;
   return (
-   <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-255  font-prompt">
+
+   <div className="flex flex-col items-center justify-center my-10 m-auto w-2/3 h-full font-prompt">
          <div className="h-1/7 w-full flex items-center justify-center">
            <ul className="steps h-full">
              <li data-content="✓" className="step step-primary step-success">

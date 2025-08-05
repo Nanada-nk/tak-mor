@@ -27,7 +27,7 @@ function HeroSection() {
           </div>
           <div className="hidden sm:block">
             <img
-              src="../../public/Graphics.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362005/Graphics_u8jks7.svg"
               alt="arrowcuel"
               className="h-full w-auto object-contain"
             />
@@ -50,7 +50,7 @@ function HeroSection() {
         <div className="bg-[#e1ebf7] w-full h-full rounded-full shadow-[#e1ebf7] shadow-sm flex items-center justify-center">
           <div className="bg-[#0E82FD] w-3/4 h-3/4 rounded-full border-8 border-white shadow-white shadow-2xl flex items-center justify-center">
             <img
-              src="../../public/DocImageLandingPage1.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362017/DocImageLandingPage1_ftzcsz.svg"
               alt="DocImage"
               className="w-full h-full object-contain absolute top-[-8px] left-3"
             />
@@ -60,7 +60,7 @@ function HeroSection() {
         <div className="w-30 h-40 bg-white rounded-xl shadow-2xl shadow-gray absolute top-35 left-75 hidden sm:flex flex-col items-center">
           <div className="w-16 h-16 rounded-full overflow-hidden mx-auto mt-4 relative bg-gray-300">
             <img
-              src="../../public/DocImageLandingPage2.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362013/DocImageLandingPage2_og2evw.svg"
               alt="DocImage"
               className="w-full h-full object-contain"
             />
@@ -81,32 +81,32 @@ function HeroSection() {
           <p className="text-xs font-medium text-gray-700">พบกับแพทย์ของเรา</p>
           <div className="flex mt-2">
             <img
-              src="../../public/patient1.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362009/patient1_qlqhkx.svg"
               alt="Patient1"
               className="w-10 h-10 object-contain rounded-full -ml-0 border-2  border-white"
             />
             <img
-              src="../../public/patient2.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362007/patient2_xfbfvw.svg"
               alt="Patient2"
               className="w-10 h-10 object-contain rounded-full -ml-3 border-2 border-white"
             />
             <img
-              src="../../public/patient3.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362015/patient3_r8btkw.svg"
               alt="Patient3"
               className="w-10 h-10 object-contain rounded-full -ml-3 border-2 border-white"
             />
             <img
-              src="../../public/patient4.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362017/patient4_zzq6xl.svg"
               alt="Patient4"
               className="w-10 h-10 object-contain rounded-full -ml-3 border-2 border-white"
             />
             <img
-              src="../../public/patient5.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362018/patient5_exlgl5.svg"
               alt="Patient5"
               className="w-10 h-10 object-contain rounded-full -ml-3 border-2 border-white"
             />
             <img
-              src="../../public/patient6.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362021/patient6_lug3cj.svg"
               alt="Patient6"
               className="w-10 h-10 object-contain rounded-full -ml-3 border-2 border-white"
             />

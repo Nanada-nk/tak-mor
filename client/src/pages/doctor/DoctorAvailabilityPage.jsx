@@ -9,9 +9,57 @@ import { Search, MapPin, Calendar, ChevronDown, BetweenHorizonalStart, LayoutTem
 import Brandner from "../../components/Brandner.jsx";
 import DoctorCardList from "../../components/DoctorList/DoctorCardList.jsx";
 
+
+const doctors = [
+  {
+    id: 1,
+    name: "พญ.ดาวเนอร์",
+    specialty: "แพทย์กระดูกและข้อ",
+    rating: 4.5,
+    reviews: 35,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362010/DocContainer1_ly8fj7.svg",
+  },
+  {
+    id: 2,
+    name: "นพ.เจมส์",
+    specialty: "แพทย์ระบบประสาทและสมอง",
+    rating: 3.8,
+    reviews: 29,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362006/DocContainer2_cm5rkk.svg",
+  },
+  {
+    id: 3,
+    name: "พญ.โรส",
+    specialty: "แพทย์กุมารเวช",
+    rating: 4,
+    reviews: 15,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362007/DocContainer3_iiveff.svg",
+  },
+  {
+    id: 4,
+    name: "พญ.เจมม่า",
+    specialty: "แพทย์อายุรกรรม",
+    rating: 5,
+    reviews: 30,
+    hospital: "โรงพยาบาลศิริราช",
+    status: "ว่าง",
+    price: 500,
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362010/DocContainer1_ly8fj7.svg",
+  },
+];
+
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
-  const [doctors, setDoctors] = useState([]);
+  // const [doctors, setDoctors] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
@@ -258,6 +306,7 @@ function DoctorAvailabilityPage() {
 
 
       </div>
+
     </div>
   );
 }
