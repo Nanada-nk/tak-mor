@@ -4,7 +4,8 @@ import React, { useEffect, useState } from 'react';
 import patientApi from '../../../api/patientApi';
 import authStore from '../../../stores/authStore';
 import Modal from '../../../components/Modal.jsx';
-
+import ModalDiagnosis from '../../../components/ModalDiagnosis.jsx';
+import DiagnosisForm from '../../../components/DiagnosisForm.jsx';
 function PatientManagementPage() {
   const user = authStore(state => state.user);
   const [appointments, setAppointments] = useState([]);
@@ -12,7 +13,29 @@ function PatientManagementPage() {
   const [error, setError] = useState(null);
   const [showDetail, setShowDetail] = useState(null);
   const [sortConfig, setSortConfig] = useState({ key: null, direction: 'asc' });
+  const [callModalAppointment, setCallModalAppointment] = useState(null);
+  const [diagnosisModalAppointment, setDiagnosisModalAppointment] = React.useState(null);
 
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      if (!user?.Patient?.id) {
+        setError('No patient ID found.');
+        setLoading(false);
+        return;
+      }
+      try {
+        setLoading(true);
+        const resp = await patientApi.getAppointments(user.Patient.id);
+        setAppointments(resp.data);
+      } catch (err) {
+        setError('Failed to fetch appointments.');
+        console.error('Error fetching appointments:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchAppointments();
+  }, [user]);
 
 const fetchAppointments = async () => {
   if (!user?.Patient?.id) return;
@@ -146,6 +169,9 @@ if (error) return <div className="flex items-center justify-center min-h-screen 
                   สถานะ {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">รายละเอียด</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">โทร</th>
+                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">การวินิจฉัย</th>
+
               </tr>
             </thead>
             <tbody className="bg-white">
@@ -175,6 +201,49 @@ if (error) return <div className="flex items-center justify-center min-h-screen 
                       ดูรายละเอียด
                     </button>
                   </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                    <button
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500 hover:bg-green-700 text-white rounded-md shadow-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
+                      onClick={() => setCallModalAppointment(appt)}
+                      title="โทรหาแพทย์"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2.28a2 2 0 011.789 1.106l1.387 2.773a2 2 0 01-.217 2.12l-1.516 1.89a11.042 11.042 0 005.516 5.516l1.89-1.516a2 2 0 012.12-.217l2.773 1.387A2 2 0 0121 16.72V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" /></svg>
+                      โทร
+                    </button>
+                  </td>
+                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
+                    <button
+                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-700 text-white rounded-md shadow-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
+                      onClick={() => setDiagnosisModalAppointment(appt)}
+                      title="ดูการวินิจฉัย"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                      อ่าน
+                    </button>
+                  </td>
+      {/* Modal for mock call to doctor */}
+      <Modal isOpen={!!callModalAppointment} onClose={() => setCallModalAppointment(null)} title="โทรหาแพทย์">
+        {callModalAppointment && (
+          <div className="flex flex-col items-center gap-4 py-4">
+            <div className="flex flex-col items-center gap-2">
+              <div className="bg-green-100 rounded-full p-4 mb-2">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2.28a2 2 0 011.789 1.106l1.387 2.773a2 2 0 01-.217 2.12l-1.516 1.89a11.042 11.042 0 005.516 5.516l1.89-1.516a2 2 0 012.12-.217l2.773 1.387A2 2 0 0121 16.72V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" /></svg>
+              </div>
+              <div className="text-lg font-bold text-green-700">กำลังโทรหาแพทย์...</div>
+              <div className="text-base text-gray-800 font-semibold">{callModalAppointment.Doctor?.firstName || '-'} {callModalAppointment.Doctor?.lastName || ''}</div>
+              <div className="text-sm text-gray-600">เบอร์โทร: {callModalAppointment.Doctor?.Account?.phone || '-'}</div>
+            </div>
+            <div className="mt-4 flex justify-end w-full">
+              <button
+                className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded shadow text-sm"
+                onClick={() => setCallModalAppointment(null)}
+              >
+                วางสาย
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
                 </tr>
               ))}
             </tbody>
@@ -225,6 +294,24 @@ if (error) return <div className="flex items-center justify-center min-h-screen 
           </div>
         )}
       </Modal>
+       {/* Modal for diagnosis form */}
+<ModalDiagnosis
+  isOpen={!!diagnosisModalAppointment}
+  onClose={() => setDiagnosisModalAppointment(null)}
+  title="Medical Diagnosis"
+
+>
+ 
+  <DiagnosisForm
+   appointment={diagnosisModalAppointment}
+   name={diagnosisModalAppointment?.Patient?.firstName + ' ' + diagnosisModalAppointment?.Patient?.lastName}
+   phone={diagnosisModalAppointment?.Patient?.Account?.phone}
+   email={diagnosisModalAppointment?.Patient?.Account?.email}
+
+   doctorname={diagnosisModalAppointment?.Doctor?.firstName + ' ' + diagnosisModalAppointment?.Doctor?.lastName}
+    />
+
+</ModalDiagnosis>
     </div>
   );
 }

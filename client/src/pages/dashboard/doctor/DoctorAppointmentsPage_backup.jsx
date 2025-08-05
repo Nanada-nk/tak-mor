@@ -1,9 +1,10 @@
-import React from "react";
+import React, { use } from "react";
 import doctorApi from "/src/api/doctorApi.js";
 import authStore from "/src/stores/authStore.js";
 import Modal from "/src/components/Modal.jsx";
 import ModalDiagnosis from "/src/components/ModalDiagnosis.jsx";
 import DiagnosisForm from "../../../components/DiagnosisForm";
+import useBookingStore from "../../../stores/bookingStore";
 
 function DoctorAppointmentsPage() {
   const [showDetail, setShowDetail] = React.useState(null);
@@ -11,7 +12,6 @@ function DoctorAppointmentsPage() {
   const [appointments, setAppointments] = React.useState([]);
   const [loading, setLoading] = React.useState(true);
   const [sortConfig, setSortConfig] = React.useState({ key: null, direction: 'asc' });
-  const [callModalAppointment, setCallModalAppointment] = React.useState(null);
   const { user } = authStore();
 
   const fetchAppointments = async () => {
@@ -79,7 +79,6 @@ function DoctorAppointmentsPage() {
       return { key, direction: 'asc' };
     });
   };
-
   // Status badge color helper
   const statusColor = status => {
     switch (status) {
@@ -91,8 +90,7 @@ function DoctorAppointmentsPage() {
     }
   };
 
-  console.log('user', user)
-  console.log('appointments', appointments);
+  // Loading spinner for initial load
 
   return (
     <div className="py-8 px-2 sm:px-6 lg:px-8">
@@ -112,6 +110,55 @@ function DoctorAppointmentsPage() {
         <div className="flex flex-col items-center justify-center min-h-[300px] text-blue-800 gap-2">
           <svg className="animate-spin h-8 w-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
           <span>กำลังโหลดข้อมูลการนัดหมาย...</span>
+=======
+  }, [user]);
+
+  console.log('user', user)
+  console.log('appointments', appointments);
+  return (
+    
+    <div className="max-w-5xl h-full mx-40 py-8 px-2 sm:px-6 lg:px-8 ">
+      <h1 className="text-2xl sm:text-3xl font-bold text-blue-900 mb-6">My Appointments</h1>
+      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-8 h-full w-270">
+        <div className="bg-white shadow-md w-full">
+          <div className="flex justify-between">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient Name</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Time</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medical Diagnosis</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {appointments.map((appointment) => (
+                  <tr key={appointment.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {appointment.Patient?.firstName || '-'} {appointment.Patient?.lastName || ''}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{appointment.date?.slice(0,10)}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{appointment.startTime} - {appointment.endTime}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{appointment.symptoms}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">-</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{appointment.status}</td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button className="text-blue-600 hover:text-blue-900" onClick={() => setShowDetail(appointment)}>View</button>
+                     
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <button className="text-blue-600 hover:text-blue-900"  onClick={() => setDiagnosisModalAppointment(appointment)}>View</button> | <button className="text-blue-600 hover:text-blue-900"  onClick={() => setDiagnosisModalAppointment(appointment)}>Edit</button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+>>>>>>> 02f41b7a3145a0581ff1d0b85192c1b5339a199b
         </div>
       ) : appointments.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 text-gray-400 gap-2">
@@ -140,8 +187,6 @@ function DoctorAppointmentsPage() {
                   สถานะ {sortConfig.key === 'status' && (sortConfig.direction === 'asc' ? '▲' : '▼')}
                 </th>
                 <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">รายละเอียด</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">การนัดหมาย</th>
-                <th className="px-4 py-3 text-left text-xs font-bold text-blue-700 uppercase tracking-wider">การวินิจฉัย</th>
               </tr>
             </thead>
             <tbody>
@@ -171,64 +216,12 @@ function DoctorAppointmentsPage() {
                       ดูรายละเอียด
                     </button>
                   </td>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium">
-                    <button
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-green-500 hover:bg-green-700 text-white rounded-md shadow-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2"
-                      onClick={() => setCallModalAppointment(appointment)}
-                      title="โทรหาผู้ป่วย"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2.28a2 2 0 011.789 1.106l1.387 2.773a2 2 0 01-.217 2.12l-1.516 1.89a11.042 11.042 0 005.516 5.516l1.89-1.516a2 2 0 012.12-.217l2.773 1.387A2 2 0 0121 16.72V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" /></svg>
-                      โทร
-                    </button>
-                  </td>
-      {/* Modal for mock call */}
-      <Modal isOpen={!!callModalAppointment} onClose={() => setCallModalAppointment(null)} title="โทรหาผู้ป่วย">
-        {callModalAppointment && (
-          <div className="flex flex-col items-center gap-4 py-4">
-            <div className="flex flex-col items-center gap-2">
-              <div className="bg-green-100 rounded-full p-4 mb-2">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10 text-green-600 animate-pulse" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h2.28a2 2 0 011.789 1.106l1.387 2.773a2 2 0 01-.217 2.12l-1.516 1.89a11.042 11.042 0 005.516 5.516l1.89-1.516a2 2 0 012.12-.217l2.773 1.387A2 2 0 0121 16.72V19a2 2 0 01-2 2h-1C9.163 21 3 14.837 3 7V5z" /></svg>
-              </div>
-              <div className="text-lg font-bold text-green-700">กำลังโทรหาผู้ป่วย...</div>
-              <div className="text-base text-gray-800 font-semibold">{callModalAppointment.Patient?.firstName || '-'} {callModalAppointment.Patient?.lastName || ''}</div>
-              <div className="text-sm text-gray-600">เบอร์โทร: {callModalAppointment.Patient?.Account?.phone || '-'}</div>
-            </div>
-            <div className="mt-4 flex justify-end w-full">
-              <button
-                className="px-4 py-2 bg-green-500 hover:bg-green-700 text-white rounded shadow text-sm"
-                onClick={() => setCallModalAppointment(null)}
-              >
-                วางสาย
-              </button>
-            </div>
-          </div>
-        )}
-      </Modal>
-                  <td className="px-4 py-3 whitespace-nowrap text-sm font-medium flex gap-2">
-                    <button
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-500 hover:bg-blue-700 text-white rounded-md shadow-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2"
-                      onClick={() => setDiagnosisModalAppointment(appointment)}
-                      title="อ่านการวินิจฉัย"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                      อ่าน
-                    </button>
-                    <button
-                      className="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-400 hover:bg-blue-600 text-white rounded-md shadow-sm transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-blue-300 focus:ring-offset-2"
-                      onClick={() => setDiagnosisModalAppointment(appointment)}
-                      title="แก้ไขการวินิจฉัย"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5h2m-1 0v14m-7-7h14" /></svg>
-                      แก้ไข
-                    </button>
-                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
       )}
-      
       {/* Modal for appointment detail */}
       <Modal isOpen={!!showDetail} onClose={() => setShowDetail(null)} title="รายละเอียดการนัดหมาย">
         {showDetail && (
@@ -255,6 +248,7 @@ function DoctorAppointmentsPage() {
                   <div><span className="font-semibold">อาการ:</span> {showDetail.symptoms || '-'}</div>
                 </div>
               </div>
+<<<<<<< HEAD
               {/* Appointment Card */}
               <div className="bg-white rounded-xl shadow p-3 flex flex-col gap-1 border border-blue-100 w-full">
                 <div className="text-blue-900 font-bold text-base mb-1">ข้อมูลการนัดหมาย</div>
@@ -285,21 +279,32 @@ function DoctorAppointmentsPage() {
           </>
         )}
       </Modal>
+=======
+            </>
+          )}
+        </Modal>
 
-      {/* Modal for diagnosis form */}
-      <ModalDiagnosis
-        isOpen={!!diagnosisModalAppointment}
-        onClose={() => setDiagnosisModalAppointment(null)}
-        title="Medical Diagnosis"
-      >
-        <DiagnosisForm
-          appointment={diagnosisModalAppointment}
-          name={diagnosisModalAppointment?.Patient?.firstName + ' ' + diagnosisModalAppointment?.Patient?.lastName}
-          phone={diagnosisModalAppointment?.Patient?.Account?.phone}
-          email={diagnosisModalAppointment?.Patient?.Account?.email}
-          doctorname={diagnosisModalAppointment?.Doctor?.firstName + ' ' + diagnosisModalAppointment?.Doctor?.lastName}
-        />
-      </ModalDiagnosis>
+        {/* Modal for diagnosis form */}
+<ModalDiagnosis
+  isOpen={!!diagnosisModalAppointment}
+  onClose={() => setDiagnosisModalAppointment(null)}
+  title="Medical Diagnosis"
+
+>
+ 
+  <DiagnosisForm
+   appointment={diagnosisModalAppointment}
+   name={diagnosisModalAppointment?.Patient?.firstName + ' ' + diagnosisModalAppointment?.Patient?.lastName}
+   phone={diagnosisModalAppointment?.Patient?.Account?.phone}
+   email={diagnosisModalAppointment?.Patient?.Account?.email}
+
+   doctorname={diagnosisModalAppointment?.Doctor?.firstName + ' ' + diagnosisModalAppointment?.Doctor?.lastName}
+    />
+
+</ModalDiagnosis>
+
+      </div>
+>>>>>>> 02f41b7a3145a0581ff1d0b85192c1b5339a199b
     </div>
   );
 }
