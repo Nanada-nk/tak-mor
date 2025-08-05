@@ -26,7 +26,7 @@ function ServiceInternalSection() {
  
         <CategoryCardComponent
           title="ระบบประสาทและสมอง"
-          iconSrc="../../public/cate2.svg"
+          iconSrc="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362014/cate2_xk6rww.svg"
           widthClass="w-full lg:w-55"
           heightClass="h-75"
           flexClass="flex-col"
@@ -41,7 +41,7 @@ function ServiceInternalSection() {
       
         <CategoryCardComponent
           title="ระบบกระดูกและข้อต่อ"
-          iconSrc="../../public/cate4.svg"
+          iconSrc="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362014/cate4_fhxxhv.svg"
           widthClass="w-full lg:w-55"
           heightClass="h-75"
           flexClass="flex-col"
@@ -55,7 +55,7 @@ function ServiceInternalSection() {
         />
         <CategoryCardComponent
           title="ทันตกรรม"
-          iconSrc="../../public/cate5.svg"
+          iconSrc="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362015/cate5_blrgze.svg"
           widthClass="w-full lg:w-55"
           heightClass="h-75"
           flexClass="flex-col"
@@ -69,7 +69,7 @@ function ServiceInternalSection() {
         />
         <CategoryCardComponent
           title="จักษุวิทยา"
-          iconSrc="../../public/cate6.svg"
+          iconSrc="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362016/cate6_ecfclq.svg"
           widthClass="w-full lg:w-55"
           heightClass="h-75"
           flexClass="flex-col"

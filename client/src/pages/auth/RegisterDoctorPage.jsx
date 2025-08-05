@@ -147,7 +147,7 @@ function RegisterDoctorPage() {
                   {...register("agreeToTerms")}
                   className="checkbox checkbox-primary checkbox-xs"
                 />
-                <span className="label-text text-[13px] text-gray-600">
+                <span className="label-text text-[11px] text-gray-600">
                   I have read and agree to the{' '}
                   <button type="button" onClick={() => openModal('terms')} className="link link-primary font-medium">
                     Terms of Service
