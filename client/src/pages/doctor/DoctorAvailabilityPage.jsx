@@ -59,7 +59,7 @@ const doctors = [
 
 function DoctorAvailabilityPage() {
   const navigate = useNavigate();
-  // const [doctors, setDoctors] = useState([]);
+  const [doctors, setDoctors] = useState([]);
   const [selectedDates, setSelectedDates] = useState({});
   const [slotsByDoctor, setSlotsByDoctor] = useState({});
   const [fixedByDoctor, setFixedByDoctor] = useState({});
