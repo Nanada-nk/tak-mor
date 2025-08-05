@@ -200,10 +200,11 @@ function AppRouter() {
           <Route path="doctordashboard" element={<AdminDoctorDashboardMenagementPage />} />
           <Route path="appointmentdashboard" element={<AdminAppointmentDashboardManagementPage />} />
           <Route path="doctordashboard/add" element={<AddDoctorDashboard />} />
-           <Route path="telemanagement" element={<AdminTelePage />} />
-
+          <Route path="telemanagement" element={<AdminTelePage />} />
         </Route>
         {/* </Route> */}
+
+    
 
         <Route path="*" element={<NotFoundPage />} />
 

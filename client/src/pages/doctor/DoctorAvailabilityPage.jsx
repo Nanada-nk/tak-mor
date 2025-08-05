@@ -122,9 +122,11 @@ function DoctorAvailabilityPage() {
 
   return (
     <div>
+
       <div>
         <div className="mb-4">
           <Brandner title="ตารางจองนัดหมาย แพทย์" />
+
         </div>
 
        

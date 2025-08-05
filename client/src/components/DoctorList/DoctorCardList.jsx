@@ -27,7 +27,7 @@ function DoctorCardList({
           </div>
 
           <span className="absolute top-3 right-3 bg-white text-black text-xs font-semibold px-2 py-1 rounded-full shadow-md">
-            ${price}
+            {price} ฿
           </span>
         </div>
 

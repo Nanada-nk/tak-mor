@@ -17,7 +17,7 @@ function PromotionSection() {
         />
         <PromotionCard
           title="แพ็กเกจราย 5 ครั้ง"
-          price=" 2250"
+          price=" 2,250"
           features={[
             "การสร้างโปรไฟล์",
             "การจองนัดหมาย",
@@ -31,7 +31,7 @@ function PromotionSection() {
         />
         <PromotionCard
           title="แพ็กเกจราย 10 ครั้ง"
-          price=" 4500"
+          price=" 4,500"
           features={[
             "คุณสมบัติแผนพื้นฐานทั้งหมด",
             "ฟีเจอร์แผนพรีเมียมทั้งหมด",
