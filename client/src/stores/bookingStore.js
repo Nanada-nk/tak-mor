@@ -45,7 +45,7 @@ const useBookingStore = create(
     }),
     
     {
-      name: 'BookingStore', // unique name
+      name: 'BookingStore', 
       storage: createJSONStorage(() => localStorage),
     }
   )

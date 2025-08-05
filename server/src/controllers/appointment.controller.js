@@ -5,15 +5,15 @@ export const createAppointment = async (req, res) => {
     const {
       patientId,
       doctorId,
-      date, // ISO string or Date
-      startTime, // "HH:mm"
-      endTime, // "HH:mm"
+      date, 
+      startTime, 
+      endTime,
       symptoms,
       price,
       status = "PENDING",
     } = req.body;
 
-    // Optionally: validate required fields here
+
 
     const appointment = await prisma.appointment.create({
       data: {
@@ -36,7 +36,7 @@ export const createAppointment = async (req, res) => {
   }
 };
 
-// Get all appointments for a doctor (with patient and doctor info)
+
 export const getAppointmentsByDoctor = async (req, res) => {
   try {
     const doctorId = Number(req.params.doctorId);
@@ -74,13 +74,13 @@ export const getDailyAppointments = async (req, res) => {
     const appointments = await prisma.appointment.findMany({
       where: {
         date: new Date(date),
-      }, // Include related doctor and patient data
+      }, 
       include: {
         Doctor: true,
         Patient: true,
       },
       orderBy: {
-        startTime: "asc", // Order by time for better readability
+        startTime: "asc",
       },
     });
 
@@ -92,7 +92,7 @@ export const getDailyAppointments = async (req, res) => {
       .json({ error: "Failed to fetch daily appointments." });
   }
 };
-// Get all appointments for a patient (with doctor and patient info)
+
 export const getAppointmentsByPatient = async (req, res) => {
   try {
     const patientId = Number(req.params.patientId);

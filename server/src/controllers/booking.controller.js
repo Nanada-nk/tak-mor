@@ -1,7 +1,7 @@
 import prisma from "../config/prisma.config.js";
 
 
-const slotLength = 30; // 30-minute windows
+const slotLength = 30; 
 
 function generateSlots(range) {
   const [sh, sm] = range.startTime.split(":").map(Number);
@@ -36,7 +36,7 @@ export const addFixedAvailability = async (req, res) => {
             }
         });
         if (overlap) {
-            // A conflict is found
+          
             return res.status(409).json({ error: "เวลาว่างแบบประจำนี้ ถูกเพิ่มไปแล้ว " });
         }
   const rec = await prisma.doctorAvailability.create({ data: { doctorId: Number(doctorId), dayOfWeek, startTime, endTime, isActive: true }});
@@ -53,7 +53,7 @@ export const addManualSlot = async (req, res) => {
   const { availableDate, startTime, endTime } = req.body;
   if (!availableDate || !startTime || !endTime) return res.status(400).json({ error: "Missing" });
 
-  // Check for overlapping slots
+ 
   const overlap = await prisma.doctorAvailableSlot.findFirst({
     where: {
       doctorId: Number(doctorId),
@@ -106,7 +106,7 @@ export const getAvailableSlots = async (req, res) => {
 
         const bookedStartTimes = appointments.map(a => a.startTime);
 
-        // ✅ 1. Custom slots on that exact date
+     
         const custom = await prisma.doctorAvailableSlot.findMany({
             where: { doctorId, availableDate: new Date(date), isActive: true },
             orderBy: { startTime: "asc" }
@@ -119,7 +119,7 @@ export const getAvailableSlots = async (req, res) => {
             return res.json(filteredCustom.map(slot => ({ ...slot, source: 'manual' })));
         }
 
-        // ✅ 2. Fallback: Recurring availability for that weekday
+   
         const avail = await prisma.doctorAvailability.findMany({
             where: { doctorId, dayOfWeek: day, isActive: true }
         });

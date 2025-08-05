@@ -35,14 +35,7 @@ app.use(helmet())
 
 const allowedOrigins = [
   process.env.FRONTEND_URL,
-  // เพิ่ม URL อื่นๆ ที่อนุญาต เช่น Production Frontend URL
-  // 'https://your-production-frontend.com'
 ]
-
-// app.use(cors({
-//   // origin: process.env.FRONTEND_URL,
-//   // credentials: true
-// }))
 
 
 app.use(cors({
@@ -57,56 +50,37 @@ app.use(cors({
 }));
 
 
-// const limiter = rateLimit({
-//   windowMs: 1 * 60 * 1000,
-//   max: 200,
-//   message: 'Too many requests, please try again later.'
-// })
-
-
 const limiter = rateLimit({
   windowMs: 1 * 60 * 1000,
-  max: 200, // อนุญาต 200 requests ต่อ 1 นาที ต่อ IP
+  max: 200, 
   message: 'Too many requests from this IP, please try again after 1 minute.',
-  standardHeaders: true, // ส่ง RateLimit-Limit, RateLimit-Remaining, RateLimit-Reset headers
-  legacyHeaders: false // ไม่ส่ง X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset headers
+  standardHeaders: true, 
+  legacyHeaders: false 
 })
 app.use(limiter)
 
 app.use(cookieParser())
 
-// Body Parsers (สำหรับอ่านข้อมูลจาก Request Body)
-// app.use(express.json())
-app.use(express.json({limit: '10mb'})) // สำหรับ JSON payloads
-app.use(express.urlencoded({extended: true, limit: '10mb'})) // สำหรับ URL-encoded payloads
+
+app.use(express.json({limit: '10mb'})) 
+app.use(express.urlencoded({extended: true, limit: '10mb'})) 
 
 app.use(morgan("dev"))
 app.use(compression())
 
 
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-//   cookie: {
-//     secure: process.env.NODE_ENV === 'production',
-//     httpOnly: true,
-//   }
-// }));
-
 app.use(session({
-  secret: process.env.SESSION_SECRET, // Secret key สำหรับเซ็นต์ Session ID cookie (ต้องยาวและสุ่มมากๆ)
-  resave: false,                      // ไม่ต้องบันทึก Session ซ้ำถ้าไม่มีการเปลี่ยนแปลง
-  saveUninitialized: false,           // ไม่ต้องบันทึก Session ที่ยังไม่มีการเปลี่ยนแปลง
+  secret: process.env.SESSION_SECRET, 
+  resave: false,                      
+  saveUninitialized: false,           
   cookie: {
-    // secure: true ใน Production เมื่อใช้ HTTPS, false ใน Development (ถ้าไม่ใช้ HTTPS)
+    
     secure: process.env.NODE_ENV === 'production' || process.env.BACKEND_URL.startsWith('https'),
-    httpOnly: true,                   // ป้องกันการเข้าถึง cookie ผ่าน client-side script
-    maxAge: 1000 * 60 * 60 * 24,      // อายุของ cookie (เช่น 24 ชั่วโมง)
-    sameSite: 'Lax',                  // ป้องกัน CSRF ในระดับหนึ่ง (สามารถเป็น 'Strict' หรือ 'None' ขึ้นอยู่กับ Use Case)
+    httpOnly: true,                   
+    maxAge: 1000 * 60 * 60 * 24,      
+    sameSite: 'Lax',                  
   },
-  // Best Practice: ใน Production ควรใช้ External Session Store เช่น Redis
-  // store: new RedisStore({ client: redisClient }),
+
 }));
 
 
@@ -118,40 +92,6 @@ const csrfProtection = csurf({ cookie: true });
 app.get('/csrf-token', csrfProtection, (req, res) => {
   res.json({ csrfToken: req.csrfToken() });
 });
-
-// // ******** เริ่มการแก้ไขตรงนี้เลยค่ะ ********
-// // สร้าง instance ของ csrfProtection (ยังคงอยู่)
-// const csrfProtection = csurf({ cookie: true });
-
-// // Middleware ที่จะยกเว้นบาง Path จาก CSRF Protection
-// app.use((req, res, next) => {
-//   // กำหนดรายการ API ที่จะยกเว้นจาก CSRF (สำหรับ Postman)
-//   const exemptedPaths = [
-//     { path: '/api/auth/login', method: 'POST' },
-//     { path: '/api/admin/tele', method: 'POST' } // <-- เพิ่มบรรทัดนี้เข้ามา!
-//     // เพิ่ม API อื่นๆ ที่เป็น POST/PUT/PATCH/DELETE ที่คุณต้องการยิงด้วย Postman โดยไม่ต้องมี CSRF
-//     // เช่น { path: '/api/admin/tele/byRoomId/:roomId', method: 'GET' } ไม่ต้องยกเว้นเพราะเป็น GET ไม่ต้องใช้ CSRF
-//     // แต่ถ้ามี PATCH/PUT/DELETE อื่นๆ ของ admin ก็ต้องเพิ่มเข้ามา
-//   ];
-
-//   // ตรวจสอบว่า Request นั้นเป็นหนึ่งใน Path ที่ยกเว้นหรือไม่
-//   const isExempted = exemptedPaths.some(exempt =>
-//     req.path === exempt.path && req.method === exempt.method
-//   );
-
-//   if (isExempted) {
-//     return next(); // ถ้าเป็น Path ที่ยกเว้น ให้ข้าม csrfProtection ไป
-//   }
-
-//   // ถ้าไม่ใช่ Request ที่ยกเว้น ให้ใช้ csrfProtection ปกติ
-//   csrfProtection(req, res, next);
-// });
-
-// // Endpoint สำหรับให้ Frontend ดึง CSRF Token (ยังคงต้องมีอยู่)
-// app.get('/csrf-token', (req, res) => {
-//   res.json({ csrfToken: req.csrfToken() });
-// });
-// // ******** สิ้นสุดการแก้ไขตรงนี้ค่ะ ********
 
 
 app.use('/api/auth', authRouter);
@@ -175,8 +115,7 @@ app.use('/api/admin/tele', adminTeleRouter);
 // app.use('/api/googleMap', ()=>{});
 // app.use('/api/review', ()=>{});
 
-// --- 8. Health Check Endpoint ---
-// Endpoint สำหรับตรวจสอบสถานะของ Server (ใช้ใน Load Balancer, Kubernetes)
+
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'Server is healthy' });
 });

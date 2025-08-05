@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-// Enum สำหรับ call status (optional)
+
 export const CALL_STATUS = {
   IDLE: 'idle',
   LOADING_APPOINTMENT: 'loading-appointment',
@@ -15,11 +15,9 @@ export const CALL_STATUS = {
 const getDefaultState = () => ({
   callStatus: CALL_STATUS.IDLE,
   chatMessages: [],
-  // participants: [],
   currentRoomId: null,
   isMicMuted: false,
   isCameraOff: false,
-  // socketConnected: false,
   error: null,
 });
 
@@ -35,9 +33,6 @@ const teleStore = create((set, get) => ({
 
   setChatMessages: (messages) => set({ chatMessages: messages }),
 
-  // setParticipants: (participants) => set({
-  //   participants: Array.isArray(participants) ? participants : []
-  // }),
 
   setCurrentRoomId: (roomId) => set({ currentRoomId: roomId }),
 
@@ -45,7 +40,6 @@ const teleStore = create((set, get) => ({
 
   setCameraOff: (isOff) => set({ isCameraOff: isOff }),
 
-  // setSocketConnected: (connected) => set({ socketConnected: connected }),
 
   toggleMic: () => set((state) => ({ isMicMuted: !state.isMicMuted })),
 
