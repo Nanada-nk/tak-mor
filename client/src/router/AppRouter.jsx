@@ -47,6 +47,7 @@ import PatientProfilePage from "../pages/dashboard/patient/PatientProfilePage.js
 import PatientManagementPage from "../pages/dashboard/patient/PatientManagementPage.jsx"
 import EditProfilePage from "../pages/dashboard/patient/PatientEditProfilePage.jsx";
 import ChangePasswordPage from "../pages/dashboard/patient/ChangePasswordPage.jsx";
+import DoctorChangePasswordPage from "../pages/dashboard/doctor/ChangePasswordPage.jsx";
 import PatientTableColumns from "../pages/dashboard/patient/PatientTableColumnsComponent.jsx";
 
 import DoctorManagementPage from "../components/DoctorManagement.jsx";
@@ -178,6 +179,7 @@ function AppRouter() {
             <Route path="profile" element={<DoctorProfilePage />} />
             <Route path="profile/edit" element={<DoctorProfileEditPage />} />
             <Route path="appointments" element={<DoctorAppointmentsPage />} />
+            <Route path="change-password" element={<DoctorChangePasswordPage />} />
           </Route>
           {/* Patient Profile (Dashboard) */}
           <Route path="/dashboard/patient" element={<PatientLayout />}>
