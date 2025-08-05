@@ -12,16 +12,10 @@ function PatientProfile({
   saveEdit,
   setEditValue,
   handleInputKey,
-  onProfilePictureClick
+  onProfilePictureClick,
+  customGender,
+  setCustomGender
 }) {
-  // Cache-busting for profile picture
-  // If profile.profilePictureUrl exists, append a timestamp to force reload after update
-  const [imgCacheBust, setImgCacheBust] = useState(Date.now());
-  const profilePictureUrl = profile && profile.profilePictureUrl;
-  useEffect(() => {
-    setImgCacheBust(Date.now());
-  }, [profilePictureUrl]);
-
   const isDisplayOnly = !startEdit || !saveEdit || !cancelEdit;
   const navigate = useNavigate();
   // Helper to get value for a field from editValue or profile
@@ -97,9 +91,7 @@ function PatientProfile({
             >
               {profile?.profilePictureUrl ? (
                 <img
-                  src={profile.profilePictureUrl
-                    ? `${profile.profilePictureUrl}${profile.profilePictureUrl.includes('?') ? '&' : '?'}cb=${imgCacheBust}`
-                    : undefined}
+                  src={profile.profilePictureUrl}
                   alt="Patient Avatar"
                   className="h-full w-full object-cover"
                 />
@@ -124,7 +116,43 @@ function PatientProfile({
           </div>
           {/* Name */}
           <div className="flex flex-col items-center md:items-start">
-            <h1 className="text-3xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
+            {editField === "firstName_lastName" ? (
+              <div className="flex items-center gap-2">
+                <input
+                  ref={firstNameRef}
+                  className="input input-sm max-w-[10rem]"
+                  value={editValue.firstName}
+                  onChange={e => setEditValue({ ...editValue, firstName: e.target.value })}
+                  onKeyDown={handleInputKey}
+                  disabled={editLoading}
+                  placeholder="First Name"
+                />
+                <input
+                  ref={lastNameRef}
+                  className="input input-sm max-w-[10rem]"
+                  value={editValue.lastName}
+                  onChange={e => setEditValue({ ...editValue, lastName: e.target.value })}
+                  onKeyDown={handleInputKey}
+                  disabled={editLoading}
+                  placeholder="Last Name"
+                />
+                <button type="button" className="btn btn-success btn-xs ml-2" onClick={saveEdit} disabled={editLoading}>Save</button>
+                <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <h1 className="text-3xl font-bold text-gray-800">{profile?.firstName || ''} {profile?.lastName || ''}</h1>
+                {startEdit && (
+                  <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("firstName_lastName", { firstName: profile?.firstName, lastName: profile?.lastName })} title="Edit Name">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                      <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -178,55 +206,7 @@ function PatientProfile({
                   Personal Information
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="flex gap-4 md:col-span-2">
-                    <div className="flex-1">
-                      <label className="block text-xs font-medium text-gray-500">First Name</label>
-                      {editField === "firstName_lastName" ? (
-                        <input
-                          ref={firstNameRef}
-                          className="input input-sm w-full"
-                          value={editValue.firstName}
-                          onChange={e => setEditValue({ ...editValue, firstName: e.target.value })}
-                          onKeyDown={handleInputKey}
-                          disabled={editLoading}
-                          placeholder="First Name"
-                        />
-                      ) : (
-                        <span className="text-gray-900 mt-1 font-medium">
-                          {profile?.firstName || '-'}
-                          {startEdit && (
-                            <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("firstName_lastName", { firstName: profile?.firstName, lastName: profile?.lastName })} title="Edit Name">
-                              ✎
-                            </button>
-                          )}
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex-1">
-                      <label className="block text-xs font-medium text-gray-500">Last Name</label>
-                      {editField === "firstName_lastName" ? (
-                        <input
-                          ref={lastNameRef}
-                          className="input input-sm w-full"
-                          value={editValue.lastName}
-                          onChange={e => setEditValue({ ...editValue, lastName: e.target.value })}
-                          onKeyDown={handleInputKey}
-                          disabled={editLoading}
-                          placeholder="Last Name"
-                        />
-                      ) : (
-                        <span className="text-gray-900 mt-1 font-medium">
-                          {profile?.lastName || '-'}
-                        </span>
-                      )}
-                    </div>
-                    {editField === "firstName_lastName" && (
-                      <div className="flex items-center gap-2 ml-2">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
-                  </div>
+                  {/* Name field removed, now editable beside profile picture */}
                   <div>
                     <label className="block text-xs font-medium text-gray-500">HN</label>
                     <span className="text-gray-900 mt-1 font-medium">{profile?.hn || '-'}</span>
@@ -236,74 +216,162 @@ function PatientProfile({
                     <span className="text-gray-900 mt-1 font-medium">{profile?.email || '-'}</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Phone</label>
-                    {editField === "phone" ? (
-                      <input
-                        ref={phoneRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Phone"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.phone || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("phone", profile?.phone)} title="Edit Phone">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "phone" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Phone</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("phone", profile?.phone)} title="Edit Phone">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
+                      {editField === "phone" ? (
+                        <>
+                          <input
+                            ref={phoneRef}
+                            className="input input-sm w-full"
+                            value={editValue}
+                            onChange={e => setEditValue(e.target.value)}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Phone"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.phone || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
                     <label className="block text-xs font-medium text-gray-500">National ID</label>
                     <span className="text-gray-900 mt-1 font-medium">{profile?.nationalId || '-'}</span>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Birth Date</label>
-                    <span className="text-gray-900 mt-1 font-medium">{profile?.birthDate || '-'}</span>
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Birth Date</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("birthDate", profile?.birthDate)} title="Edit Birth Date">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
+                      {editField === "birthDate" ? (
+                        <>
+                          <input
+                            type="date"
+                            className="input input-sm w-full"
+                            value={editValue}
+                            onChange={e => setEditValue(e.target.value)}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Birth Date"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.birthDate || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Gender</label>
-                    <span className="text-gray-900 mt-1 font-medium">{profile?.gender || '-'}</span>
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Gender</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("gender", profile?.gender)} title="Edit Gender">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
+                      {editField === "gender" ? (
+                        <>
+                          <select
+                            className="input input-sm w-full max-w-[10rem]"
+                            value={editValue}
+                            onChange={e => setEditValue(e.target.value)}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                          >
+                            <option value="">Select Gender</option>
+                            <option value="MALE">Male</option>
+                            <option value="FEMALE">Female</option>
+                            <option value="OTHER">Other</option>
+                          </select>
+                          {editValue === "OTHER" && typeof setCustomGender === 'function' && (
+                            <input
+                              className="input input-sm ml-2 w-full max-w-[12rem]"
+                              placeholder="Please specify..."
+                              value={typeof customGender !== 'undefined' ? customGender : ''}
+                              onChange={e => setCustomGender(e.target.value)}
+                              onKeyDown={handleInputKey}
+                              disabled={editLoading}
+                            />
+                          )}
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.gender || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-500">Address</label>
-                    {editField === "address" ? (
-                      <input
-                        ref={addressRef}
-                        className="input input-sm w-full"
-                        value={editValue}
-                        onChange={e => setEditValue(e.target.value)}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Address"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.address || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("address", profile?.address)} title="Edit Address">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "address" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Address</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("address", profile?.address)} title="Edit Address">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
+                      {editField === "address" ? (
+                        <>
+                          <textarea
+                            ref={addressRef}
+                            className="input input-sm w-full h-full max-w-md resize-none"
+                            value={editValue}
+                            onChange={e => setEditValue(e.target.value)}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Address"
+                            rows={2}
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.address || '-'}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -316,7 +384,23 @@ function PatientProfile({
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Name</label>
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Name</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("emergencyContactName", {
+                          emergencyContactName: profile?.emergencyContactName || '',
+                          emergencyContactPhone: profile?.emergencyContactPhone || '',
+                          emergencyContactRelation: profile?.emergencyContactRelation || ''
+                        })} title="Edit Emergency Contact Name">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
                     {editField === "emergencyContactName" ? (
                       <>
                         <input
@@ -327,28 +411,34 @@ function PatientProfile({
                           disabled={editLoading}
                           placeholder="Emergency Contact Name"
                         />
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 ml-2">
                           <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
                           <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
                         </div>
                       </>
                     ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.emergencyContactName || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactName", {
-                            emergencyContactName: profile?.emergencyContactName || '',
-                            emergencyContactPhone: profile?.emergencyContactPhone || '',
-                            emergencyContactRelation: profile?.emergencyContactRelation || ''
-                          })} title="Edit Emergency Contact Name">
-                            ✎
-                          </button>
-                        )}
-                      </span>
+                      <span className="text-gray-900 font-medium w-full">{profile?.emergencyContactName || '-'}</span>
                     )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Phone</label>
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Phone</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("emergencyContactPhone", {
+                          emergencyContactName: profile?.emergencyContactName || '',
+                          emergencyContactPhone: profile?.emergencyContactPhone || '',
+                          emergencyContactRelation: profile?.emergencyContactRelation || ''
+                        })} title="Edit Emergency Contact Phone">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
                     {editField === "emergencyContactPhone" ? (
                       <>
                         <input
@@ -359,28 +449,34 @@ function PatientProfile({
                           disabled={editLoading}
                           placeholder="Emergency Contact Phone"
                         />
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 ml-2">
                           <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
                           <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
                         </div>
                       </>
                     ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.emergencyContactPhone || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactPhone", {
-                            emergencyContactName: profile?.emergencyContactName || '',
-                            emergencyContactPhone: profile?.emergencyContactPhone || '',
-                            emergencyContactRelation: profile?.emergencyContactRelation || ''
-                          })} title="Edit Emergency Contact Phone">
-                            ✎
-                          </button>
-                        )}
-                      </span>
+                      <span className="text-gray-900 font-medium w-full">{profile?.emergencyContactPhone || '-'}</span>
                     )}
+                    </div>
                   </div>
                   <div className="md:col-span-2">
-                    <label className="block text-xs font-medium text-gray-500">Relation</label>
+                    <div className="flex items-center gap-1 mb-1">
+                      <label className="block text-xs font-medium text-gray-500">Relation</label>
+                      {startEdit && (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("emergencyContactRelation", {
+                          emergencyContactName: profile?.emergencyContactName || '',
+                          emergencyContactPhone: profile?.emergencyContactPhone || '',
+                          emergencyContactRelation: profile?.emergencyContactRelation || ''
+                        })} title="Edit Emergency Contact Relation">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2.25rem]">
                     {editField === "emergencyContactRelation" ? (
                       <>
                         <input
@@ -391,181 +487,211 @@ function PatientProfile({
                           disabled={editLoading}
                           placeholder="Emergency Contact Relation"
                         />
-                        <div className="flex items-center gap-2 mt-1">
+                        <div className="flex items-center gap-2 ml-2">
                           <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
                           <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
                         </div>
                       </>
                     ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.emergencyContactRelation || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("emergencyContactRelation", {
-                            emergencyContactName: profile?.emergencyContactName || '',
-                            emergencyContactPhone: profile?.emergencyContactPhone || '',
-                            emergencyContactRelation: profile?.emergencyContactRelation || ''
-                          })} title="Edit Emergency Contact Relation">
-                            ✎
-                          </button>
-                        )}
-                      </span>
+                      <span className="text-gray-900 font-medium w-full">{profile?.emergencyContactRelation || '-'}</span>
                     )}
+                    </div>
                   </div>
                 </div>
               </div>
             )}
             {tab === 'medical' && (
-              <div className="bg-white rounded-lg shadow p-6 border-t-4 border-green-400">
-                <h2 className="text-lg font-semibold mb-4 text-green-700 flex items-center gap-2">
+              <div className="bg-white rounded-lg shadow p-4 border-t-4 border-green-400">
+                <h2 className="text-lg font-semibold mb-2 text-green-700 flex items-center gap-2">
                   {/* Standard medical cross icon */}
                   <svg className="h-5 w-5 text-green-500" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" /></svg>
                   Medical Information
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Height (cm)</label>
-                    {editField === "height" ? (
-                      <input
-                        ref={heightRef}
-                        className="input input-sm w-full"
-                        value={getFieldValue('height')}
-                        onChange={e => setEditValue({ ...editValue, height: e.target.value })}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Height"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.height || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("height", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Height">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "height" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <label className="block text-xs font-medium text-gray-500">Height (cm)</label>
+                      {startEdit ? (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("height", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Height">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span className="ml-1 inline-block w-5 h-5 opacity-0 pointer-events-none"></span>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2rem]">
+                      {editField === "height" ? (
+                        <>
+                          <input
+                            ref={heightRef}
+                            className="input input-sm w-full"
+                            value={getFieldValue('height')}
+                            onChange={e => setEditValue({ ...editValue, height: e.target.value })}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Height"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.height || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Weight (kg)</label>
-                    {editField === "weight" ? (
-                      <input
-                        ref={weightRef}
-                        className="input input-sm w-full"
-                        value={getFieldValue('weight')}
-                        onChange={e => setEditValue({ ...editValue, weight: e.target.value })}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Weight"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.weight || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("weight", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Weight">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "weight" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <label className="block text-xs font-medium text-gray-500">Weight (kg)</label>
+                      {startEdit ? (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("weight", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Weight">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span className="ml-1 inline-block w-5 h-5 opacity-0 pointer-events-none"></span>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2rem]">
+                      {editField === "weight" ? (
+                        <>
+                          <input
+                            ref={weightRef}
+                            className="input input-sm w-full"
+                            value={getFieldValue('weight')}
+                            onChange={e => setEditValue({ ...editValue, weight: e.target.value })}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Weight"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.weight || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Blood Type</label>
-                    {editField === "bloodType" ? (
-                      <input
-                        ref={bloodTypeRef}
-                        className="input input-sm w-full"
-                        value={getFieldValue('bloodType')}
-                        onChange={e => setEditValue({ ...editValue, bloodType: e.target.value })}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Blood Type"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.bloodType || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("bloodType", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Blood Type">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "bloodType" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <label className="block text-xs font-medium text-gray-500">Blood Type</label>
+                      {startEdit ? (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("bloodType", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Blood Type">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span className="ml-1 inline-block w-5 h-5 opacity-0 pointer-events-none"></span>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2rem]">
+                      {editField === "bloodType" ? (
+                        <>
+                          <input
+                            ref={bloodTypeRef}
+                            className="input input-sm w-full"
+                            value={getFieldValue('bloodType')}
+                            onChange={e => setEditValue({ ...editValue, bloodType: e.target.value })}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Blood Type"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.bloodType || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Congenital Diseases</label>
-                    {editField === "congenital" ? (
-                      <input
-                        ref={congenitalRef}
-                        className="input input-sm w-full"
-                        value={getFieldValue('congenital')}
-                        onChange={e => setEditValue({ ...editValue, congenital: e.target.value })}
-                        onKeyDown={handleInputKey}
-                        disabled={editLoading}
-                        placeholder="Congenital Diseases"
-                      />
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.congenital || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("congenital", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Congenital Diseases">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
-                    {editField === "congenital" && (
-                      <div className="flex items-center gap-2 mt-1">
-                        <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                        <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                      </div>
-                    )}
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <label className="block text-xs font-medium text-gray-500">Congenital Diseases</label>
+                      {startEdit ? (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("congenital", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Congenital Diseases">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span className="ml-1 inline-block w-5 h-5 opacity-0 pointer-events-none"></span>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2rem]">
+                      {editField === "congenital" ? (
+                        <>
+                          <input
+                            ref={congenitalRef}
+                            className="input input-sm w-full"
+                            value={getFieldValue('congenital')}
+                            onChange={e => setEditValue({ ...editValue, congenital: e.target.value })}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Congenital Diseases"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.congenital || '-'}</span>
+                      )}
+                    </div>
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500">Allergies</label>
-                    {editField === "allergies" ? (
-                      <>
-                        <input
-                          ref={allergiesRef}
-                          className="input input-sm w-full"
-                          value={getFieldValue('allergies')}
-                          onChange={e => setEditValue({ ...editValue, allergies: e.target.value })}
-                          onKeyDown={handleInputKey}
-                          disabled={editLoading}
-                          placeholder="Allergies"
-                        />
-                        <div className="flex items-center gap-2 mt-1">
-                          <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
-                          <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
-                        </div>
-                      </>
-                    ) : (
-                      <span className="text-gray-900 mt-1 font-medium">
-                        {profile?.allergies || '-'}
-                        {startEdit && (
-                          <button type="button" className="ml-2 btn btn-xs btn-ghost" onClick={() => startEdit("allergies", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Allergies">
-                            ✎
-                          </button>
-                        )}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-1 mb-0.5">
+                      <label className="block text-xs font-medium text-gray-500">Allergies</label>
+                      {startEdit ? (
+                        <button type="button" className="ml-1 p-0.5 rounded-full hover:bg-blue-100 focus:outline-none" onClick={() => startEdit("allergies", { height: profile?.height, weight: profile?.weight, bloodType: profile?.bloodType, congenital: profile?.congenital, allergies: profile?.allergies })} title="Edit Allergies">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.2}>
+                            <rect x="2" y="17" width="20" height="3" rx="1.5" fill="#e0e7ff"/>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-2-2" />
+                          </svg>
+                        </button>
+                      ) : (
+                        <span className="ml-1 inline-block w-5 h-5 opacity-0 pointer-events-none"></span>
+                      )}
+                    </div>
+                    <div className="flex items-center min-h-[2rem]">
+                      {editField === "allergies" ? (
+                        <>
+                          <input
+                            ref={allergiesRef}
+                            className="input input-sm w-full"
+                            value={getFieldValue('allergies')}
+                            onChange={e => setEditValue({ ...editValue, allergies: e.target.value })}
+                            onKeyDown={handleInputKey}
+                            disabled={editLoading}
+                            placeholder="Allergies"
+                          />
+                          <div className="flex items-center gap-2 ml-2">
+                            <button type="button" className="btn btn-success btn-xs" onClick={saveEdit} disabled={editLoading}>Save</button>
+                            <button type="button" className="btn btn-error btn-xs" onClick={cancelEdit} disabled={editLoading}>Cancel</button>
+                          </div>
+                        </>
+                      ) : (
+                        <span className="text-gray-900 font-medium w-full">{profile?.allergies || '-'}</span>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>

@@ -3,6 +3,7 @@ import createError from '../utils/create-error.js';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
 import r2 from '../config/r2.js';
+import hashService from '../services/hash.service.js';
 
 const accountController = {};
 
@@ -32,6 +33,32 @@ accountController.updateAccount = async (req, res, next) => {
 };
 
 export default accountController;
+
+// Change password for authenticated user
+
+accountController.changePassword = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const { currentPassword, newPassword } = req.body;
+    if (!currentPassword || !newPassword) {
+      throw createError(400, 'Current and new password are required.');
+    }
+    const user = await prisma.account.findUnique({ where: { id: userId } });
+    if (!user) throw createError(404, 'User not found.');
+    const isMatch = await hashService.comparePassword(currentPassword, user.password);
+    if (!isMatch) throw createError(400, 'Current password is incorrect.');
+    // Password complexity: at least 8 chars, one uppercase, one lowercase, one number
+    const complexityRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!complexityRegex.test(newPassword)) {
+      throw createError(400, 'Password must be at least 8 characters and include uppercase, lowercase, and a number.');
+    }
+    const hashed = await hashService.hash(newPassword);
+    await prisma.account.update({ where: { id: userId }, data: { password: hashed } });
+    res.json({ message: 'Password changed successfully.' });
+  } catch (err) {
+    next(err);
+  }
+};
 
 // --- Profile Picture Upload ---
 accountController.uploadProfilePicture = async (req, res, next) => {

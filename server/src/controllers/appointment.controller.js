@@ -103,7 +103,11 @@ export const getAppointmentsByPatient = async (req, res) => {
       where: { patientId },
       orderBy: { date: "desc" },
       include: {
-        Doctor: true,
+        Doctor: {
+          include: {
+            Account: true,
+          },
+        },
         Patient: {
           include: {
             PatientMedicalProfile: true,

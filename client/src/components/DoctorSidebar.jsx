@@ -1,10 +1,11 @@
 import { Link, useLocation, useNavigate } from "react-router";
-import { UserCircle, Calendar, ClipboardList } from 'lucide-react';
+import { UserCircle, Calendar, ClipboardList, KeyRound } from 'lucide-react';
 
 
 const doctorNavLinks = [
   { path: '/dashboard/doctor/profile', label: 'My Profile', icon: <UserCircle size={18} /> },
   { path: '/dashboard/doctor/appointments', label: 'Appointments', icon: <Calendar size={18} /> },
+  { path: '/dashboard/doctor/change-password', label: 'Change Password', icon: <KeyRound size={18} /> },
 ];
 
 function DoctorSidebar() {  

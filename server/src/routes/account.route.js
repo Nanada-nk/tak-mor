@@ -19,4 +19,7 @@ accountRouter.post(
 // Update account info (phone, profilePictureUrl, etc.)
 accountRouter.put('/', authenticateUser, accountController.updateAccount);
 
+// Change password
+accountRouter.put('/change-password', authenticateUser, accountController.changePassword);
+
 export default accountRouter;
