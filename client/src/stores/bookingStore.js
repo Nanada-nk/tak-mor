@@ -14,6 +14,7 @@ const useBookingStore = create(
       selectedDate: null,
       selectedTime: '',
       doctorId: null,
+      doctorDetails: null,
       startDateTime: null,
   endDateTime: null,
   setStartDateTime: (dt) => set({ startDateTime: dt }),
@@ -27,6 +28,7 @@ const useBookingStore = create(
       setSelectedTime: (selectedTime) => set({ selectedTime }),
       setServicePrice: (price) => set({ servicePrice: price }),
       setDoctorId: (doctorId) => set({ doctorId }),
+       setDoctorDetails: (doctorDetails) => set({ doctorDetails }),
       resetBooking: () =>
         set({
           specialty: '',

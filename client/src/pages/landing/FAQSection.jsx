@@ -62,7 +62,7 @@ function FAQSection() {
             <div className="border-2 border-[#e2edff] w-[60%] h-[70%] absolute bottom-10 left-9 -z-10"></div>
           </div>
           <img
-            src="../../public/FAQbg.svg"
+            src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362015/FAQbg_sggi9g.svg"
             alt="FAQbg"
             className="w-60 h-60 sm:w-80 sm:h-80 object-contain mt-10 lg:mt-0"
           />

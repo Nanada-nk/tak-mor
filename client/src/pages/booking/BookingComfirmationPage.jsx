@@ -6,6 +6,7 @@ import { PinIcon, StarIcon } from '../../components/icons/index.jsx';
 import useBookingStore from '../../stores/bookingStore.js';
 import usePatientFormStore from '../../stores/usePatientFormStore.js';
 import axios from 'axios';
+import useAuthStore from '../../stores/authStore.js';
 
 function BookingComfirmationPage() {
   const handleResend = () => {
@@ -20,24 +21,10 @@ function BookingComfirmationPage() {
     servicePrice
   } = useBookingStore();
 
-//  const doctorId = useBookingStore(state => state.doctorId);
-
-//   const [doctor, setDoctor] = useState(null);
-// console.log(doctorId)
-
-// useEffect(() => {
-//    console.log("doctorId:", doctorId);
-//   if (!doctorId) return;
-//   console.log("Fetching doctor with ID:", doctorId);
-//   axios.get(`http://localhost:9090/api/doctor/${doctorId}`)
-//     .then(res => {
-//       console.log("Doctor response:", res.data);
-//       setDoctor(res.data);
-//     })
-//     .catch(err => console.error("Failed to fetch doctor:", err));
-// }, [doctorId]);
-
-
+ const doctor = useBookingStore(state => state.doctorDetails);
+ const user = useAuthStore((state) => state.user);
+ console.log(user)
+console.log(doctor)
   const [showEmailPopup] = useState(true); // Always true, popup stays
   const [cooldown, setCooldown] = useState(0);
   const [hovered, setHovered] = useState(false);
@@ -71,13 +58,13 @@ function BookingComfirmationPage() {
 
   // Compose booking info from store or fallback
   const bookingInfo = {
-    doctor: fallback.doctor, // Not in store, static for now
+    doctor: 'Dr. ' + doctor.firstName + " " + doctor.lastName || fallback.doctor, // Not in store, static for now
     specialty: specialty || fallback.specialty,
     date: dateTime?.date ? dateTime.date.toLocaleDateString() : fallback.date,
     time: dateTime?.time || fallback.time,
     location: hospital || fallback.location,
     bookingId: fallback.bookingId, // Not in store, static for now
-    patient: 'Jane Smith', // Not in store, static for now
+    patient: user.Patient?.firstName + " " + user.Patient?.lastName || 'Jane Smith', // Not in store, static for now
     paymentMethod: 'Credit Card', // Not in store, static for now
     service: service || fallback.service,
     servicePrice: servicePrice > 0 ? servicePrice : fallback.servicePrice,
@@ -92,12 +79,24 @@ function BookingComfirmationPage() {
       {/* ...existing code... */}
       <div className="h-1/7 w-full flex items-center justify-center">
         <ul className="steps h-full">
-          <li data-content="✓" className="step step-primary step-success">Specialty</li>
-          <li data-content="✓" className="step step-primary step-success">Appointment Type</li>
-          <li data-content="✓" className="step step-primary step-success">Date & Time</li>
-          <li data-content="✓" className="step step-primary step-success">Patient Information</li>
-          <li data-content="✓" className="step step-primary step-success">Payment</li>
-          <li data-content="✓" className="step step-primary step-success">Confirmation</li>
+      <li data-content="✓" className="step step-primary step-success">
+            รูปแบบการนัดหมาย
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+            เลือกเฉพาะทาง
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+           วันเวลา นัดหมาย
+          </li> 
+          <li data-content="✓" className="step step-primary step-success">
+            ข้อมูลส่วนตัว
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+           ชำระเงิน
+          </li>
+          <li data-content="✓" className="step step-primary step-success">
+            ยืนยันสำเร็จ
+          </li>
         </ul>
       </div>
       <div className="h-6/7 w-full bg-gray-100 rounded-2xl">
@@ -109,8 +108,8 @@ function BookingComfirmationPage() {
               {/* Booking Confirmed! */}
               <div className='flex flex-col items-center border rounded-2xl px-6 py-4 min-w-[220px] bg-green-50 border-green-200 w-full relative'>
                 <CheckCircle2 className="w-12 h-12 text-green-500 mb-2" />
-                <div className='text-xl font-bold text-green-700 mb-1'>Booking Confirmed!</div>
-                <div className='text-gray-600 text-center text-sm mb-1'>Your appointment has been successfully booked.</div>
+                <div className='text-xl font-bold text-green-700 mb-1'>ยืนยันการนัดหมาย</div>
+                <div className='text-gray-600 text-center text-sm mb-1'>การนัดหมายของคุณ สำเร็จแล้ว</div>
                 <div className='flex items-center justify-center mt-2'>
                   <span className='inline-flex items-center gap-1 px-3 py-1 rounded-full bg-blue-100 border border-blue-300 text-blue-800 text-sm font-semibold shadow-sm'>
                     <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a2 2 0 012-2h2a2 2 0 012 2v2m-6 4h6a2 2 0 002-2v-6a2 2 0 00-2-2h-2a2 2 0 01-2-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 012 2v6a2 2 0 01-2 2z" /></svg>
@@ -143,7 +142,7 @@ function BookingComfirmationPage() {
             {/* Payment Info */}
               <div className='flex flex-col items-start border rounded-2xl px-6 py-4 min-w-[220px] bg-gray-50 border-gray-200 w-full'>
                 <div className="flex items-center justify-between w-full mb-2">
-                  <span className="font-bold">Payment Info</span>
+                  <span className="font-bold">ข้อมูลการชำระเงิน</span>
                   <button
                     className="btn btn-outline btn-sm ml-2 flex items-center justify-center"
                     onClick={() => window.print()}
@@ -156,15 +155,15 @@ function BookingComfirmationPage() {
                   <div className="grid grid-cols-2 gap-y-2 text-base">
                     <div className="text-gray-600">{bookingInfo.service}</div>
                     <div className="text-right text-gray-800 font-semibold">฿{bookingInfo.servicePrice}</div>
-                    <div className="text-gray-600">Booking Fees</div>
+                    <div className="text-gray-600">ค่านัดหมาย</div>
                     <div className="text-right text-gray-800 font-semibold">฿{bookingInfo.bookingFee}</div>
-                    <div className="text-gray-600">Tax</div>
+                    <div className="text-gray-600">ภาษี</div>
                     <div className="text-right text-gray-800 font-semibold">฿{bookingInfo.tax}</div>
-                    <div className="text-gray-600">Discount</div>
+                    <div className="text-gray-600">ส่วนลด</div>
                     <div className="text-right text-green-600 font-semibold">-฿{bookingInfo.discount}</div>
                   </div>
                   <div className="flex justify-between items-center border-t border-gray-200 mt-3 pt-2 text-lg font-bold">
-                    <div>Total</div>
+                    <div>ยอดทั้งหมด</div>
                     <div className="text-blue-600">฿{bookingInfo.total}</div>
                   </div>
                 </div>
@@ -175,7 +174,7 @@ function BookingComfirmationPage() {
               {/* Doctor Detail Card */}
               <div className='flex items-center gap-4 border rounded-2xl px-6 py-4 bg-white border-blue-200 mb-4 w-full'>
                 <img
-                  src="https://randomuser.me/api/portraits/men/32.jpg"
+                  src={doctor.Account.profilePictureUrl || "https://via.placeholder.com/150"}
                   alt="Doctor profile"
                   className="w-16 h-16 rounded-full object-cover border-2 border-blue-300"
                 />
@@ -186,30 +185,30 @@ function BookingComfirmationPage() {
                 </div>
               </div>
               <div className='flex flex-col items-start justify-center border rounded-2xl px-6 py-4 min-w-[220px] bg-gray-50 border-gray-200 w-full'>
-                <div className="font-bold mb-2">Booking Info</div>
+                <div className="font-bold mb-2">ข้อมูลการนัดหมาย</div>
                 <div className="grid grid-cols-2 gap-x-8 gap-y-2 w-full">
                   <div>
                     <div className="font-medium text-gray-600">Booking ID</div>
                     <div className="font-semibold text-gray-800 text-base">{bookingInfo.bookingId}</div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Patient</div>
+                    <div className="font-medium text-gray-600">คนไข้</div>
                     <div className="font-semibold text-gray-800 text-base">{bookingInfo.patient}</div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Date & Time</div>
+                    <div className="font-medium text-gray-600">วันที่ เวลา</div>
                     <div className="font-semibold text-gray-800 text-base">{bookingInfo.date} {bookingInfo.time}</div>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-600">Payment Method</div>
+                    <div className="font-medium text-gray-600">ประเภทการชำระเงิน</div>
                     <div className="font-semibold text-gray-800 text-base">{bookingInfo.paymentMethod}</div>
                   </div>
                 </div>
               </div>
               {/* Assistance Section as a new block under Booking Info */}
               <div className="w-full mt-4 p-3 bg-blue-50 border border-blue-200 rounded-xl flex flex-col items-start">
-                <div className="font-semibold text-blue-700 mb-1">Need our assistance?</div>
-                <div className="text-gray-700 text-sm mb-3">If you have any questions or need help with your booking, please contact our support team.</div>
+                <div className="font-semibold text-blue-700 mb-1">ต้องการความช่วยเหลือ</div>
+                <div className="text-gray-700 text-sm mb-3">หากคุณมีคำถามหรือต้องการความช่วยเหลือเกี่ยวกับการจอง โปรดติดต่อทีมสนับสนุนของเรา</div>
                 <div className="flex gap-3 w-full">
                   <button className="btn btn-primary btn-sm flex-[3] min-w-0 h-9 flex items-center gap-1 justify-center" onClick={() => alert('Chat support coming soon!')}>
                     <MessageCircle className="w-4 h-4" /> Live Chat
@@ -230,9 +229,9 @@ function BookingComfirmationPage() {
             </div>
           </div>
         </div>
-        <div className=" h-1/10 flex justify-between items-center px-5">
-          <button onClick={() => navigate("/")} className="btn btn-error">Home</button>
-          <button onClick={() => navigate("/dashboard")} className="btn btn-primary">Go to Dashboard</button>
+        <div className=" h-1/10 flex justify-between items-center px-8 mt-6">
+          <button onClick={() => navigate("/")} className="btn btn-error text-white w-50">กลับไปหน้าหลัก</button>
+          <button onClick={() => navigate("/dashboard/patient/profile")} className="btn btn-primary w-50">ไปหน้าโปรไฟล์</button>
         </div>
       </div>
     </div>

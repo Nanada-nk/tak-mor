@@ -14,6 +14,7 @@ const NewContent = [
 function NewsBox({className="", limit=8}) {
     return (
       
+<<<<<<< HEAD
         <div className={`${className}`}>
             {NewContent.slice(0,limit).map((content) => (
 
@@ -65,6 +66,19 @@ function NewsBox({className="", limit=8}) {
                         </div>
                     </Link>
             ))}
+=======
+            <div className="relative">
+                <div className='m-3 h-48 overflow-hidden rounded-md'> 
+                    <img
+                        src="https://www.aha.org/sites/default/files/styles/900x400/public/2021-09/in-the-news-900x400.jpg?itok=-GlPej7P" 
+                        alt="News Thumbnail"
+                        className="w-full h-full object-cover" 
+                    />
+                </div>
+                <span className="absolute top-6 left-6 bg-[#3B80F5] text-white text-xs font-semibold px-3 py-1 rounded-full shadow-md"> 
+                    Wellness
+                </span>
+>>>>>>> origin
             </div>
 
 

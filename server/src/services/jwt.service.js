@@ -6,7 +6,7 @@ const jwtService = {};
 jwtService.genAccessToken = (payload) => {
     return jwt.sign(payload, process.env.JWT_SECRET, {
         algorithm: "HS256",
-        expiresIn: "5d"
+        expiresIn: "1d"
     });
 };
 

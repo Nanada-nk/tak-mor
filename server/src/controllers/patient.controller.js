@@ -1,9 +1,9 @@
-import prisma from "../config/prisma.config.js";
+import prisma from '../config/prisma.config.js';
 
 
 export const createProfile = async (req, res) => {
   const  patientId  = Number(req.params.patientId);
-  let { height, weight, bloodType, congenital, allergies, surgeries, medications } = req.body;
+  let { height, weight, bloodType, congenital, allergies, surgeries, medications, address, birthDate, gender, nationalId, emergencyContactName, emergencyContactPhone, emergencyContactRelation } = req.body;
   height = height !== undefined && height !== null && height !== "" ? Number(height) : null;
   weight = weight !== undefined && weight !== null && weight !== "" ? Number(weight) : null;
   console.log("Received request body:", req.body);
@@ -25,6 +25,7 @@ export const createProfile = async (req, res) => {
         allergies,
         surgeries,
         medications,
+        address
       },
     });
     
@@ -37,12 +38,24 @@ export const createProfile = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   const  patientId  = Number(req.params.patientId);
-  let { height, weight, bloodType, congenital, allergies, surgeries, medications, medicalHistory, emergencyContactName, emergencyContactPhone, emergencyContactRelation } = req.body;
+  let { height, weight, bloodType, congenital, allergies, surgeries, medications, address, birthDate, gender, nationalId, emergencyContactName, emergencyContactPhone, emergencyContactRelation } = req.body;
   height = height !== undefined && height !== null && height !== "" ? Number(height) : null;
   weight = weight !== undefined && weight !== null && weight !== "" ? Number(weight) : null;
   try {
-    // Update medical profile fields
-    const profile = await prisma.patientMedicalProfile.update({
+  const [updatedPatient, updatedProfile] = await prisma.$transaction([
+    prisma.patient.update({
+      where: { id: patientId },
+      data: {
+        address,
+        birthDate, 
+        gender,
+        nationalId,
+        emergencyContactName,
+        emergencyContactPhone,
+        emergencyContactRelation
+      },
+    }),
+    prisma.patientMedicalProfile.update({
       where: { patientId },
       data: {
         height,
@@ -52,27 +65,15 @@ export const updateProfile = async (req, res) => {
         allergies,
         surgeries,
         medications,
-        medicalHistory,
       },
-    });
-    // Update emergency contact fields in Patient model if provided
-    if (emergencyContactName !== undefined || emergencyContactPhone !== undefined || emergencyContactRelation !== undefined) {
-      // Fetch current values to preserve unedited fields
-      const currentPatient = await prisma.patient.findUnique({ where: { id: patientId } });
-      await prisma.patient.update({
-        where: { id: patientId },
-        data: {
-          emergencyContactName: emergencyContactName !== undefined ? emergencyContactName : currentPatient.emergencyContactName,
-          emergencyContactPhone: emergencyContactPhone !== undefined ? emergencyContactPhone : currentPatient.emergencyContactPhone,
-          emergencyContactRelation: emergencyContactRelation !== undefined ? emergencyContactRelation : currentPatient.emergencyContactRelation,
-        },
-      });
-    }
-    res.json(profile);
-  } catch (err) {
-    console.error('Update medical profile error:', err);
-    res.status(500).json({ error: "Failed to update profile", details: err.message });
-  }
+    }),
+  ]);
+
+  res.json({ patient: updatedPatient, profile: updatedProfile });
+} catch (err) {
+  console.error('Update error:', err);
+  res.status(500).json({ error: "Failed to update patient and profile", details: err.message });
+}
 };
 
 export const getProfile = async (req, res) => {

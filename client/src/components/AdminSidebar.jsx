@@ -8,9 +8,10 @@ import { toast } from "react-toastify";
 
 
 const adminNavLinks = [
-  { path: '/admin/patientdashboard', label: 'Patient Dashboard', icon: <ShieldUser size={18} /> },
-  { path: '/admin/doctordashboard', label: 'Doctor Dashboard', icon: <BriefcaseMedical size={20} /> },
-  { path: '/admin/appointmentdashboard', label: 'Appointment Dashboard', icon: <ClipboardCheck size={20} /> },
+  { path: '/admin/patientdashboard', label: 'จัดการตารางคนไข้', icon: <ShieldUser size={18} /> },
+  { path: '/admin/doctordashboard', label: 'จัดการตารางแพทย์', icon: <BriefcaseMedical size={20} /> },
+  { path: '/admin/appointmentdashboard', label: 'ตารางการนัดหมายทั้งหมด', icon: <ClipboardCheck size={20} /> },
+  { path: '/admin/doctordashboard/add', label: 'จัดการตารางการนัดหมายแพทย์', icon: <ClipboardCheck size={20} /> },
 ];
 
 
