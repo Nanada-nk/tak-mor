@@ -120,7 +120,6 @@ function AppRouter() {
           <Route path="rolepick" element={<SignupRolePick />} />
           <Route path="auth/callback" element={<AuthCallbackPage />} />
 
-
           <Route path="faq" element={<FaqPage />} />
           <Route path="termsOfService" element={<TermOfService />} />
           <Route path="privacyPolicy" element={<PrivacyPolicy />} />
