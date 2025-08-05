@@ -1,27 +1,27 @@
 import { Search } from "lucide-react";
 import Brandner from "../../components/Brandner.jsx";
+import NewBoxBarComponent from "../../components/NewsBox/NewBoxBarComponent.jsx";
 
 function NewsContentPage() {
   const post = {
 
-    author: 'Arthur Hetzel',
-    authorAvatar: 'https://images.unsplash.com/photo-1507003211169-e69adba4c2d9?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // URL รูปโปรไฟล์ผู้เขียนเล็กๆ
+    author: 'นายสมพง ทองคุ้ม',
+    authorAvatar: 'https://www.kinrehab.com/upload/images/%E0%B8%A3%E0%B8%B9%E0%B8%9B%20Staff%20New/%E0%B8%99%E0%B8%9E.%E0%B8%81%E0%B8%A4%E0%B8%A9%E0%B8%93%E0%B8%B0%20%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B8%95%E0%B8%B4%E0%B9%82%E0%B8%8A%E0%B8%84%E0%B8%A7%E0%B8%B4%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B9%8C%20%E0%B9%81%E0%B8%9E%E0%B8%97%E0%B8%A2%E0%B9%8C%E0%B9%80%E0%B8%89%E0%B8%9E%E0%B8%B2%E0%B8%B0%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%94%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%80%E0%B8%A7%E0%B8%8A%E0%B8%A8%E0%B8%B2%E0%B8%AA%E0%B8%95%E0%B8%A3%E0%B9%8C%E0%B8%9F%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%9F%E0%B8%B9.png', // URL รูปโปรไฟล์ผู้เขียนเล็กๆ
     views: 90,
     comments: 25,
-    content: [
-      `Maintaining a healthy lifestyle year-round is achievable with consistent habits that support your physical and mental well-being. One of the key pillars is staying hydrated, as water is essential for digestion, nutrient absorption, and overall bodily functions. Aim to drink at least eight glasses of water daily, adjusting for factors like weather and physical activity. A balanced diet is equally important, as it fuels your body with the nutrients it needs for energy, growth, and repair. Incorporate a variety of fruits, vegetables, lean proteins, and whole grains to ensure you’re getting a range of vitamins and minerals.`,
-      `Regular physical activity is another cornerstone of a healthy lifestyle. Engaging in at least 150 minutes of moderate exercise per week, such as walking or cycling, can boost your cardiovascular health, strengthen muscles, and improve mood. Equally important is prioritizing sleep. Getting 7-9 hours of quality sleep each night helps regulate your mood, enhances mental clarity, and supports physical health. With these tips in mind, you’ll be on your way to maintaining a healthy lifestyle all year long.`,
+    content: ["การผ่าตัดมะเร็งต่อมลูกหมาก (Radical Prostatectomy) เป็นหนึ่งในการรักษาหลักสำหรับมะเร็งต่อมลูกหมากเฉพาะที่ ภาวะหย่อนสมรรถภาพทางเพศ (Erectile Dysfunction: ED) จึงเป็นหนึ่งในผลข้างเคียงที่พบได้บ่อยในผู้ป่วยหลังได้รับการรักษานายแพทย์สกานต์ บุนนาค รองอธิบดีกรมการแพทย์ กล่าวว่า ปัจจุบันแนวคิดในการ “ฟื้นฟูสมรรถภาพทางเพศ” สำหรับผู้ได้รับการผ่าตัดมะเร็งต่อมลูกหมาก คือ ให้การรักษาตั้งแต่เนิ่น ๆ หลังการผ่าตัด เพื่อป้องกันการเสื่อมสภาพของเนื้อเยื่อองคชาตจากการขาดออกซิเจน และส่งเสริมการฟื้นตัวของเส้นประสาทและหลอดเลือด โดยมีเป้าหมายเพื่อเพิ่มโอกาสการกลับมาแข็งตัวได้เองอีกครั้งในระยะยาว ในปัจจุบันยังไม่มีแนวทางการรักษาที่เป็นมาตรฐานเพียงวิธีเดียว แต่ใช้วิธีการรักษาแบบผสมผสานเรืออากาศเอกนายแพทย์สมชาย ธนะสิทธิชัย ผู้อำนวยการสถาบันมะเร็งแห่งชาติ กล่าวว่า วิธีการรักษาผู้ป่วยภาวะหย่อนสมรรถภาพหลังการผ่าตัดมะเร็งต่อมลูกหมาก ใช้วิธีการรักษาแบบผสมผสาน โดยมีทางเลือกต่าง ๆ ได้แก่ การใช้ยา ได้แก่ ยากลุ่ม PDE5 Inhibitorsที่ใช้ในการรักษาภาวะหย่อนสมรรถภาพทางเพศ การฉีดยาเข้าองคชาตโดยตรงก่อนการมีเพศสัมพันธ์ การใช้อุปกรณ์ช่วย ซึ่งเป็นอุปกรณ์สุญญากาศที่ช่วยดึงเลือดมาคั่งที่องคชาตเพื่อให้เกิดการแข็งตัว การรักษาเสริมและแนวทางการรักษาเพิ่มเติม ได้แก่ การใช้คลื่นกระแทกความเข้มต่ำ(Low - Intensity Extracorporeal Shockwave Therapy - LI - ESWT) เทคโนโลยีที่ใช้คลื่นเสียงความเข้มต่ำมากระตุ้นที่องคชาต โดยเชื่อว่าจะช่วยกระตุ้นให้เกิดการสร้างหลอดเลือดใหม่ และอาจส่งเสริมการซ่อมแซมของเส้นประสาท การบริหารกล้ามเนื้ออุ้งเชิงกราน(Pelvic Floor Muscle Training) และ การออกกำลังกายแบบแอโรบิก(Aerobic Training)"
+      ,
     ],
-    highlightedNote: `An extra important note to remember is that consistency is key. Small, sustainable changes in your daily habits will have a more lasting impact than short-term, extreme efforts. Prioritize gradual improvements in your routine and be patient with yourself - lasting health is a marathon, not a sprint.`,
+    highlightedNote: ` บทสรุปและคำแนะนำ การฟื้นฟูสมรรถภาพทางเพศหลังการผ่าตัดมะเร็งต่อมลูกหมากเป็น "การวิ่งมาราธอน ไม่ใช่การวิ่งระยะสั้น" การฟื้นตัวของเส้นประสาทอาจใช้เวลาตั้งแต่ 1-2 ปี หรือนานถึง 4 ปี สิ่งสำคัญคือ ทำความเข้าใจว่าการฟื้นตัวต้องใช้ระยะเวลาและความอดทน และปรึกษาแพทย์ประจำตัวของท่าน เพื่อวางแผนการฟื้นฟูที่เหมาะสมและหากมีอาการผิดปกติให้รีบปรึกษาแพทย์โดยเร็ว หากท่านมีข้อสงสัย สามารถศึกษาเพิ่มเติมได้จากสถาบันมะเร็งแห่งชาติผ่านทาง Facebook : สถาบันมะเร็งแห่งชาติ National Cancer Institute และ LINE : NCI รู้สู้มะเร็ง`,
     aboutAuthor: {
-      name: 'Arthur Hetzel',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-e69adba4c2d9?q=80&w=1887&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D', // URL รูปโปรไฟล์ผู้เขียนใหญ่
-      bio: `As a certified nutritionist and wellness coach, I’m passionate about helping others achieve a balanced lifestyle and lasting health. My journey into health started with my own desire to feel better physically and mentally, and along the way, I’ve learned the importance of consistency and small, sustainable changes. I love exploring new ways to stay active, experimenting with healthy meals, and sharing tips that are practical and realistic for people with busy lives.`,
+      name: 'นายสมพง ทองคุ้ม',
+      avatar: 'https://www.kinrehab.com/upload/images/%E0%B8%A3%E0%B8%B9%E0%B8%9B%20Staff%20New/%E0%B8%99%E0%B8%9E.%E0%B8%81%E0%B8%A4%E0%B8%A9%E0%B8%93%E0%B8%B0%20%E0%B9%80%E0%B8%81%E0%B8%B5%E0%B8%A2%E0%B8%A3%E0%B8%95%E0%B8%B4%E0%B9%82%E0%B8%8A%E0%B8%84%E0%B8%A7%E0%B8%B4%E0%B8%A7%E0%B8%B1%E0%B8%92%E0%B8%99%E0%B9%8C%20%E0%B9%81%E0%B8%9E%E0%B8%97%E0%B8%A2%E0%B9%8C%E0%B9%80%E0%B8%89%E0%B8%9E%E0%B8%B2%E0%B8%B0%E0%B8%97%E0%B8%B2%E0%B8%87%E0%B8%94%E0%B9%89%E0%B8%B2%E0%B8%99%E0%B9%80%E0%B8%A7%E0%B8%8A%E0%B8%A8%E0%B8%B2%E0%B8%AA%E0%B8%95%E0%B8%A3%E0%B9%8C%E0%B8%9F%E0%B8%B7%E0%B9%89%E0%B8%99%E0%B8%9F%E0%B8%B9.png', // URL รูปโปรไฟล์ผู้เขียนใหญ่
+      bio: `บทสรุปและคำแนะนำ การฟื้นฟูสมรรถภาพทางเพศหลังการผ่าตัดมะเร็งต่อมลูกหมากเป็น "การวิ่งมาราธอน ไม่ใช่การวิ่งระยะสั้น" การฟื้นตัวของเส้นประสาทอาจใช้เวลาตั้งแต่ 1-2 ปี หรือนานถึง 4 ปี สิ่งสำคัญคือ ทำความเข้าใจว่าการฟื้นตัวต้องใช้ระยะเวลาและความอดทน และปรึกษาแพทย์ประจำตัวของท่าน เพื่อวางแผนการฟื้นฟูที่เหมาะสมและหากมีอาการผิดปกติให้รีบปรึกษาแพทย์โดยเร็ว หากท่านมีข้อสงสัย สามารถศึกษาเพิ่มเติมได้จากสถาบันมะเร็งแห่งชาติผ่านทาง Facebook : สถาบันมะเร็งแห่งชาติ National Cancer Institute และ LINE : NCI รู้สู้มะเร็ง`,
     },
-    tags: ['Health Tips', 'Awareness', 'Health', 'Wellness'],
+    tags: ['สุขภาพทั่วไป', 'วิจัยทางการแพทย์', 'โรงพยาบาลและสารธรณสุข', 'ประกาศและกิจกรรม'],
   };
   return (
-    <div className="font-prompt">
+    <div className="font-prompt mb-6">
 
       <Brandner title="ข่าว" />
 
@@ -35,7 +35,7 @@ function NewsContentPage() {
             <header className="bg-white shadow-sm py-4">
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <h1 className="text-3xl sm:text-4xl lg:text-4xl font-extrabold text-gray-800 mb-4 leading-tight">
-                  10 Tips for Maintaining a Healthy Lifestyle Year-Round
+                  การดูแลสุขภาพทางเพศชายหลังผ่าตัดมะเร็งต่อมลูกหมาก
                 </h1>
               </div>
             </header>
@@ -47,8 +47,8 @@ function NewsContentPage() {
                 {'https://images.unsplash.com/photo-1533221430079-c70e2cc5140e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D' && (
                   <div className="relative h-64 sm:h-80 lg:h-96 w-full overflow-hidden">
                     <img
-                      src='https://images.unsplash.com/photo-1533221430079-c70e2cc5140e?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                      alt="10 Tips for Maintaining a Healthy Lifestyle Year-Round"
+                      src='https://www.dms.go.th/backend//Content//Content_File/Hot_News/Img/25680804130531PM_1754287232442.jpg'
+                      alt="การดูแลสุขภาพทางเพศชายหลังผ่าตัดมะเร็งต่อมลูกหมาก"
                       className="absolute inset-0 w-full h-full object-cover"
                     />
                   </div>
@@ -63,7 +63,7 @@ function NewsContentPage() {
                   <div className="flex items-center text-sm text-gray-500 mb-6 flex-wrap gap-y-2">
                     {/* Health Tips Tag */}
                     <span className="bg-gray-900 text-white text-xs font-medium mr-3 px-3 py-1 rounded-full flex items-center whitespace-nowrap">
-                      Health Tips
+                      สุขภาพทั่วไป
                     </span>
 
                     {/* Date */}
@@ -82,7 +82,7 @@ function NewsContentPage() {
                           d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                         />
                       </svg>
-                      <span>03 Apr 2024</span>
+                      <span>04 ส.ค. 2568</span>
                     </div>
 
                     {/* Author */}
@@ -148,13 +148,13 @@ function NewsContentPage() {
 
                   {/* Highlighted Note */}
                   <div className="bg-blue-50 border-l-4 border-blue-500 text-blue-800 p-4 rounded-md italic mb-8">
-                    <p className="font-semibold mb-2">An extra important note to remember is that consistency is key.</p>
+                    <p className="font-semibold mb-2">สรุป</p>
                     <p>{post.highlightedNote}</p>
                   </div>
 
                   {/* About Author Section */}
                   <div className="bg-gray-50 p-6 sm:p-8 lg:p-10 border-t border-gray-200 rounded-b-lg -mx-6 sm:-mx-8 lg:-mx-10 mt-8">
-                    <h2 className="text-gray-800 text-xl font-bold mb-4">About Author</h2>
+                    <h2 className="text-gray-800 text-xl font-bold mb-4">คำแนะนำจากแพทย์</h2>
                     <div className="flex items-start md:items-center flex-col md:flex-row">
                       {post.aboutAuthor.avatar && (
                         <div className="flex-shrink-0 mb-4 md:mb-0 md:mr-6">
@@ -178,7 +178,7 @@ function NewsContentPage() {
 
                   {/* Tags Section */}
                   <div className="mt-8 pt-6 border-t border-gray-200">
-                    <h3 className="text-gray-800 text-lg font-semibold mb-3">Tags</h3>
+                    <h3 className="text-gray-800 text-lg font-semibold mb-3">แท๊ก</h3>
                     <div className="flex flex-wrap gap-2">
                       {post.tags.map((tag, index) => (
                         <span
@@ -199,126 +199,7 @@ function NewsContentPage() {
         </div>
 
 
-        <div className="flex flex-col gap-6" >
-
-          <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">ค้นหา</h2>
-
-            <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden join-mb3">
-
-              <input
-                type="text"
-                placeholder="ค้นหา"
-                className="input input-bordered join-item ]"
-              />
-
-
-              <button className="btn btn-primary join-item bg-[#3B80F5]">
-                <Search/>
-              </button>
-            </div>
-          </div>
-
-
-
-          <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
-            <h2 class="text-2xl font-semibold text-gray-800 mb-4">หมวดหมู่</h2>
-            <ul class="space-y-2 text-gray-700">
-              <li class="flex justify-between">
-                <span>Health Care</span>
-                <span class="text-gray-500">(2)</span>
-              </li>
-              <li class="flex justify-between">
-                <span>Health Tips</span>
-                <span class="text-gray-500">(5)</span>
-              </li>
-              <li class="flex justify-between">
-                <span>Medical Research</span>
-                <span class="text-gray-500">(4)</span>
-              </li>
-              <li class="flex justify-between">
-                <span>Health Treatment</span>
-                <span class="text-gray-500">(6)</span>
-              </li>
-              <li class="flex justify-between">
-                <span>Nutrition</span>
-                <span class="text-gray-500">(8)</span>
-              </li>
-            </ul>
-
-          </div>
-
-          <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">ข่าวก่อนนหน้า</h2>
-            <ul class="space-y-4">
-              <li class="flex items-start gap-3">
-                <img src="https://via.placeholder.com/60" alt="news" class="w-14 h-14 object-cover rounded-md" />
-                <div>
-                  <p class="text-xs text-gray-500">06 Nov 2024</p>
-                  <p class="text-sm text-gray-800 font-medium leading-snug">
-                    Managing Chronic Conditions: Expert Advice for Better Living
-                  </p>
-                </div>
-              </li>
-
-              <li class="flex items-start gap-3">
-                <img src="https://via.placeholder.com/60" alt="news" class="w-14 h-14 object-cover rounded-md" />
-                <div>
-                  <p class="text-xs text-gray-500">15 Nov 2024</p>
-                  <p class="text-sm text-gray-800 font-medium leading-snug">
-                    Understanding Common Symptoms: When to See a Doctor
-                  </p>
-                </div>
-              </li>
-
-              <li class="flex items-start gap-3">
-                <img src="https://via.placeholder.com/60" alt="news" class="w-14 h-14 object-cover rounded-md" />
-                <div>
-                  <p class="text-xs text-gray-500">08 Dec 2024</p>
-                  <p class="text-sm text-gray-800 font-medium leading-snug">
-                    Nutrition and Wellness: A Guide to Balanced Eating
-                  </p>
-                </div>
-              </li>
-
-              <li class="flex items-start gap-3">
-                <img src="https://via.placeholder.com/60" alt="news" class="w-14 h-14 object-cover rounded-md" />
-                <div>
-                  <p class="text-xs text-gray-500">17 Dec 2024</p>
-                  <p class="text-sm text-gray-800 font-medium leading-snug">
-                    Top Preventive Health Measures Everyone Should Take
-                  </p>
-                </div>
-              </li>
-            </ul>
-
-          </div>
-
-
-
-          <div class="max-w-xl mx-auto bg-white p-6 rounded-lg shadow border border-gray-300 w-[400px]">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">แท๊ก</h2>
-
-            <div className="filter">
-              <input className="btn btn-soft btn-error filter-reset" type="radio" name="metaframeworks" aria-label="All" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Health Tips" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Awareness" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Health" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Wellness" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Treatment" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Checkup" />
-              <input className="btn btn-soft btn-info" type="radio" name="metaframeworks" aria-label="Prevention" />
-
-            </div>
-          </div>
-          <div>
-
-          </div>
-
-        </div>
-      </div>
-      <div className="join flex justify-center my-5">
-
+        <NewBoxBarComponent />
       </div>
 
 
