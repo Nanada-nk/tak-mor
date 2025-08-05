@@ -4,13 +4,16 @@ import React, { useEffect, useState } from 'react';
 import patientApi from '../../../api/patientApi';
 import authStore from '../../../stores/authStore';
 import Modal from '../../../components/Modal.jsx';
-
+import ModalDiagnosis from '../../../components/ModalDiagnosis.jsx';
+import DiagnosisForm from '../../../components/DiagnosisForm.jsx';
 function PatientManagementPage() {
   const user = authStore(state => state.user);
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showDetail, setShowDetail] = useState(null);
+
+    const [diagnosisModalAppointment, setDiagnosisModalAppointment] = React.useState(null);
 
   useEffect(() => {
     const fetchAppointments = async () => {
@@ -53,6 +56,8 @@ function PatientManagementPage() {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Action</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Medical Diagnosis</th>
+
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
@@ -74,6 +79,9 @@ function PatientManagementPage() {
                       View
                     </button>
                   </td>
+                     <td className="pl-20 py-4 whitespace-nowrap text-sm font-medium">
+                      <button className="text-blue-600 hover:text-blue-900"  onClick={() => setDiagnosisModalAppointment(appt)}>View</button> 
+                    </td>
                 </tr>
               ))}
             </tbody>
@@ -124,6 +132,24 @@ function PatientManagementPage() {
           </div>
         )}
       </Modal>
+       {/* Modal for diagnosis form */}
+<ModalDiagnosis
+  isOpen={!!diagnosisModalAppointment}
+  onClose={() => setDiagnosisModalAppointment(null)}
+  title="Medical Diagnosis"
+
+>
+ 
+  <DiagnosisForm
+   appointment={diagnosisModalAppointment}
+   name={diagnosisModalAppointment?.Patient?.firstName + ' ' + diagnosisModalAppointment?.Patient?.lastName}
+   phone={diagnosisModalAppointment?.Patient?.Account?.phone}
+   email={diagnosisModalAppointment?.Patient?.Account?.email}
+
+   doctorname={diagnosisModalAppointment?.Doctor?.firstName + ' ' + diagnosisModalAppointment?.Doctor?.lastName}
+    />
+
+</ModalDiagnosis>
     </div>
   );
 }

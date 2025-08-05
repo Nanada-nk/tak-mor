@@ -7,6 +7,8 @@ import authStore from "../../stores/authStore.js";
 import usePatientFormStore from "../../stores/usePatientFormStore.js";
 import axios from "axios";
 import BookingNavButtons from "../../components/booking/BookingNavButtons.jsx";
+import { toast } from "react-toastify";
+import ConfirmModal from "../../components/ConfirmModal.jsx";
 
 function PatientInfoPage() {
   const user = authStore((state) => state.user)
@@ -15,8 +17,11 @@ function PatientInfoPage() {
 
 const { patientForm, setField } = usePatientFormStore();
 
+const [openConfirmModal, setOpenConfirmModal] = useState(false);
 
-
+const handleSubmitWithConfirm = () => {
+  setOpenConfirmModal(true);
+};
 const handleSubmit = async () => {
   try {
     const user = authStore.getState().user;
@@ -89,7 +94,7 @@ const handleSubmit = async () => {
       );
     }
 
-    alert("Profile saved successfully");
+    toast.success("โปรไฟล์ผู้ป่วยถูกบันทึกเรียบร้อยแล้ว");
     console.log("Profile saved", response.data);
     navigate("/payment");
   } catch (error) {
@@ -379,10 +384,20 @@ const handleSubmit = async () => {
            <div className="flex px-8 justify-between items-center">
           <BookingNavButtons
         onBack={handlePrevious}
-        onNext={handleSubmit}
+        onNext={handleSubmitWithConfirm}
         title='เลือกชำระเงิน'
       />
            </div>
+           <ConfirmModal
+  open={openConfirmModal}
+  onCancel={() => setOpenConfirmModal(false)}
+  onConfirm={() => {
+    setOpenConfirmModal(false);
+    handleSubmit();
+  }}
+  title="ยืนยันการดำเนินการ"
+  description="คุณต้องการดำเนินการต่อไปยังขั้นตอนชำระเงินหรือไม่?"
+/>
          </div>
        </div>
   )
