@@ -25,7 +25,7 @@ function DailyAppointmentsViewer() {
       }
     };
     fetchAppointments();
-  }, [selectedDate]); // This effect runs whenever the selected date changes
+  }, [selectedDate]); 
 
   return (
     <div className="p-6 max-w-2xl border border-gray-200 rounded-lg font-prompt">

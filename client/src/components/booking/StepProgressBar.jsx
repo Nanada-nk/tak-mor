@@ -1,11 +1,6 @@
 import React from "react";
 
 
-/**
- * @param {Object[]} steps - Array of step objects: { label, status, dataContent }
- * @param {number} currentStep - 0-based index of the current step
- * @param {boolean[]} [successSteps] - Optional: which steps are marked as success
- */
 function StepProgressBar({ steps, currentStep = 0, successSteps = [] }) {
   return (
     <div className="h-1/7 w-full flex items-center my-4 justify-center">

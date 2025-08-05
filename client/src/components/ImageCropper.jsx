@@ -16,12 +16,12 @@ function ImageCropper({
   enableResize = true,
   className = ''
 }) {
-  // Core cropping state
+ 
   const [crop, setCrop] = useState(initialCrop);
   const [zoom, setZoom] = useState(initialZoom);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   
-  // Crop area state for window-style resizing
+ 
   const [cropArea, setCropArea] = useState({
     width: 200,
     height: 200,
@@ -29,18 +29,18 @@ function ImageCropper({
     y: 100
   });
   
-  // UI state
+
   const [isDragging, setIsDragging] = useState(false);
   const [isResizing, setIsResizing] = useState(false);
   const [dragHandle, setDragHandle] = useState(null);
   const [showControls, setShowControls] = useState(true);
   
-  // Preview state
+  
   const [previewImage, setPreviewImage] = useState(null);
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   
-  // Handle crop completion
+  
   const generatePreview = useCallback(async (cropData) => {
     if (!src || !cropData || !canvasRef.current) return;
     
@@ -54,17 +54,17 @@ function ImageCropper({
         canvas.width = size;
         canvas.height = size;
         
-        // Clear canvas
+        
         ctx.clearRect(0, 0, size, size);
         
         if (cropShape === 'round') {
-          // Create circular clipping path
+          
           ctx.beginPath();
           ctx.arc(size / 2, size / 2, size / 2, 0, Math.PI * 2);
           ctx.clip();
         }
         
-        // Draw cropped image
+       
         ctx.drawImage(
           image,
           cropData.x,
@@ -77,7 +77,7 @@ function ImageCropper({
           size
         );
         
-        // Convert to blob URL
+     
         canvas.toBlob((blob) => {
           if (previewImage) {
             URL.revokeObjectURL(previewImage);
@@ -101,7 +101,7 @@ function ImageCropper({
     generatePreview(croppedAreaPixels);
   }, [onCropComplete, generatePreview]);
   
-  // Resize handles for window-style interaction
+  
   const handleMouseDown = useCallback((e, handle) => {
     if (!enableResize) return;
     
@@ -156,11 +156,11 @@ function ImageCropper({
           break;
       }
       
-      // Maintain minimum size
+      
       if (newCropArea.width < 50) newCropArea.width = 50;
       if (newCropArea.height < 50) newCropArea.height = 50;
       
-      // Maintain aspect ratio for circular crops
+     
       if (cropShape === 'round') {
         const size = Math.min(newCropArea.width, newCropArea.height);
         newCropArea.width = size;
@@ -181,7 +181,7 @@ function ImageCropper({
     document.addEventListener('mouseup', handleMouseUp);
   }, [enableResize, cropArea, cropShape]);
   
-  // Touch support for mobile devices
+ 
   const handleTouchStart = useCallback((e, handle) => {
     if (!enableResize || e.touches.length !== 1) return;
     
@@ -194,7 +194,7 @@ function ImageCropper({
     handleMouseDown(mouseEvent, handle);
   }, [handleMouseDown, enableResize]);
   
-  // Cleanup blob URLs on unmount
+  
   useEffect(() => {
     return () => {
       if (previewImage) {
@@ -203,7 +203,7 @@ function ImageCropper({
     };
   }, [previewImage]);
   
-  // Reset controls visibility timer
+  
   useEffect(() => {
     let timer;
     if (isDragging || isResizing) {
@@ -216,7 +216,7 @@ function ImageCropper({
   
   return (
     <div className={`flex flex-col ${showPreview ? 'lg:flex-row' : ''} gap-6 p-4 bg-white rounded-lg shadow-lg ${className}`}>
-      {/* Main Cropper Area */}
+      
       <div className="flex-1 min-h-0">
         <div 
           ref={containerRef}
@@ -254,10 +254,10 @@ function ImageCropper({
                 }}
               />
               
-              {/* Resize Handles for Window-style Interaction */}
+             
               {enableResize && showControls && (
                 <>
-                  {/* Corner handles */}
+                 
                   <div
                     className="absolute w-3 h-3 bg-blue-500 border border-white rounded-sm cursor-nw-resize hover:bg-blue-600 transition-colors"
                     style={{ top: '10px', left: '10px' }}
@@ -283,7 +283,7 @@ function ImageCropper({
                     onTouchStart={(e) => handleTouchStart(e, 'sw')}
                   />
                   
-                  {/* Edge handles */}
+                 
                   <div
                     className="absolute w-3 h-6 bg-blue-500 border border-white rounded-sm cursor-n-resize hover:bg-blue-600 transition-colors"
                     style={{ top: '10px', left: '50%', transform: 'translateX(-50%)' }}
@@ -321,7 +321,7 @@ function ImageCropper({
           )}
         </div>
         
-        {/* Zoom Controls */}
+        
         <div className="mt-4 space-y-3">
           <div className="flex items-center gap-3">
             <label className="text-sm font-medium text-gray-700 w-16">Zoom:</label>
@@ -339,7 +339,7 @@ function ImageCropper({
         </div>
       </div>
       
-      {/* Preview Panel */}
+    
       {showPreview && (
         <div className="lg:w-80 w-full">
           <div className="mb-4">
@@ -367,7 +367,7 @@ function ImageCropper({
                 </div>
               </div>
               
-              {/* Medium Preview */}
+             
               <div className="relative">
                 <div className={`w-20 h-20 bg-gray-200 border border-gray-300 flex items-center justify-center ${cropShape === 'round' ? 'rounded-full' : 'rounded'} overflow-hidden`}>
                   {previewImage ? (
@@ -385,7 +385,7 @@ function ImageCropper({
                 </div>
               </div>
               
-              {/* Small Preview */}
+              
               <div className="relative">
                 <div className={`w-10 h-10 bg-gray-200 border border-gray-300 flex items-center justify-center ${cropShape === 'round' ? 'rounded-full' : 'rounded'} overflow-hidden`}>
                   {previewImage ? (
@@ -404,7 +404,7 @@ function ImageCropper({
               </div>
             </div>
             
-            {/* Preview Info */}
+         
             {croppedAreaPixels && (
               <div className="mt-4 text-xs text-gray-600 space-y-1">
                 <div>Size: {Math.round(croppedAreaPixels.width)} × {Math.round(croppedAreaPixels.height)}px</div>
@@ -416,7 +416,7 @@ function ImageCropper({
         </div>
       )}
       
-      {/* Hidden canvas for preview generation */}
+      
       <canvas 
         ref={canvasRef}
         style={{ display: 'none' }}

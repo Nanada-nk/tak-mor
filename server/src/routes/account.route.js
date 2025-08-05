@@ -8,7 +8,7 @@ const upload = multer();
 
 
 
-// Upload profile picture
+
 accountRouter.post(
   '/upload-profile-picture',
   authenticateUser,
@@ -16,10 +16,10 @@ accountRouter.post(
   accountController.uploadProfilePicture
 );
 
-// Update account info (phone, profilePictureUrl, etc.)
+
 accountRouter.put('/', authenticateUser, accountController.updateAccount);
 
-// Change password
+
 accountRouter.put('/change-password', authenticateUser, accountController.changePassword);
 
 export default accountRouter;

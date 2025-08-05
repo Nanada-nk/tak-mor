@@ -39,7 +39,7 @@ function DoctorDashboard() {
         editedDoctor
       );
 
-      // Update local state
+      
       setDoctors((prev) =>
         prev.map((doc) => (doc.id === id ? response.data : doc))
       );
@@ -112,7 +112,7 @@ function DoctorDashboard() {
                   </div>
                 </td>
 
-                {/* First Name */}
+                
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <input
@@ -126,7 +126,7 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Last Name */}
+                
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <input
@@ -140,7 +140,7 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Phone */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <input
@@ -154,7 +154,7 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Email */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <input
@@ -168,7 +168,7 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Role */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <select
@@ -186,7 +186,7 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Address */}
+                
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingDoctorId === doctor.id ? (
                     <input
@@ -202,12 +202,12 @@ function DoctorDashboard() {
                   )}
                 </td>
 
-                {/* Created At */}
+                
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {doctor.Account?.createdAt?.split("T")[0]}
                 </td>
 
-                {/* Action */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   {editingDoctorId === doctor.id ? (
                     <div className="flex gap-2 justify-end">

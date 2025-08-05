@@ -39,7 +39,7 @@ function PatientDashboard() {
         editedPatient
       );
 
-      // Update local state
+      
       setPatients((prev) =>
         prev.map((pat) => (pat.id === id ? response.data : pat))
       );
@@ -113,7 +113,7 @@ function PatientDashboard() {
                   </div>
                 </td>
 
-                {/* First Name */}
+                
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <input
@@ -127,7 +127,7 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Last Name */}
+              
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <input
@@ -141,7 +141,7 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Phone */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <input
@@ -155,7 +155,7 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Email */}
+              
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <input
@@ -169,7 +169,7 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Role */}
+              
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <select
@@ -187,7 +187,7 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Address */}
+             
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {editingPatientId === patient.id ? (
                     <input
@@ -203,12 +203,12 @@ function PatientDashboard() {
                   )}
                 </td>
 
-                {/* Created At */}
+               
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                   {patient.Account?.createdAt?.split("T")[0]}
                 </td>
 
-                {/* Action */}
+              
                 <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                   {editingPatientId === patient.id ? (
                     <div className="flex gap-2 justify-end">

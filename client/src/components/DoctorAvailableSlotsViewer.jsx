@@ -10,14 +10,14 @@ function DoctorAvailableSlotsViewer() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [timeSlots, setTimeSlots] = useState([]);
 
-  // Fetch the list of all doctors on component mount
+ 
   useEffect(() => {
     axiosInstance.get("/api/doctor")
       .then(res => setDoctors(res.data))
       .catch(err => console.error("Failed to fetch doctors:", err));
   }, []);
 
-  // Fetch slots for the selected doctor and date whenever they change
+  
   useEffect(() => {
     const fetchSlots = async () => {
       if (!selectedDoctor || !selectedDate) {

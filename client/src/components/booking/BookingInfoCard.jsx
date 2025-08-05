@@ -26,7 +26,7 @@ function BookingInfoCard({ doctor, specialty, service, date, time, appointmentTy
           </div>
         </div>
       </div>
-      {/* Main Booking Info Section */}
+    
       <div className="mt-2 w-full border-gray-200 pt-2 px-4">
         <div className="flex flex-row justify-between gap-4 text-sm">
           <div className="flex flex-col items-start justify-center w-1/4">

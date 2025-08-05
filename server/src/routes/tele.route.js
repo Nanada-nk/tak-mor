@@ -4,13 +4,13 @@ import teleController from '../controllers/tele.controller.js';
 
 const teleRouter = express.Router()
 
-// --- Chat Message Routes ---
+
 teleRouter.post('/chat/messages', teleController.sendChatMessage);
 teleRouter.get('/chat/appointments/:appointmentId/messages', teleController.getChatMessagesByAppointment);
 teleRouter.put('/chat/messages/:messageId/read', teleController.markChatMessageAsRead);
 
 
-// --- Call Log Routes ---
+
 teleRouter.post('/calls/logs', teleController.logCall);
 teleRouter.put('/calls/logs/:id', teleController.updateCallLog);
 teleRouter.get('/calls/appointments/:appointmentId/logs', teleController.getCallLogsByAppointment);

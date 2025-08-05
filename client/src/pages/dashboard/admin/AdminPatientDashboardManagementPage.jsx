@@ -1,4 +1,5 @@
-import {Search} from "lucide-react"
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
 import PatientDashboard from "../../../components/dashboard/PatientDashboard.jsx"
 
 function AdminPatientDashboardManagementPage() {

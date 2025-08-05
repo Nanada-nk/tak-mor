@@ -16,7 +16,7 @@ const authController = {};
 
 
 
-// Register Patient
+
 authController.registerPatient = async (req, res, next) => {
   const { email, phone, firstName, lastName, password, confirmPassword } = req.body;
   const role = "PATIENT";
@@ -48,7 +48,7 @@ authController.registerPatient = async (req, res, next) => {
   });
 };
 
-// Register Doctor
+
 authController.registerDoctor = async (req, res, next) => {
   const { email, phone, firstName, lastName, password, confirmPassword } = req.body;
   const role = "DOCTOR";

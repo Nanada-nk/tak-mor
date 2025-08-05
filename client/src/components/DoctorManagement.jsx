@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import axiosInstance from "../config/axios.js";
 import { toast } from "react-toastify";
 
-// Generate 30-minute intervals from 09:00 to 19:30
+
 const generate30MinTimeOptions = () => {
   const times = [];
   for (let hour = 9; hour < 20; hour++) {

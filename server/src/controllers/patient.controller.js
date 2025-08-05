@@ -4,7 +4,7 @@ export const getAllPatients = async (req, res, next) => {
   try {
     const patients = await prisma.patient.findMany({
       include: {
-        Account: true,      // include account info (email, phone, etc.)
+        Account: true,      
       }
     });
     res.status(200).json(patients);
@@ -106,7 +106,7 @@ export const getProfile = async (req, res) => {
   }
 };
 
-// Update patient basic info (firstName, lastName, address)
+
 export const updatePatientInfo = async (req, res) => {
   const patientId = Number(req.params.patientId);
   const { firstName, lastName, address } = req.body;

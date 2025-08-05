@@ -12,14 +12,14 @@ function DoctorSlotDeletion() {
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
-    // Fetch the list of doctors on component mount
+
     axiosInstance.get("/api/doctor")
       .then(res => setDoctors(res.data))
       .catch(err => console.error("Failed to fetch doctors:", err));
   }, []);
 
   useEffect(() => {
-    // Fetch slots for the selected doctor and date
+   
     const fetchSlots = async () => {
       if (!selectedDoctor || !selectedDate) {
         setTimeSlots([]);
@@ -42,18 +42,18 @@ function DoctorSlotDeletion() {
     if (window.confirm(`Are you sure you want to delete this slot from ${slot.startTime} to ${slot.endTime}?`)) {
       try {
         if (slot.source === 'generated') {
-          // This is a fixed availability slot (recurring)
+          
           await axiosInstance.delete(`/api/doctor/fixed-availability/${slot.id}`);
           toast.success("ตารางเวลาว่างแบบประจำถูกลบเรียบร้อยแล้ว!");
           setMessage("ตารางเวลาว่างแบบประจำถูกลบเรียบร้อยแล้ว!");
         } else if (slot.source === 'manual') {
-          // This is a manual one-off slot
+         
           await axiosInstance.delete(`/api/doctor/manual-slot/${slot.id}`);
           toast.success("ตารางเวลาว่างแบบครั้งเดียวถูกลบเรียบร้อยแล้ว!");
           setMessage("ตารางเวลาว่างแบบครั้งเดียวถูกลบเรียบร้อยแล้ว!");
         }
 
-        // Refresh the slots list after successful deletion
+        
         setTimeSlots(prev => prev.filter(s => s.id !== slot.id));
       } catch (err) {
         console.error(err);

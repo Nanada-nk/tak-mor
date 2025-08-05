@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import axiosInstance from "../config/axios.js";
 import { toast } from "react-toastify";
 
-// Generate 30-minute intervals from 09:00 to 19:30
+
 const generate30MinTimeOptions = () => {
   const times = [];
-  // Ensure the loop goes up to the last valid 30-minute slot before 20:00
+  
   for (let hour = 9; hour < 20; hour++) {
     times.push(`${String(hour).padStart(2, "0")}:00`);
-    if (hour < 19) { // Don't add 19:30 if the end time is 20:00
+    if (hour < 19) { 
       times.push(`${String(hour).padStart(2, "0")}:30`);
     }
   }
@@ -28,7 +28,7 @@ const dayOfWeekOptions = [
 function DoctorFixedAvailabilityPage() {
   const [doctors, setDoctors] = useState([]);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
-  const [dayOfWeek, setDayOfWeek] = useState(0); // 0 = Sunday
+  const [dayOfWeek, setDayOfWeek] = useState(0); 
   const [startTime, setStartTime] = useState("09:00");
   const [endTime, setEndTime] = useState("17:00");
   const [message, setMessage] = useState(null);
@@ -36,7 +36,7 @@ function DoctorFixedAvailabilityPage() {
   const timeOptions = generate30MinTimeOptions();
 
   useEffect(() => {
-    // Fetch the list of doctors when the component mounts
+ 
     axiosInstance.get("/api/doctor")
       .then(res => setDoctors(res.data))
       .catch(err => console.error("Failed to fetch doctors:", err));
@@ -49,7 +49,7 @@ function DoctorFixedAvailabilityPage() {
       return;
     }
 
-    // Basic validation to ensure start time is before end time
+
     if (startTime >= endTime) {
       toast.error("เวลาเริ่มต้นต้องก่อนเวลาสิ้นสุด");
       return;

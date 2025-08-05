@@ -27,16 +27,8 @@ function DoctorLayout() {
 
   useEffect(() => {
     handleAccessControl();
-    // eslint-disable-next-line
   }, []);
 
-  // if (isLoading || !user) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen bg-gray-100">
-  //       <BubblesIcon className="w-10 h-10 animate-spin text-blue-800" />
-  //     </div>
-  //   );
-  // }
 
   return (
     <div className="flex h-fit bg-blue-100">

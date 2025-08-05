@@ -3,12 +3,12 @@ import { createAppointment, getAppointmentsByDoctor, getDailyAppointments, getAp
 
 const appointmentRouter = express.Router();
 
-// Get all appointments for a patient
+
 appointmentRouter.get("/patient/:patientId", getAppointmentsByPatient);
 
 appointmentRouter.post("/", createAppointment);
 
-// Get all appointments for a doctor
+
 appointmentRouter.get("/", getDailyAppointments);
 appointmentRouter.get("/doctor/:doctorId", getAppointmentsByDoctor);
 

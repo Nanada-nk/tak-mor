@@ -1,6 +1,6 @@
 import React from "react";
 
-// Optionally import icons if not provided as props
+
 import { PinIcon, StarIcon } from "../icons/index.jsx";
 
 

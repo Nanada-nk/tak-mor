@@ -32,15 +32,6 @@ function AdminLayout() {
   }, []);
 
 
-  // if (isLoading || !user) {
-  //   return (
-  //     <div className="flex items-center justify-center h-screen bg-gray-100">
-  //       <BubblesIcon className="w-10 h-10 animate-spin text-pri-gr1" />
-  //     </div>
-  //   );
-  // }
-
-
   return (
     
     <div className="flex h-screen bg-gray-600">
