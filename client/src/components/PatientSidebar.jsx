@@ -1,14 +1,14 @@
 
-import { User, Calendar, FileText, Lock, LogOut } from 'lucide-react';
+import { UserCircle, Calendar, KeyRound, LogOut } from 'lucide-react';
 import { Link, useLocation, useNavigate } from "react-router";
 import authStore from "../stores/authStore.js";
 import { toast } from "react-toastify";
 
 const patientNavLinks = [
-  { path: '/dashboard/patient/profile', label: 'My Profile', icon: <User size={18} /> },
-  { path: '/dashboard/patient/management', label: 'My Appointments', icon: <Calendar size={18} /> },
-  { path: '/dashboard/patient/table', label: 'Medical Records', icon: <FileText size={18} /> },
-  { path: '/dashboard/patient/changepassword', label: 'Change Password', icon: <Lock size={18} /> },
+  { path: '/dashboard/patient/profile', label: 'โปรไฟล์ของฉัน', icon: <UserCircle size={18} /> },
+  { path: '/dashboard/patient/management', label: 'การนัดหมายของฉัน', icon: <Calendar size={18} /> },
+  { path: '/dashboard/patient/table', label: 'ประวัติการรักษา', icon: <UserCircle size={18} /> },
+  { path: '/dashboard/patient/changepassword', label: 'เปลี่ยนรหัสผ่าน', icon: <KeyRound size={18} /> },
 ];
 
 function PatientSidebar() {
@@ -18,13 +18,13 @@ function PatientSidebar() {
 
   const handleLogout = () => {
     actionLogout();
-    toast.success("Logged out successfully!");
+    toast.success("ออกจากระบบสำเร็จ!");
     navigate("/login");
   };
 
   return (
     <div className="w-64 bg-blue-800 text-white p-4 flex flex-col min-h-screen">
-      <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">Patient Portal</div>
+      <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">ระบบผู้ป่วย</div>
       <nav className="flex-grow">
         <ul>
           {/* My Profile and Edit Profile on the same line */}
@@ -36,7 +36,7 @@ function PatientSidebar() {
                 style={{ minWidth: '180px', flex: 1 }}
               >
                 <span className="flex items-center gap-2">
-                  <User size={18} /> My Profile
+                  <UserCircle size={18} /> โปรไฟล์ของฉัน
                 </span>
                 <span className="flex-1" />
                 <button
@@ -52,7 +52,7 @@ function PatientSidebar() {
                   style={{ minWidth: 0 }}
                   tabIndex={0}
                 >
-                  Edit
+                  แก้ไข
                 </button>
               </Link>
             </div>
@@ -75,7 +75,7 @@ function PatientSidebar() {
           onClick={handleLogout}
           className="w-full text-left p-2 rounded hover:bg-blue-900 flex items-center"
         >
-          <LogOut size={18} className="mr-2" /> Logout
+          <LogOut size={18} className="mr-2" /> ออกจากระบบ
         </button>
       </div>
     </div>

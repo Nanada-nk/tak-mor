@@ -35,22 +35,22 @@ function DoctorChangePasswordPage() {
     setError('');
     setSuccess('');
     if (!currentPassword || !newPassword || !confirmPassword) {
-      setError('All fields are required.');
+      setError('กรุณากรอกข้อมูลให้ครบทุกช่อง');
       return;
     }
     if (newPassword !== confirmPassword) {
-      setError('New passwords do not match.');
+      setError('รหัสผ่านใหม่ไม่ตรงกัน');
       return;
     }
     if (newPassword.length < 8) {
-      setError('Password must be at least 8 characters.');
+      setError('รหัสผ่านต้องมีอย่างน้อย 8 ตัวอักษร');
       return;
     }
 
     setLoading(true);
     try {
       await accountApi.changePassword({ currentPassword, newPassword });
-      setSuccess('Password changed successfully.');
+      setSuccess('เปลี่ยนรหัสผ่านสำเร็จ');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -58,7 +58,7 @@ function DoctorChangePasswordPage() {
       if (err.response && err.response.data && err.response.data.message) {
         setError(err.response.data.message);
       } else {
-        setError('Failed to change password.');
+        setError('เปลี่ยนรหัสผ่านไม่สำเร็จ');
       }
     } finally {
       setLoading(false);
@@ -69,12 +69,12 @@ function DoctorChangePasswordPage() {
     <div className="max-w-2xl w-full mx-auto mt-14 bg-gradient-to-br from-blue-50 to-white p-12 rounded-3xl shadow-2xl border border-blue-200/70">
       <div className="flex items-center justify-center gap-2 mb-2">
         <KeyRound className="text-blue-700" size={28} />
-        <h2 className="text-2xl font-extrabold text-blue-900">Change Password</h2>
+        <h2 className="text-2xl font-extrabold text-blue-900">เปลี่ยนรหัสผ่าน</h2>
       </div>
-      <p className="text-gray-600 text-center mb-8 text-base">Update your password regularly to keep your account secure.</p>
+      <p className="text-gray-600 text-center mb-8 text-base">กรุณาเปลี่ยนรหัสผ่านเป็นประจำเพื่อความปลอดภัยของบัญชี</p>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">รหัสผ่านปัจจุบัน</label>
           <div className="relative">
             <input
               type={showCurrent ? 'text' : 'password'}
@@ -95,7 +95,7 @@ function DoctorChangePasswordPage() {
           </div>
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">New Password</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">รหัสผ่านใหม่</label>
           <div className="relative">
             <input
               type={showNew ? 'text' : 'password'}
@@ -114,11 +114,11 @@ function DoctorChangePasswordPage() {
               {showNew ? <Eye size={18} /> : <EyeOff size={18} />}
             </button>
           </div>
-          <p className="text-xs text-gray-500 mt-1 ml-1">Must be at least 8 characters, include uppercase, lowercase, and a number.</p>
+          <p className="text-xs text-gray-500 mt-1 ml-1">ต้องมีอย่างน้อย 8 ตัวอักษร รวมตัวพิมพ์ใหญ่ ตัวพิมพ์เล็ก และตัวเลข</p>
           <PasswordStrengthGauge password={newPassword} />
         </div>
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">ยืนยันรหัสผ่านใหม่</label>
           <div className="relative">
             <input
               type={showConfirm ? 'text' : 'password'}
@@ -141,13 +141,13 @@ function DoctorChangePasswordPage() {
         {error && (
           <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-md px-3 py-2 mb-2 flex items-center gap-2 animate-pulse">
             <span className="flex-1">{error}</span>
-            <button type="button" className="text-red-400 hover:text-red-700" onClick={() => setError('')} aria-label="Dismiss error">✕</button>
+            <button type="button" className="text-red-400 hover:text-red-700" onClick={() => setError('')} aria-label="ปิดข้อผิดพลาด">✕</button>
           </div>
         )}
         {success && (
           <div className="bg-green-50 border border-green-200 text-green-700 text-sm rounded-md px-3 py-2 mb-2 flex items-center gap-2 animate-pulse">
             <span className="flex-1">{success}</span>
-            <button type="button" className="text-green-400 hover:text-green-700" onClick={() => setSuccess('')} aria-label="Dismiss success">✕</button>
+            <button type="button" className="text-green-400 hover:text-green-700" onClick={() => setSuccess('')} aria-label="ปิดข้อความสำเร็จ">✕</button>
           </div>
         )}
         <button
@@ -158,9 +158,9 @@ function DoctorChangePasswordPage() {
           {loading ? (
             <span className="flex items-center justify-center gap-2">
               <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path></svg>
-              Changing...
+              กำลังเปลี่ยนรหัสผ่าน...
             </span>
-          ) : 'Change Password'}
+          ) : 'เปลี่ยนรหัสผ่าน'}
         </button>
       </form>
     </div>
