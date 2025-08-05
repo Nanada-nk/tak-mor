@@ -17,6 +17,7 @@ function PatientEditProfilePage() {
   const [error, setError] = useState(null);
   const [editField, setEditField] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [customGender, setCustomGender] = useState("");
   const [editLoading, setEditLoading] = useState(false);
   
   // Profile picture upload state
@@ -203,6 +204,33 @@ function PatientEditProfilePage() {
         if (patientId) {
           await patientApi.updatePatientInfo(patientId, { address: value });
         }
+      } else if (editField === "birthDate" || editField === "gender") {
+        let value = (editValue || "").trim();
+        if (editField === "gender" && value === "OTHER") {
+          value = customGender.trim();
+        }
+        const current = (profile?.Patient?.[editField] || "").trim();
+        if (!value || value === current) { setEditLoading(false); return; }
+        const patientId = profile?.Patient?.id;
+        if (patientId) {
+          const med = profile?.Patient?.PatientMedicalProfile || {};
+          // Use birthDate and gender from Patient (not just medical profile)
+          const patientBirthDate = profile?.Patient?.birthDate ?? '';
+          const patientGender = profile?.Patient?.gender ?? '';
+          const allMedical = {
+            height: med.height ?? '',
+            weight: med.weight ?? '',
+            bloodType: med.bloodType ?? '',
+            congenital: med.congenital ?? '',
+            allergies: med.allergies ?? '',
+            surgeries: med.surgeries ?? '',
+            medications: med.medications ?? '',
+            medicalHistory: med.medicalHistory ?? '',
+            birthDate: editField === 'birthDate' ? value : patientBirthDate,
+            gender: editField === 'gender' ? value : patientGender,
+          };
+          await patientApi.updateMedicalProfile(patientId, allMedical);
+        }
       } else if (editField === "firstName_lastName") {
         let firstName = "";
         let lastName = "";
@@ -315,6 +343,8 @@ function PatientEditProfilePage() {
         setEditValue={setEditValue}
         handleInputKey={handleInputKey}
         onProfilePictureClick={() => setShowPfpModal(true)}
+        customGender={customGender}
+        setCustomGender={setCustomGender}
       />
       <Modal isOpen={showPfpModal} onClose={() => {
         setShowPfpModal(false);

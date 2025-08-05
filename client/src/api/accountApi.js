@@ -17,3 +17,8 @@ accountApi.updateAccount = (body) => {
 };
 
 export default accountApi;
+
+// Change password (current + new)
+accountApi.changePassword = (body) => {
+  return axiosInstance.put('/api/account/change-password', body);
+};

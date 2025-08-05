@@ -21,7 +21,7 @@ function NewsContentPage() {
     tags: ['สุขภาพทั่วไป', 'วิจัยทางการแพทย์', 'โรงพยาบาลและสารธรณสุข', 'ประกาศและกิจกรรม'],
   };
   return (
-    <div className="font-prompt">
+    <div className="font-prompt mb-6">
 
       <Brandner title="ข่าว" />
 
