@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 
 function CategoryCardComponent({
-  iconSrc = "../../public/cate1.svg",
+  iconSrc = "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362013/cate1_mzfcrs.svg",
   bgImageUrl = "",
   title = "หมวดหมู่",
   showSubtitle = false,

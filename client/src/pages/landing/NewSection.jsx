@@ -6,7 +6,7 @@ const newsList = [
     date: "30 ก.ค 2025",
     title: "เคล็ดลับสุขภาพหัวใจ",
     description: "วิธีการดูแลหัวใจของคุณให้แข็งแรงและมีความสุขในทุกๆ วัน",
-    image: "/images/heart-health.jpg",
+    image: "https://www.blackmores.co.th/media/article/dtl1-105.jpg?v=2568071811",
   },
   {
     id: 2,
@@ -14,7 +14,7 @@ const newsList = [
     date: "28 ก.ค 2025",
     title: "ออกกำลังกายให้ปลอดภัย",
     description: "เรียนรู้วิธีออกกำลังกายที่ถูกต้องสำหรับทุกเพศทุกวัย",
-    image: "/images/exercise.jpg",
+    image: "https://inwfile.com/s-fl/ir11cw.jpg",
   },
   {
     id: 3,
@@ -22,7 +22,7 @@ const newsList = [
     date: "25 ก.ค 2025",
     title: "การนอนหลับกับสุขภาพจิต",
     description: "สำรวจความสัมพันธ์ของการนอนหลับและอารมณ์ในแต่ละวัน",
-    image: "/images/sleep-mental.jpg",
+    image: "https://dz.lnwfile.com/299paz.jpg",
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ const newsList = [
     title: "การดูแลสุขภาพผู้สูงอายุในบ้าน",
     description:
       "แนวทางการดูแลผู้สูงอายุให้มีคุณภาพชีวิตที่ดีภายในบ้านและครอบครัว",
-    image: "/images/elderly-care.jpg",
+    image: "https://static.wixstatic.com/media/a09e0a_7f86c5e49bc2440092ed7391a4698368~mv2.jpg/v1/fill/w_980,h_654,al_c,q_85,usm_0.66_1.00_0.01,enc_avif,quality_auto/a09e0a_7f86c5e49bc2440092ed7391a4698368~mv2.jpg",
   },
 ];
 function NewSection() {

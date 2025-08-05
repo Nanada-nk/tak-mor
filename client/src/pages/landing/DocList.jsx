@@ -10,7 +10,7 @@ const doctors = [
     hospital: "โรงพยาบาลศิริราช",
     status: "ว่าง",
     price: 500,
-    imgSrc: "../../public/DocContainer1.svg",
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362010/DocContainer1_ly8fj7.svg",
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ const doctors = [
     hospital: "โรงพยาบาลศิริราช",
     status: "ว่าง",
     price: 500,
-    imgSrc: "../../public/DocContainer2.svg",
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362006/DocContainer2_cm5rkk.svg",
   },
   {
     id: 3,
@@ -32,7 +32,7 @@ const doctors = [
     hospital: "โรงพยาบาลศิริราช",
     status: "ว่าง",
     price: 500,
-    imgSrc: "../../public/DocContainer3.svg",
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362007/DocContainer3_iiveff.svg",
   },
   {
     id: 4,
@@ -43,7 +43,7 @@ const doctors = [
     hospital: "โรงพยาบาลศิริราช",
     status: "ว่าง",
     price: 500,
-    imgSrc: "../../public/DocContainer1.svg",
+    imgSrc: "https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362010/DocContainer1_ly8fj7.svg",
   },
 ];
 

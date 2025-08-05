@@ -20,7 +20,7 @@ function HeroAboutUs() {
         <div className="hidden md:grid grid-cols-1">
           <div className="md:w-80 lg:w-100 md:h-60 lg:h-80 absolute md:top-25 md:-right-10 lg:top-20 lg:right-12 z-30">
             <img
-              src="../../public/DocImageLandingPage3.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362020/DocImageLandingPage3_zraplu.svg"
               alt="DocImageLandingPage3"
               className="w-full h-full object-contain transform -scale-x-100"
             />
