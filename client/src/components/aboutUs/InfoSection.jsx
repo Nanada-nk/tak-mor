@@ -7,7 +7,7 @@ function InfoSection() {
         <div className="flex gap-2">
           <div className="hidden lg:block w-50">
             <img
-              src="../../public/DocImageAboutPage1.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362009/DocImageAboutPage1_ibmryp.svg"
               alt="DocImageAboutPage1"
               className="w-full h-full object-contain"
             />
@@ -21,14 +21,14 @@ function InfoSection() {
         <div className="flex gap-3">
           <div className="w-50 absolute top-70 hidden lg:block">
             <img
-              src="../../public/DocImageAboutPage2.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362011/DocImageAboutPage2_n2mknl.svg"
               alt="DocImageAboutPage2"
               className="w-full h-full object-contain"
             />
           </div>
           <div className="w-50 absolute top-50 left-54 hidden lg:block">
             <img
-              src="../../public/DocImageAboutPage3.svg"
+              src="https://res.cloudinary.com/dhoyopcr7/image/upload/v1754362012/DocImageAboutPage3_dnzfrh.svg"
               alt="DocImageAboutPage3"
               className="w-full h-full object-cover"
             />
