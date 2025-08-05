@@ -76,18 +76,18 @@ function DoctorProfile({
           <button
             className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-blue-600 text-white rounded shadow hover:bg-blue-800 transition-colors z-20"
             onClick={() => navigate('/dashboard/doctor/profile/edit')}
-            title="Edit Profile"
+            title="แก้ไขโปรไฟล์"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.862 3.487a2.121 2.121 0 113 3L7.5 18.35l-4 1 1-4L16.862 3.487z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-2-2" /></svg>
-            Edit
+            แก้ไข
           </button>
         ) : (
           <button
             className="absolute top-4 right-4 flex items-center gap-1 px-3 py-1 bg-green-600 text-white rounded shadow hover:bg-green-800 transition-colors z-20"
             onClick={() => navigate('/dashboard/doctor/profile')}
-            title="Done"
+            title="เสร็จสิ้น"
           >
-            Done
+            เสร็จสิ้น
           </button>
         )}
         {/* Card header with avatar overlay */}
@@ -130,7 +130,7 @@ function DoctorProfile({
                     onChange={e => setEditValue({ ...editValue, firstName: e.target.value })}
                     onKeyDown={handleInputKey}
                     disabled={editLoading}
-                    placeholder="First Name"
+                    placeholder="ชื่อ"
                   />
                   <input
                     ref={lastNameRef}
@@ -139,14 +139,14 @@ function DoctorProfile({
                     onChange={e => setEditValue({ ...editValue, lastName: e.target.value })}
                     onKeyDown={handleInputKey}
                     disabled={editLoading}
-                    placeholder="Last Name"
+                    placeholder="นามสกุล"
                   />
                   <button
                     type="button"
                     onClick={saveEdit}
                     className="btn btn-success btn-sm btn-circle ml-1"
                     aria-label="Save edit"
-                    title="Save"
+                    title="บันทึก"
                     disabled={editLoading}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -157,7 +157,7 @@ function DoctorProfile({
                     className="btn btn-error btn-sm btn-circle ml-1"
                     tabIndex={-1}
                     aria-label="Cancel edit"
-                    title="Cancel"
+                    title="ยกเลิก"
                     disabled={editLoading}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -173,7 +173,7 @@ function DoctorProfile({
                       onClick={() => startEdit("firstName_lastName", { firstName: doctor.firstName, lastName: doctor.lastName })}
                       className="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100"
                       aria-label="Edit name"
-                      title="Edit name"
+                      title="แก้ไขชื่อ"
                       style={{ padding: 0 }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
@@ -201,7 +201,7 @@ function DoctorProfile({
                     onClick={saveEdit}
                     className="btn btn-success btn-sm btn-circle ml-1"
                     aria-label="Save edit"
-                    title="Save"
+                    title="บันทึก"
                     disabled={editLoading}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -212,7 +212,7 @@ function DoctorProfile({
                     className="btn btn-error btn-sm btn-circle ml-1"
                     tabIndex={-1}
                     aria-label="Cancel edit"
-                    title="Cancel"
+                    title="ยกเลิก"
                     disabled={editLoading}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -227,7 +227,7 @@ function DoctorProfile({
                       onClick={() => startEdit("phone", phone)}
                       className="btn btn-ghost btn-xs btn-circle opacity-70 hover:opacity-100"
                       aria-label="Edit phone"
-                      title="Edit phone"
+                      title="แก้ไขเบอร์โทร"
                       style={{ padding: 0 }}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
@@ -246,7 +246,7 @@ function DoctorProfile({
             {/* Editable Address */}
             <div>
               <div className="flex gap-1 mb-1 min-h-[24px] items-center justify-between">
-                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">Address</span>
+                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">ที่อยู่</span>
                 {editField === "address" ? (
                   <div className="flex gap-1">
                     <button
@@ -254,7 +254,7 @@ function DoctorProfile({
                       onClick={saveEdit}
                     className="btn btn-success btn-xs btn-circle btn-ghost"
                       aria-label="Save edit"
-                      title="Save"
+                      title="บันทึก"
                       disabled={editLoading}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -265,7 +265,7 @@ function DoctorProfile({
                     className="btn btn-error btn-xs btn-circle btn-ghost"
                       tabIndex={-1}
                       aria-label="Cancel edit"
-                      title="Cancel"
+                      title="ยกเลิก"
                       disabled={editLoading}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -278,7 +278,7 @@ function DoctorProfile({
                       onClick={() => startEdit("address", address)}
                       className="btn btn-ghost btn-circle btn-xs ml-1"
                       aria-label="Edit address"
-                      title="Edit address"
+                      title="แก้ไขที่อยู่"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
                     </button>
@@ -292,19 +292,19 @@ function DoctorProfile({
                   className="border border-blue-100 bg-blue-50 p-3 rounded-lg text-blue-900 w-full text-base shadow-sm align-middle"
                   value={editValue}
                   onChange={e => setEditValue(e.target.value)}
-                  placeholder={doctor.address ? "Enter address..." : "No address"}
+                  placeholder={doctor.address ? "กรอกที่อยู่..." : "ไม่มีที่อยู่"}
                   onKeyDown={handleInputKey}
                   disabled={editLoading}
                   style={{height: 'auto', minHeight: 'unset', lineHeight: '1.5'}}
                 />
               ) : (
-                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[40px]">{doctor.address || "No address"}</div>
+                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[40px]">{doctor.address || "ไม่มีที่อยู่"}</div>
               )}
             </div>
             {/* Specialties (editable) */}
             <div>
               <div className="flex items-center mb-1 gap-1 justify-between">
-                <div className="text-sm font-semibold text-blue-700">Specialties</div>
+                <div className="text-sm font-semibold text-blue-700">ความเชี่ยวชาญ</div>
                 {editSpecialties ? (
                   <div className="flex gap-1">
                     <button
@@ -320,7 +320,7 @@ function DoctorProfile({
                         setEditSpecialties(false);
                       }}
                       aria-label="Save specialties"
-                      title="Save"
+                      title="บันทึก"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
                     </button>
@@ -330,7 +330,7 @@ function DoctorProfile({
                       disabled={savingSpecialties}
                       onClick={() => setEditSpecialties(false)}
                       aria-label="Cancel specialties"
-                      title="Cancel"
+                      title="ยกเลิก"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                     </button>
@@ -341,7 +341,7 @@ function DoctorProfile({
                       type="button"
                       className="btn btn-ghost btn-xs btn-circle ml-1"
                       aria-label="Edit specialties"
-                      title="Edit specialties"
+                      title="แก้ไขความเชี่ยวชาญ"
                       onClick={() => {
                         setEditSpecialties(true);
                         setPendingSpecialties(
@@ -374,14 +374,14 @@ function DoctorProfile({
                           {s.Specialty?.name || s.Specialty?.id || "Unknown"}
                         </span>
                       ))
-                    : <span className="text-gray-400">No specialties</span>}
+                    : <span className="text-gray-400">ไม่มีความเชี่ยวชาญ</span>}
                 </div>
               )}
             </div>
             {/* Editable Bio */}
             <div>
               <div className="flex gap-1 mb-1 min-h-[24px] items-center justify-between">
-                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">Bio</span>
+                <span className="text-sm font-semibold text-blue-700 flex items-center h-6">ประวัติ</span>
                 {editField === "bio" ? (
                   <div className="flex gap-1">
                     <button
@@ -389,7 +389,7 @@ function DoctorProfile({
                       onClick={saveEdit}
                     className="btn btn-success btn-xs btn-circle btn-ghost"
                       aria-label="Save edit"
-                      title="Save"
+                      title="บันทึก"
                       disabled={editLoading}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
@@ -400,7 +400,7 @@ function DoctorProfile({
                     className="btn btn-error btn-xs btn-circle btn-ghost"
                       tabIndex={-1}
                       aria-label="Cancel edit"
-                      title="Cancel"
+                      title="ยกเลิก"
                       disabled={editLoading}
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
@@ -413,7 +413,7 @@ function DoctorProfile({
                       onClick={() => startEdit("bio", bio)}
                       className="btn btn-ghost btn-circle btn-xs ml-1"
                       aria-label="Edit bio"
-                      title="Edit bio"
+                      title="แก้ไขประวัติ"
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 20h9" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16.5 3.5a2.121 2.121 0 113 3L7 19.5 3 21l1.5-4L16.5 3.5z" /></svg>
                     </button>
@@ -426,12 +426,12 @@ function DoctorProfile({
                   className="border border-blue-100 bg-blue-50 p-3 rounded-lg text-blue-900 w-full text-base shadow-sm min-h-[56px] h-[56px] resize-none"
                   value={editValue}
                   onChange={e => setEditValue(e.target.value)}
-                  placeholder={doctor.bio ? "Enter bio..." : "No bio"}
+                  placeholder={doctor.bio ? "กรอกประวัติ..." : "ไม่มีประวัติ"}
                   onKeyDown={handleInputKey}
                   disabled={editLoading}
                 />
               ) : (
-                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[56px] whitespace-pre-line">{doctor.bio || "No bio"}</div>
+                <div className="p-3 rounded-lg bg-blue-50 text-gray-800 border border-blue-100 shadow-sm min-h-[56px] whitespace-pre-line">{doctor.bio || "ไม่มีประวัติ"}</div>
               )}
             </div>
           </div>

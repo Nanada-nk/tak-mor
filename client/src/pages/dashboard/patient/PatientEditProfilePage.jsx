@@ -32,13 +32,13 @@ function PatientEditProfilePage() {
   const handleFileChange = (file) => {
     if (!file) return;
     if (!file.type.startsWith("image/")) {
-      setPfpError("Only image files are allowed.");
+      setPfpError("อนุญาตเฉพาะไฟล์รูปภาพเท่านั้น");
       setSelectedFile(null);
       setPreviewUrl("");
       return;
     }
     if (file.size > 5 * 1024 * 1024) {
-      setPfpError("File size must be less than 5MB.");
+      setPfpError("ขนาดไฟล์ต้องไม่เกิน 5MB");
       setSelectedFile(null);
       setPreviewUrl("");
       return;
@@ -113,7 +113,7 @@ function PatientEditProfilePage() {
 
   const handleProfilePictureUpload = async () => {
     if (!selectedFile) {
-      setPfpError("Please select an image to upload.");
+      setPfpError("กรุณาเลือกรูปภาพเพื่ออัปโหลด");
       return;
     }
     setPfpLoading(true);
@@ -133,24 +133,44 @@ function PatientEditProfilePage() {
       await authStore.getState().checkAuth();
       const updatedUser = authStore.getState().user;
       
-      // Force image cache refresh by updating the profile state
-      if (updatedUser) {
+      // Poll the image URL until the new image is available
+      if (updatedUser && updatedUser.profilePictureUrl) {
+        const baseUrl = updatedUser.profilePictureUrl;
+        let tries = 0;
+        const maxTries = 10;
+        const delay = 700;
+        let found = false;
+        let cacheUrl = '';
+        while (tries < maxTries && !found) {
+          cacheUrl = `${baseUrl}?t=${Date.now()}`;
+          try {
+            // Try to load the image
+            await new Promise((resolve, reject) => {
+              const img = new window.Image();
+              img.onload = () => resolve();
+              img.onerror = () => reject();
+              img.src = cacheUrl;
+            });
+            found = true;
+          } catch {
+            await new Promise(res => setTimeout(res, delay));
+            tries++;
+          }
+        }
         const profileWithFreshImage = {
           ...updatedUser,
-          profilePictureUrl: updatedUser.profilePictureUrl ? 
-            `${updatedUser.profilePictureUrl}?t=${Date.now()}` : 
-            updatedUser.profilePictureUrl
+          profilePictureUrl: cacheUrl
         };
         setProfile(profileWithFreshImage);
+        authStore.setState({ user: profileWithFreshImage });
       }
-      
       setShowPfpModal(false);
       setSelectedFile(null);
       setPreviewUrl("");
       setCroppedAreaPixels(null);
     } catch (err) {
       console.error("Profile picture upload failed:", err);
-      setPfpError("Failed to upload profile picture. Please try again.");
+      setPfpError("อัปโหลดรูปโปรไฟล์ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
     } finally {
       setPfpLoading(false);
     }
@@ -165,7 +185,7 @@ function PatientEditProfilePage() {
           const resp = await authApi.getMe();
           setProfile(resp.data.user);
         } catch (err) {
-          setError('Failed to load profile');
+          setError('โหลดข้อมูลโปรไฟล์ไม่สำเร็จ');
           console.error('Error fetching profile:', err);
         } finally {
           setLoading(false);
@@ -206,8 +226,11 @@ function PatientEditProfilePage() {
         }
       } else if (editField === "birthDate" || editField === "gender") {
         let value = (editValue || "").trim();
-        if (editField === "gender" && value === "OTHER") {
-          value = customGender.trim();
+        // Map gender to Thai for saving
+        if (editField === "gender") {
+          if (value === "MALE" || value === "ชาย") value = "ชาย";
+          else if (value === "FEMALE" || value === "หญิง") value = "หญิง";
+          else if (value === "OTHER" || value === "อื่น ๆ") value = customGender.trim() || "อื่น ๆ";
         }
         const current = (profile?.Patient?.[editField] || "").trim();
         if (!value || value === current) { setEditLoading(false); return; }
@@ -296,7 +319,7 @@ function PatientEditProfilePage() {
       setEditField(null);
       setEditValue("");
     } catch (err) {
-      console.error('Error updating profile:', err);
+      console.error('เกิดข้อผิดพลาดในการอัปเดตโปรไฟล์:', err);
     } finally {
       setEditLoading(false);
     }
@@ -312,7 +335,7 @@ function PatientEditProfilePage() {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center min-h-screen text-blue-800">Loading...</div>;
+    return <div className="flex items-center justify-center min-h-screen text-blue-800">กำลังโหลด...</div>;
   }
 
   if (error) {
@@ -351,7 +374,7 @@ function PatientEditProfilePage() {
         setSelectedFile(null);
         setPreviewUrl("");
         setPfpError("");
-      }} title="Update Profile Picture" maxWidth="max-w-5xl">
+      }} title="อัปเดตรูปโปรไฟล์" maxWidth="max-w-5xl">
         <div className="flex flex-col items-center gap-6 w-full">
           <div className="w-full flex flex-col items-center mb-2">
             {previewUrl ? (
@@ -388,9 +411,9 @@ function PatientEditProfilePage() {
               >
                 <div className="text-center">
                   <div className="text-4xl mb-3 text-blue-500">📸</div>
-                  <p className="text-blue-700 font-semibold text-lg mb-1">Choose Your Photo</p>
-                  <p className="text-blue-600 text-sm">Drag & drop or click to browse</p>
-                  <p className="text-gray-600 text-xs mt-2">Max 5MB • JPG, PNG</p>
+                  <p className="text-blue-700 font-semibold text-lg mb-1">เลือกรูปภาพของคุณ</p>
+                  <p className="text-blue-600 text-sm">ลากและวาง หรือคลิกเพื่อเลือกไฟล์</p>
+                  <p className="text-gray-600 text-xs mt-2">ไม่เกิน 5MB • JPG, PNG</p>
                 </div>
               </div>
             )}
@@ -419,14 +442,14 @@ function PatientEditProfilePage() {
                     <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                     <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
-                  Uploading...
+                  กำลังอัปโหลด...
                 </>
               ) : (
                 <>
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
-                  Save Profile Picture
+              บันทึกรูปโปรไฟล์
                 </>
               )}
             </button>
@@ -440,7 +463,7 @@ function PatientEditProfilePage() {
               }}
               disabled={pfpLoading}
             >
-              Cancel
+              ยกเลิก
             </button>
           </div>
           {pfpError && (

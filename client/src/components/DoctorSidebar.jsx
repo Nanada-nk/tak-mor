@@ -2,10 +2,11 @@ import { Link, useLocation, useNavigate } from "react-router";
 import { UserCircle, Calendar, ClipboardList, KeyRound } from 'lucide-react';
 
 
+
 const doctorNavLinks = [
-  { path: '/dashboard/doctor/profile', label: 'My Profile', icon: <UserCircle size={18} /> },
-  { path: '/dashboard/doctor/appointments', label: 'Appointments', icon: <Calendar size={18} /> },
-  { path: '/dashboard/doctor/change-password', label: 'Change Password', icon: <KeyRound size={18} /> },
+  { path: '/dashboard/doctor/profile', label: 'โปรไฟล์ของฉัน', icon: <UserCircle size={18} /> },
+  { path: '/dashboard/doctor/appointments', label: 'การนัดหมาย', icon: <Calendar size={18} /> },
+  { path: '/dashboard/doctor/change-password', label: 'เปลี่ยนรหัสผ่าน', icon: <KeyRound size={18} /> },
 ];
 
 function DoctorSidebar() {  
@@ -16,7 +17,7 @@ const location = useLocation();
 
   return (
     <div className="w-64 bg-blue-800 text-white p-4 flex flex-col min-h-screen">
-      <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">Doctor Portal</div>
+      <div className="flex-shrink-0 mb-8 font-bold text-xl tracking-wide">ระบบแพทย์</div>
       <nav className="flex-grow">
         <ul>
           {/* My Profile and Edit Profile on the same line, Edit styled as before */}
@@ -28,7 +29,7 @@ const location = useLocation();
                 style={{ minWidth: '180px', flex: 1 }}
               >
                 <span className="flex items-center gap-2">
-                  <UserCircle size={18} /> My Profile
+                  <UserCircle size={18} /> โปรไฟล์ของฉัน
                 </span>
                 <span className="flex-1" />
                 <button
@@ -44,7 +45,7 @@ const location = useLocation();
                   style={{ minWidth: 0 }}
                   tabIndex={0}
                 >
-                  Edit
+                  แก้ไข
                 </button>
               </Link>
             </div>
