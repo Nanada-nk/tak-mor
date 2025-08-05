@@ -25,7 +25,7 @@ function DropdownNavBar() {
           tabIndex={0}
           className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow-lg"> 
           <li>
-            <a onClick={() => navigate("/doctorlist")}>รายชื่อแพทย์ทั้งหมด</a>
+            <a onClick={() => navigate("/alldoctor")}>รายชื่อแพทย์ทั้งหมด</a>
           </li>
           <li>
             <a onClick={() => navigate("/doctoravailability")}>

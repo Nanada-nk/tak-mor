@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 
 
 const adminNavLinks = [
+  { path: '/admin', label: 'Admin Dashboard', icon: <ShieldUser size={18} /> },
   { path: '/admin/patientdashboard', label: 'จัดการตารางคนไข้', icon: <ShieldUser size={18} /> },
   { path: '/admin/doctordashboard', label: 'จัดการตารางแพทย์', icon: <BriefcaseMedical size={20} /> },
   { path: '/admin/appointmentdashboard', label: 'ตารางการนัดหมายทั้งหมด', icon: <ClipboardCheck size={20} /> },
@@ -29,7 +30,7 @@ function AdminSidebar() {
   return (
     <div className="w-64 bg-primary-gradient text-white p-4 flex flex-col">
       <div className="flex-shrink-0 mb-8">
-        <div>
+        <div onClick={() => navigate('/')} className="cursor-pointer flex items-center justify-center mt-2">
                         <img src="../../../public/takmor.svg" alt='logo' className="h-12 w-auto object-contain" /> 
                     </div>
       </div>

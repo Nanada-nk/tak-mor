@@ -190,3 +190,40 @@ export const updateDoctorProfile = async (req, res, next) => {
   }
 };
 
+export const updateDoctor = async (req, res) => {
+  const doctorId = parseInt(req.params.id);
+  const {
+    firstName,
+    lastName,
+    address,
+    phone,
+    email,
+    role,
+  } = req.body;
+
+  try {
+    const updatedDoctor = await prisma.doctor.update({
+      where: { id: doctorId },
+      data: {
+        firstName,
+        lastName,
+        address,
+        Account: {
+          update: {
+            phone,
+            email,
+            role,
+          },
+        },
+      },
+      include: {
+        Account: true,
+      },
+    });
+
+    res.json(updatedDoctor);
+  } catch (error) {
+    console.error("Update doctor error:", error);
+    res.status(500).json({ message: 'Failed to update doctor' });
+  }
+};

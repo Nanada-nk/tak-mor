@@ -97,7 +97,7 @@ console.log('doctor!!!!!!!!!', doctor)
         <SpecialtySelector
           specialties={specialties}
           selected={selectedSpecialty}
-          onChange={setSpecialty}
+          onSelect={setSpecialty}
         />
       </div>
 

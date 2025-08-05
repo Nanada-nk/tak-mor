@@ -1,5 +1,7 @@
 import { Star, MapPin, Dot } from "lucide-react";
 import { Link } from "react-router";
+import { useNavigate } from "react-router";
+import useBookingStore from "../../stores/bookingStore";
 
 function DoctorCardList({
   name,
@@ -12,7 +14,10 @@ function DoctorCardList({
   imgSrc,
   linkPath = "/",
   showButton = false,
+  doctorId
 }) {
+  const navigate = useNavigate();
+   const setDoctorId = useBookingStore(state => state.setDoctorId);
   return (
     <div className="bg-white rounded-lg shadow-lg border border-gray-200 w-full max-w-xs mx-auto overflow-hidden hover:cursor-pointer transition-transform duration-200 hover:scale-[1.02]">
       <Link to={linkPath}>
@@ -56,10 +61,12 @@ function DoctorCardList({
       <div className="mb-4">
         {showButton && (
           <div className="flex justify-center gap-2">
-            <button className="btn bg-black rounded-full w-1/2 text-white text-sm px-4 py-2 mx-2">
+            <button onClick={()=>navigate('/doctoravailability')} className="btn bg-black rounded-full w-1/2 text-white text-sm px-4 py-2 mx-2">
               ตารางเวลา
             </button>
-            <button className="btn bg-primary-gradient rounded-full w-1/3 text-white text-sm px-4 py-2 mx-2">
+            <button 
+             onClick={() => { navigate("/appointment"), setDoctorId(doctorId); }}
+            className="btn bg-primary-gradient rounded-full w-1/3 text-white text-sm px-4 py-2 mx-2">
               จองเลย
             </button>
           </div>
