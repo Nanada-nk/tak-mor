@@ -58,7 +58,7 @@ function PatientManagementPage() {
             <tbody className="bg-white divide-y divide-gray-200">
               {appointments.map((appt) => (
                 <tr key={appt.id} className="hover:bg-gray-50">
-                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{appt.date?.slice(0,10) || '-'}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{appt.date ? (() => { const d = new Date(appt.date); return d.toLocaleDateString('en-GB'); })() : '-'}</td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{appt.startTime} - {appt.endTime}</td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{appt.Doctor?.firstName || '-'} {appt.Doctor?.lastName || ''}</td>
                   <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{appt.symptoms || '-'}</td>
